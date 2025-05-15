@@ -21,6 +21,11 @@
     background-color: #690F93 !important;
 }
 
+a.btn-login {
+    color: #FFFFFF !important;
+    text-decoration: none;
+}
+
 .search-button {
     color: #690F93;
     border-color: #690F93;

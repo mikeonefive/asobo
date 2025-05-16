@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("name", "Seim");
+        model.addAttribute("name", "Edmund Sackbauer");
         return "index"; // This maps to src/main/resources/templates/index.html
     }
 }

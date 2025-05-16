@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.UUID;
 
+
 @Service
 public class EventService {
     private ArrayList<Event> events;
 
     public EventService(){
+
         this.events = new ArrayList<Event>();
     }
 
@@ -49,5 +51,4 @@ public class EventService {
         }
         return null;
     }
-
 }

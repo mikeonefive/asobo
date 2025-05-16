@@ -35,6 +35,7 @@ public class Event {
         this.comments = new ArrayList<UserComment>();
         this.gallery = new Gallery();
         this.id = UUID.randomUUID();
+
         try {
             this.pictureURI = new URI("resources/static/images/");
         } catch (URISyntaxException e) {

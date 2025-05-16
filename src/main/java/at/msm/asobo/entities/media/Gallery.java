@@ -22,4 +22,5 @@ public class Gallery {
     public void setMedia(ArrayList<Medium> media) {
         this.media = media;
     }
+
 }

@@ -44,5 +44,10 @@
     <h1 class="text-primary">Welcome to My Site</h1>
     <p th:text="'Hello, ' + ${name} + '!'"></p>
 </main>
+
+<script th:src="@{/js/global.js}"></script>
+
+<!-- Fragment for child pages to insert their scripts -->
+<div layout:fragment="scripts"></div>
 </body>
 </html>

@@ -3,60 +3,66 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-<head>
-    <title>Sign Up!</title>
-</head>
-<body>
-<main layout:fragment="content" class="mt-5 container d-flex flex-column align-items-center">
-    <h1 class="text-primary">Sign Up!</h1>
-    <!--<form action="" method="post" enctype="multipart/form-data">-->
+    <head>
+        <title>Sign Up!</title>
+    </head>
+    <body>
+        <main layout:fragment="content" class="mt-5 container d-flex flex-column align-items-center">
+            <h1 class="text-primary">Sign Up!</h1>
+            <!--<form action="" method="post" enctype="multipart/form-data">-->
 
-<div class="register-form">
+            <div class="register-form">
 
-        <div class="form-group">
-            <select class="form-control" name="salutation" id="salutation" required>
-                <option value="" disabled selected>Choose your Salutation</option>
-                <option value="male">Sir</option>
-                <option value="female">Madam</option>
-                <option value="other">Other</option>
-            </select>
+                <div class="form-group">
+                    <select class="form-control" name="salutation" id="salutation" required>
+                        <option value="" disabled selected>Choose your Salutation</option>
+                        <option value="male">Sir</option>
+                        <option value="female">Madam</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="salutation-other-group">
+                    <input class="form-control" autofocus type="text" name="salutation-other" id="salutation-other"
+                           placeholder="Salutation">
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" autofocus type="text" name="username" placeholder="Username" required>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="email" name="email" placeholder="Email Address" required>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password1" placeholder="Password" required>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password2" placeholder="Confirm Password" required>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" name="location" placeholder="City">
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="file" name="profile_picture" placeholder="Profile Picture"
+                           accept="image/*">
+                </div>
+
+                <div class="form-group d-flex justify-content-center">
+                    <input class="btn btn-purple btn-primary mb-3" type="submit" value="Register">
+                </div>
+
+            </div>
+
+            Already have an account? <a href="">Log In here.</a>
+        </main>
+
+        <div layout:fragment="scripts">
+            <script th:src="@{/js/form-logic.js}"></script>
         </div>
-
-        <div class="form-group" id="salutation-other-group">
-            <input class="form-control" autofocus type="text" name="salutation-other" id="salutation-other" placeholder="Salutation">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username" required>
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address" required>
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="password" name="password1" placeholder="Password" required>
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="password" name="password2" placeholder="Confirm Password" required>
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="text" name="location" placeholder="City">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="file" name="profile_picture" placeholder="Profile Picture" accept="image/*">
-        </div>
-
-        <div class="form-group d-flex justify-content-center">
-            <input class="btn btn-purple btn-primary mb-3" type="submit" value="Register">
-        </div>
-
-</div>
-
-    Already have an account? <a href="">Log In here.</a>
-</main>
-</body>
+    </body>
 </html>

@@ -41,5 +41,5 @@ a.btn-purple {
 }
 
 #salutation-other-group {
-    visibility: hidden;
+    display: none;
 }

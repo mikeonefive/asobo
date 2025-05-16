@@ -2,7 +2,6 @@ package at.msm.asobo.entities;
 
 import at.msm.asobo.entities.media.Gallery;
 
-import javax.annotation.processing.Generated;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
@@ -36,6 +35,7 @@ public class Event {
         this.comments = new ArrayList<UserComment>();
         this.gallery = new Gallery();
         this.id = UUID.randomUUID();
+
         try {
             this.pictureURI = new URI("resources/static/images/");
         } catch (URISyntaxException e) {

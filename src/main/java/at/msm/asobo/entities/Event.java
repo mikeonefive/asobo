@@ -2,7 +2,6 @@ package at.msm.asobo.entities;
 
 import at.msm.asobo.entities.media.Gallery;
 
-import javax.annotation.processing.Generated;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;

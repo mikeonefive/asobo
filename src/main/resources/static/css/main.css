@@ -40,3 +40,6 @@ a.btn-purple {
     width: 60%;
 }
 
+#salutation-other-group {
+    visibility: hidden;
+}

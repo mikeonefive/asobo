@@ -19,22 +19,23 @@ public class Event {
     private LocalDateTime creationDate;
     private ArrayList<UserComment> comments;
     private Gallery gallery;
+
     private UUID id;
 
     public Event(){
-
     }
 
     public Event(String name, String description, LocalDateTime date, String location){
-        this.name=name;
-        this.description=description;
-        this.date=date;
-        this.location=location;
-        this.participants= new ArrayList<User>();
-        this.creationDate=LocalDateTime.now();
-        this.comments= new ArrayList<UserComment>();
-        this.gallery= new Gallery();
-        this.id=UUID.randomUUID();
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.location = location;
+        this.participants = new ArrayList<User>();
+        this.creationDate = LocalDateTime.now();
+        this.comments = new ArrayList<UserComment>();
+        this.gallery = new Gallery();
+        this.id = UUID.randomUUID();
+
         try {
             this.pictureURI = new URI("resources/static/images/");
         } catch (URISyntaxException e) {

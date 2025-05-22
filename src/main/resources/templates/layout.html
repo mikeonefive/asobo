@@ -10,20 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link href="/css/main.css" rel="stylesheet">
-    <link rel="icon" th:href="@{/images/logo.png}" type="image/png">
+    <link href="/css/event-card.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid bg-body-tertiary">
-        <a class="navbar-brand" th:href="@{/}">
-            <img src="/images/logo.png" alt="Logo" class="asobo-logo">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}"><img src="/images/logo.png" alt="Logo" class="asobo-logo"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -37,10 +32,17 @@
                 </li>
                 <li class="nav-item">
                     <div class="d-flex ms-2">
-                        <a th:href="@{/login}" class="btn btn-purple btn-primary">Login</a>
+                        <button class="btn form-control me-2 d-flex btn-purple btn-primary" type="button">
+                            <a th:href="@{/login}" class="btn-purple">Login</a>
+                        </button>
                     </div>
                 </li>
             </ul>
+
+            <!--<form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                <button class="btn btn-outline-success search-button" type="submit">Search</button>
+            </form>-->
         </div>
     </div>
 </nav>
@@ -55,12 +57,13 @@
             <!--</form>-->
     </div>
 </div>
+
 <main layout:fragment="content" class="container d-flex flex-column align-items-center mt-5">
     <h1 class="text-primary">Welcome to My Site</h1>
     <p th:text="'Hello, ' + ${name} + '!'"></p>
 </main>
 
-<footer class="bg-body-tertiary mt-5 py-3 border-top">
+<footer class="bg-light mt-5 py-3 border-top">
     <div class="footer-content container d-flex">
         <span class="text-muted">© 2025 asobō!</span>
         <span class="text-muted">All rights reserved.</span>

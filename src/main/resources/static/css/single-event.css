@@ -5,4 +5,6 @@
 
 .infobox {
     border-radius: 15px;
+    padding: 10px;
+    font-size: 0.9rem;
 }

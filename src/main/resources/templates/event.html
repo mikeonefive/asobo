@@ -23,15 +23,40 @@
 
             <!-- Event Info Column -->
             <div class="col-md-6 text-start">
-                <div class="mb-3">TITLE, DATE, LOCATION, <a href="" class="btn btn-purple imin-btn">I'm in!</a></div>
-                <div class="mb-3 bg-body-tertiary infobox">INFOBOX</div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col">
+                            <span class="fw-bold">Movie Night</span>
+                            <span class="text-muted">Thu, May 08, 2025</span>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="" class="btn btn-purple imin-btn">I'm in!</a>
+                        </div>
+                        <div class="col-md-8"><!-- optional spacer --></div>
+                    </div>
+                    <div class="row">
+                        <div class="text-muted">in San Juan Capistrano, CA</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3 p-3 bg-body-tertiary infobox rounded">
+                            Join us for the most bestest and extravagant movie night ever! Yeah!
+                            Bring your friends and don’t forget your own popcorn and booze...
+                        </div>
+                    </div>
+                    <div class="col-md-4"><!-- optional spacer --></div>
+                </div>
+
             </div>
         </div>
 
         <!-- Comment Box & Participants Row -->
-        <div class="row text-start">
-            <div class="col-md-6 text-start">
-                COMMENT BOX
+        <div class="row text-start mt-3">
+            <div class="col-md-6 text-start d-flex gap-2">
+                <textarea name="content" class="form-control card" rows="1" placeholder="Your new comment goes here"></textarea>
+                <input type="submit" value="Post!" class="btn btn-purple">
             </div>
 
             <div class="col-md-6 text-start">

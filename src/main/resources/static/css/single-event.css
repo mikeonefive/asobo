@@ -7,4 +7,37 @@
     border-radius: 15px;
     padding: 10px;
     font-size: 0.9rem;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* COMMENT BOX AND LIST */
+.comments-list {
+    font-size: 0.9rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comment-box {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.comment-time {
+    color: #adb5bd;
+    font-size: 0.85rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }

@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="col">
                             <span class="fw-bold">Movie Night</span>
-                            <span class="text-muted">Thu, May 08, 2025</span>
+                            <span class="date-font-color">Thu, May 08, 2025</span>
                         </div>
                         <div class="col-md-4">
                             <a href="" class="btn btn-purple imin-btn">I'm in!</a>
@@ -35,7 +35,7 @@
                         <div class="col-md-8"><!-- optional spacer --></div>
                     </div>
                     <div class="row">
-                        <div class="text-muted">in San Juan Capistrano, CA</div>
+                        <div class="date-font-color">in San Juan Capistrano, CA</div>
                     </div>
                 </div>
 
@@ -46,21 +46,26 @@
                             Bring your friends and don’t forget your own popcorn and booze...
                         </div>
                     </div>
-                    <div class="col-md-4"><!-- optional spacer --></div>
+                    <div class="col-md-4"><!-- spacer --></div>
                 </div>
 
             </div>
         </div>
 
         <!-- Comment Box & Participants Row -->
-        <div class="row text-start mt-4">
-            <div class="col-md-6 text-start d-flex gap-2">
+        <div class="row text-start mt-4 align-items-center">
+            <div class="col-md-6 d-flex gap-2">
                 <textarea name="content" class="form-control card" rows="1" placeholder="Your new comment goes here"></textarea>
                 <input type="submit" value="Post!" class="btn btn-purple">
             </div>
 
+            <!-- Participants -->
             <div class="col-md-6 text-start">
-                PARTICIPANTS
+                <div class="fw-bold">Going</div>
+                <div class="mt-2">
+                    <img src="https://randomuser.me/api/portraits/men/34.jpg" alt="User Avatar" class="user-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/34.jpg" alt="User Avatar" class="user-avatar">
+                </div>
             </div>
         </div>
 
@@ -74,12 +79,10 @@
                             <img src="https://randomuser.me/api/portraits/men/34.jpg" alt="User Avatar" class="user-avatar">
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="mb-0">John Doe</h6>
+                                    <h6 class="mb-0 comment-username">John Doe</h6>
                                     <span class="comment-time">2 hours ago</span>
                                 </div>
-                                <p class="mb-2">This is an amazing post! Thanks for the great time. I
-                                    had so much fun at the movie night.
-                                </p>
+                                <p class="mb-2">Thanks for the great time. I had so much fun at the movie night.</p>
                             </div>
                         </div>
                     </div>
@@ -90,17 +93,23 @@
                             <img src="https://randomuser.me/api/portraits/women/64.jpg" alt="User Avatar" class="user-avatar">
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="mb-0">Jane Smith</h6>
+                                    <h6 class="mb-0 comment-username">Lara Smith</h6>
                                     <span class="comment-time">1 hour ago</span>
                                 </div>
-                                <p class="mb-2">Totally agree with you! See you next time!</p>
+                                <p class="mb-2">Totally! See you guys next time!</p>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
 
-            <div class="col-md-6 text-start">
-                GALLERY
+            <!-- GALLERY -->
+            <div class="col-md-6 mt-3 text-start">
+                <div class="fw-bold">Photos & Videos</div>
+                <div class="gallery mt-2">
+                    <img src="/images/events/test_event/gallery_item1.jpg" alt="Gallery item">
+                    <img src="/images/events/test_event/gallery_item2.jpg" alt="Gallery item">
+                </div>
             </div>
         </div>
 

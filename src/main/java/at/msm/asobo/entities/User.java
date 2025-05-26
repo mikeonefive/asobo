@@ -1,6 +1,9 @@
 package at.msm.asobo.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -12,13 +15,16 @@ import java.util.UUID;
 @Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     private String email;
     private String username;
     private String password;
     private URI pictureURI;
     private String location;
     private LocalDateTime registerDate;
-    private UUID id;
     private boolean isActive;
 
     public User(){

@@ -1,5 +1,7 @@
 package at.msm.asobo.entities;
 
+import jakarta.persistence.Entity;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -7,6 +9,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
 public class User {
 
     private String email;

@@ -2,6 +2,17 @@
     box-shadow: 0 1px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* LINKS */
+.see-more-link {
+    text-decoration: none;
+    color: #690F93;
+    font-size: 0.9rem;
+}
+
+.see-more-link:hover {
+    text-decoration: underline;
+}
+
 /* JOIN BUTTON */
 .imin-btn {
     font-size: 0.8rem;

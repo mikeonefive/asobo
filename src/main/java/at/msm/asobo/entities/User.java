@@ -1,12 +1,14 @@
 package at.msm.asobo.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,22 +19,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    // list of events?
-    // @OneToMany(mappedBy="event")
-
-    // list of comments?
-    // @OneToMany(mappedBy="usercomment")
-
+    @NotBlank(message = "Email is mandatory")
     private String email;
+
+    @NotBlank(message = "Username is mandatory")
     private String username;
+
+    @NotBlank(message = "Password is mandatory")
     private String password;
+
+    @OneToMany(mappedBy = "creator")
+    private List<Event> events;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserComment> comments;
+
     private URI pictureURI;
+
     private String location;
+
+    @NotNull
+    @CreationTimestamp
     private LocalDateTime registerDate;
+
     private boolean isActive;
 
     public User(){
-
     }
 
     public User(String email, String username, String password) {
@@ -130,5 +142,21 @@ public class User {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public List<UserComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<UserComment> comments) {
+        this.comments = comments;
     }
 }

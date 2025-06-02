@@ -28,6 +28,9 @@ public class EventService {
         return eventRepository.findEventsByDate(date);
     }
 
+    public List<Event> getEventsByLocation(String location) {
+        return eventRepository.findEventsByLocation(location);
+    }
 
     public Event addNewEvent(Event event) {
         return this.eventRepository.save(event);
@@ -40,7 +43,7 @@ public class EventService {
 
     public Event deleteEventByID(UUID id) {
         Event eventToDelete = this.findEventByID(id);
-        this.eventRepository.deleteById(id);
+        this.eventRepository.delete(eventToDelete);
         return eventToDelete;
     }
 }

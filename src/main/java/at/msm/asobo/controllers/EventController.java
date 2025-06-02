@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 // change this to restcontroller as soon as done testing
-@Controller
+@RestController
 @RequestMapping("/events")
 public class EventController {
 
@@ -43,6 +45,28 @@ public class EventController {
     @GetMapping
     public List<Event> getAllEvents() {
         return this.eventService.getAllEvents();
+    }
+
+    @GetMapping
+    public List<Event> getEventsByLocation(@RequestParam(required = false) String location) {
+        if (location == null) {
+            return this.eventService.getAllEvents();
+        }
+        return this.eventService.getEventsByLocation(location);
+    }
+
+    @GetMapping
+    public List<Event> getEventsByDate(@RequestParam(required = false) String date) {
+        if (date == null) {
+            return this.eventService.getAllEvents();
+        }
+
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(date);
+            return this.eventService.getEventsByDate(dateTime);
+        } catch (DateTimeParseException e) {
+            return this.eventService.getAllEvents();
+        }
     }
 
     @PostMapping

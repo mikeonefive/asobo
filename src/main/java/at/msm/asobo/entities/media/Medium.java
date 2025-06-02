@@ -32,7 +32,6 @@ public abstract class Medium {
         this.mediumURI = mediumURI;
     }
 
-
     public void setId(UUID id) {
         this.id = id;
     }

@@ -34,7 +34,7 @@ public class Event {
     @NotBlank(message = "Description is mandatory")
     private String description;
 
-    @NotNull
+    @NotNull(message = "Date must be specified")
     private LocalDateTime date;
 
     @NotBlank(message = "Location is mandatory")

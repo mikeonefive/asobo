@@ -1,6 +1,10 @@
 package at.msm.asobo.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,14 +16,18 @@ public class UserComment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotBlank(message = "Text is mandatory")
     private String text;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull(message = "Date must be specified")
+    @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @LastModifiedDate
     private LocalDateTime modificationDate;
 
     // private File file;

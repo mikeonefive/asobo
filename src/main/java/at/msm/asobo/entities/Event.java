@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,6 +46,9 @@ public class Event {
     @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @LastModifiedDate
+    private LocalDateTime modificationDate;
+
     @OneToMany
     @JoinColumn(name = "event_id")
     private List<UserComment> comments;
@@ -57,6 +61,22 @@ public class Event {
     public Event() {
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public LocalDateTime getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(LocalDateTime modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
     public Event(String name, String description, LocalDateTime date, String location){
         this.name = name;
         this.description = description;
@@ -64,6 +84,7 @@ public class Event {
         this.location = location;
         this.participants = new ArrayList<User>();
         this.creationDate = LocalDateTime.now();
+        this.modificationDate = this.creationDate;
         this.comments = new ArrayList<UserComment>();
         this.gallery = new Gallery();
         this.id = UUID.randomUUID();

@@ -1,8 +1,10 @@
 package at.msm.asobo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.net.URI;
@@ -10,6 +12,12 @@ import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 
 @Entity
 @Table(name="users")
@@ -38,7 +46,6 @@ public class User {
 
     private String location;
 
-    @NotNull
     @CreationTimestamp
     private LocalDateTime registerDate;
 

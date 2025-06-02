@@ -1,9 +1,7 @@
 package at.msm.asobo.entities.media;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import at.msm.asobo.entities.Event;
+import jakarta.persistence.*;
 
 import java.net.URI;
 import java.util.UUID;
@@ -16,6 +14,10 @@ public abstract class Medium {
     private UUID id;
 
     protected URI mediumURI;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     public Medium() {
     }
@@ -38,5 +40,13 @@ public abstract class Medium {
 
     public UUID getId() {
         return id;
+    }
+
+    public Event getEvent() {
+        return this.event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

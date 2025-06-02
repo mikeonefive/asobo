@@ -1,6 +1,8 @@
 package at.msm.asobo.entities;
 
-import at.msm.asobo.entities.media.Gallery;
+import at.msm.asobo.entities.media.Medium;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +15,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 
 @Entity
 public class Event {
@@ -54,9 +62,8 @@ public class Event {
     @JoinColumn(name = "event_id")
     private List<UserComment> comments;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "gallery_id")
-    private Gallery gallery;
+    @OneToMany(mappedBy = "event")
+    private List<Medium> media;
 
 
     public Event() {
@@ -87,7 +94,7 @@ public class Event {
         this.creationDate = LocalDateTime.now();
         this.modificationDate = null;
         this.comments = new ArrayList<UserComment>();
-        this.gallery = new Gallery();
+        this.media = new ArrayList<Medium>();
         this.id = UUID.randomUUID();
 
         try {
@@ -162,12 +169,12 @@ public class Event {
         this.comments = comments;
     }
 
-    public Gallery getGallery() {
-        return gallery;
+    public List<Medium> getMedia() {
+        return this.media;
     }
 
-    public void setGallery(Gallery gallery) {
-        this.gallery = gallery;
+    public void setMedia(List<Medium> media) {
+        this.media = media;
     }
 
     public UUID getId() {

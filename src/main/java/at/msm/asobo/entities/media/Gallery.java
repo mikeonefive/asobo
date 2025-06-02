@@ -1,8 +1,8 @@
 package at.msm.asobo.entities.media;
 
+import at.msm.asobo.entities.Event;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +12,9 @@ public class Gallery {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
+
+    @OneToOne
+    private Event event;
 
     @OneToMany
     private List<Medium> media;
@@ -20,22 +22,22 @@ public class Gallery {
     public Gallery() {
     }
 
-    public Gallery(UUID id, String name, ArrayList<Medium> media) {
+    public Gallery(UUID id, Event event, List<Medium> media) {
         this.id = id;
-        this.name = name;
+        this.event = event;
         this.media = media;
     }
 
-    public String getName() {
-        return name;
+    public Event getEvent() {
+        return this.event;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public List<Medium> getMedia() {
-        return media;
+        return this.media;
     }
 
     public void setMedia(List<Medium> media) {

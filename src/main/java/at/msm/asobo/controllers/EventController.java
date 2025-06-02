@@ -3,6 +3,7 @@ package at.msm.asobo.controllers;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.services.EventService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +47,7 @@ public class EventController {
         return this.eventService.getAllEvents();
     }
 
+
     @GetMapping(value = "/events", params = "location")
     public List<Event> getEventsByLocation(@RequestParam(required = false) String location) {
         if (location == null) {
@@ -55,19 +56,17 @@ public class EventController {
         return this.eventService.getEventsByLocation(location);
     }
 
+
     @GetMapping(value = "/events", params = "date")
-    public List<Event> getEventsByDate(@RequestParam(required = false) String date) {
-        if (date == null) {
+    public List<Event> getEventsByDate(@RequestParam(required = false)
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
+        if (dateTime == null) {
             return this.eventService.getAllEvents();
         }
 
-        try {
-            LocalDateTime dateTime = LocalDateTime.parse(date);
-            return this.eventService.getEventsByDate(dateTime);
-        } catch (DateTimeParseException e) {
-            return this.eventService.getAllEvents();
-        }
+        return this.eventService.getEventsByDate(dateTime);
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -75,10 +74,12 @@ public class EventController {
         return eventService.addNewEvent(event);
     }
 
+
     @GetMapping("/{id}")
     public Event getEventByID(@PathVariable UUID id) {
         return eventService.findEventByID(id);
     }
+
 
     @DeleteMapping("/{id}")
     public Event deleteEventByID(@PathVariable UUID id) {

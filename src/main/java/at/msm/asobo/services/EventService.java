@@ -1,7 +1,7 @@
 package at.msm.asobo.services;
 
 import at.msm.asobo.entities.Event;
-import at.msm.asobo.exceptions.NotFoundException;
+import at.msm.asobo.exceptions.EventNotFoundException;
 import at.msm.asobo.repositories.EventRepository;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class EventService {
 
 
     public Event findEventByID(UUID id) {
-        return eventRepository.findById(id).orElseThrow(() -> new NotFoundException("Event not found"));
+        return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
     public Event deleteEventByID(UUID id) {

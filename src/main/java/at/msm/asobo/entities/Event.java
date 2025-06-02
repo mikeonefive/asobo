@@ -84,7 +84,7 @@ public class Event {
         this.location = location;
         this.participants = new ArrayList<User>();
         this.creationDate = LocalDateTime.now();
-        this.modificationDate = this.creationDate;
+        this.modificationDate = null;
         this.comments = new ArrayList<UserComment>();
         this.gallery = new Gallery();
         this.id = UUID.randomUUID();

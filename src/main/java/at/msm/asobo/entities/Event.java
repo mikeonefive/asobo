@@ -58,8 +58,7 @@ public class Event {
     @LastModifiedDate
     private LocalDateTime modificationDate;
 
-    @OneToMany
-    @JoinColumn(name = "event_id")
+    @OneToMany(mappedBy = "event")
     private List<UserComment> comments;
 
     @OneToMany(mappedBy = "event")

@@ -1,6 +1,7 @@
 package at.msm.asobo.entities.media;
 
 import at.msm.asobo.entities.Event;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -34,6 +35,7 @@ public abstract class Medium {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     public Medium() {

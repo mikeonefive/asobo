@@ -1,8 +1,8 @@
 package at.msm.asobo.entities;
 
 import at.msm.asobo.entities.media.Medium;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,12 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
-
 @Entity
+// @JsonIgnoreProperties({"creator"})
 public class Event {
 
     @Id
@@ -32,6 +28,7 @@ public class Event {
     @NotNull(message = "User is mandatory for creating event")
     @ManyToOne
     @JoinColumn(name = "creator_id")
+    @JsonIgnore
     private User creator;
 
     @ManyToMany
@@ -68,21 +65,6 @@ public class Event {
     public Event() {
     }
 
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public LocalDateTime getModificationDate() {
-        return modificationDate;
-    }
-
-    public void setModificationDate(LocalDateTime modificationDate) {
-        this.modificationDate = modificationDate;
-    }
 
     public Event(String name, String description, LocalDateTime date, String location){
         this.name = name;
@@ -102,6 +84,22 @@ public class Event {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public LocalDateTime getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(LocalDateTime modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public List<User> getParticipants() {

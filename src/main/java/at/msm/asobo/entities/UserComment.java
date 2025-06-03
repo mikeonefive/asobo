@@ -1,6 +1,7 @@
 package at.msm.asobo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -11,10 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
+
 @Entity
 public class UserComment {
 
@@ -28,10 +26,12 @@ public class UserComment {
     @NotNull(message = "Author is required to create a user comment")
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonIgnore
     private User author;
 
     @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
+    @JsonIgnore
     private Event event;
 
     @CreationTimestamp

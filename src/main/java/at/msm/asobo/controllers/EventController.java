@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 
 // change this to restcontroller as soon as done testing
@@ -50,7 +52,7 @@ public class EventController {
 
     @GetMapping(value = "/events", params = "location")
     public List<Event> getEventsByLocation(@RequestParam(required = false) String location) {
-        if (location == null) {
+        if (location == null || location.isBlank()) {
             return this.eventService.getAllEvents();
         }
         return this.eventService.getEventsByLocation(location);
@@ -58,14 +60,21 @@ public class EventController {
 
 
     @GetMapping(value = "/events", params = "date")
-    public List<Event> getEventsByDate(@RequestParam(required = false)
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) {
-        if (dateTime == null) {
-            return this.eventService.getAllEvents();
+    public List<Event> getEventsByDate(@RequestParam(required = false) String date) {
+        if (date == null || date.isBlank()) {
+            return eventService.getAllEvents();
         }
 
-        return this.eventService.getEventsByDate(dateTime);
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(date);
+            return eventService.getEventsByDate(dateTime);
+        } catch (DateTimeParseException dtpe) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Invalid date format. Expected ISO-8601 format (e.g., 2024-12-01T14:30:00)", dtpe);
+        }
     }
+
+
 
 
     @PostMapping

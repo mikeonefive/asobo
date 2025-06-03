@@ -35,8 +35,8 @@ public class Event {
     @JoinTable(name = "participant_id")
     private List<User> participants;
 
-    @NotBlank(message = "Name is mandatory")
-    private String name;
+    @NotBlank(message = "Title is mandatory")
+    private String title;
 
     @NotBlank(message = "Description is mandatory")
     private String description;
@@ -66,8 +66,8 @@ public class Event {
     }
 
 
-    public Event(String name, String description, LocalDateTime date, String location){
-        this.name = name;
+    public Event(String title, String description, LocalDateTime date, String location){
+        this.title = title;
         this.description = description;
         this.date = date;
         this.location = location;
@@ -110,12 +110,12 @@ public class Event {
         this.participants = participants;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getDescription() {

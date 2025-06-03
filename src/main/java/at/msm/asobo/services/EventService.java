@@ -41,6 +41,10 @@ public class EventService {
         return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
+    public List<Event> findEventsByTitle(String title) {
+        return eventRepository.findEventsByTitle(title);
+    }
+
     public Event deleteEventByID(UUID id) {
         Event eventToDelete = this.findEventByID(id);
         this.eventRepository.delete(eventToDelete);

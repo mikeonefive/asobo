@@ -18,7 +18,6 @@ import java.util.UUID;
 
 
 @Entity
-// @JsonIgnoreProperties({"creator"})
 public class Event {
 
     @Id
@@ -28,7 +27,6 @@ public class Event {
     @NotNull(message = "User is mandatory for creating event")
     @ManyToOne
     @JoinColumn(name = "creator_id")
-    @JsonIgnore
     private User creator;
 
     @ManyToMany
@@ -60,7 +58,6 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<Medium> media;
-
 
     public Event() {
     }

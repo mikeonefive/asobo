@@ -26,7 +26,6 @@ public class UserComment {
     @NotNull(message = "Author is required to create a user comment")
     @ManyToOne
     @JoinColumn(name = "author_id")
-    @JsonIgnore
     private User author;
 
     @ManyToOne//(fetch = FetchType.LAZY)

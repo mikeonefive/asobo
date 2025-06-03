@@ -1,5 +1,6 @@
 package at.msm.asobo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -32,9 +33,14 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "creator")
-    private List<Event> events;
+    @JsonIgnore
+    private List<Event> createdEvents;
+
+    @ManyToMany(mappedBy = "participants")
+    private List<Event> attendedEvents;
 
     @OneToMany(mappedBy = "author")
+    @JsonIgnore
     private List<UserComment> comments;
 
     private URI pictureURI;
@@ -146,19 +152,27 @@ public class User {
         this.id = id;
     }
 
-    public List<Event> getEvents() {
-        return events;
+    public List<Event> getCreatedEvents() {
+        return createdEvents;
     }
 
-    public void setEvents(List<Event> events) {
-        this.events = events;
+    public void setCreatedEvents(List<Event> events) {
+        this.createdEvents = events;
     }
 
     public List<UserComment> getComments() {
-        return comments;
+        return this.comments;
     }
 
     public void setComments(List<UserComment> comments) {
         this.comments = comments;
+    }
+
+    public List<Event> getAttendedEvents() {
+        return this.attendedEvents;
+    }
+
+    public void setAttendedEvents(List<Event> attendedEvents) {
+        this.attendedEvents = attendedEvents;
     }
 }

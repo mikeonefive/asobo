@@ -12,4 +12,8 @@ public class EventNotFoundException extends RuntimeException {
     public EventNotFoundException(UUID id) {
         super("Could not find event with ID " + id);
     }
+
+    public EventNotFoundException(String message){
+        super(message);
+    }
 }

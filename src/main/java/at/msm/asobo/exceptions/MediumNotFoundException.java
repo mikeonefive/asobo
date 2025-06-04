@@ -12,4 +12,8 @@ public class MediumNotFoundException extends RuntimeException {
     public MediumNotFoundException(UUID id) {
         super("Could not find medium with ID " + id);
     }
+
+    public MediumNotFoundException(String message){
+        super (message);
+    }
 }

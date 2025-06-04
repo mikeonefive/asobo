@@ -42,6 +42,6 @@ public class UserCommentController {
 
     @DeleteMapping("/{commentId}")
     public UserComment deleteUserComment(@PathVariable UUID eventId, @PathVariable UUID commentId) {
-        return userCommentService.deleteUserCommentByEventIdAndCommentId(eventId, commentId);
+        return this.userCommentService.deleteUserCommentByEventIdAndCommentId(eventId, commentId);
     }
 }

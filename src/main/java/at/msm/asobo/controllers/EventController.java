@@ -64,12 +64,12 @@ public class EventController {
     @GetMapping(params = "date")
     public List<Event> getEventsByDate(@RequestParam(required = false) String date) {
         if (date == null || date.isBlank()) {
-            return eventService.getAllEvents();
+            return this.eventService.getAllEvents();
         }
 
         try {
             LocalDateTime dateTime = LocalDateTime.parse(date);
-            return eventService.getEventsByDate(dateTime);
+            return this.eventService.getEventsByDate(dateTime);
         } catch (DateTimeParseException dtpe) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Invalid date format. Expected ISO-8601 format (e.g., 2024-12-01T14:30:00)", dtpe);
@@ -80,18 +80,18 @@ public class EventController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Event createEvent(@RequestBody @Valid Event event) {
-        return eventService.addNewEvent(event);
+        return this.eventService.addNewEvent(event);
     }
 
 
     @GetMapping("/{id}")
     public Event getEventByID(@PathVariable UUID id) {
-        return eventService.findEventByID(id);
+        return this.eventService.findEventByID(id);
     }
 
 
     @DeleteMapping("/{id}")
     public Event deleteEventByID(@PathVariable UUID id) {
-        return eventService.deleteEventByID(id);
+        return this.eventService.deleteEventByID(id);
     }
 }

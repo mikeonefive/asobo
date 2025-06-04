@@ -27,7 +27,7 @@ public class MediumController {
 
     @GetMapping("/{mediumID}")
     public Medium getMediumById(@PathVariable UUID eventID, @PathVariable UUID mediumID) {
-        return mediumService.getMediumByEventIdAndMediumId(eventID, mediumID);
+        return this.mediumService.getMediumByEventIdAndMediumId(eventID, mediumID);
     }
 
     @PostMapping
@@ -38,6 +38,6 @@ public class MediumController {
 
     @DeleteMapping("/{mediumID}")
     public Medium deleteMediumById(@PathVariable UUID eventID, @PathVariable UUID mediumID) {
-        return mediumService.deleteMediumById(eventID, mediumID);
+        return this.mediumService.deleteMediumById(eventID, mediumID);
     }
 }

@@ -1,7 +1,7 @@
 package at.msm.asobo.entities;
 
-import at.msm.asobo.dto.UserDTO;
-import at.msm.asobo.dto.UserRegisterDTO;
+import at.msm.asobo.dto.user.UserDTO;
+import at.msm.asobo.dto.user.UserRegisterDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

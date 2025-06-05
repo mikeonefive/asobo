@@ -1,4 +1,4 @@
-package at.msm.asobo.dto;
+package at.msm.asobo.dto.event;
 
 import at.msm.asobo.entities.User;
 

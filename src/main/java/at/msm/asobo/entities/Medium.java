@@ -1,9 +1,10 @@
 package at.msm.asobo.entities;
 
+import at.msm.asobo.dto.medium.MediumCreationDTO;
+import at.msm.asobo.dto.medium.MediumDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.net.URI;
 import java.util.UUID;
 
@@ -26,7 +27,17 @@ public class Medium {
     public Medium() {
     }
 
-    public Medium(URI mediumURI){
+    public Medium(MediumDTO mediumDTO) {
+        this.mediumURI = mediumDTO.getMediumURI();
+    }
+
+    public Medium(MediumCreationDTO creationDTO) {
+        this.mediumURI = creationDTO.getMediumURI();
+        this.event = new Event(creationDTO.getEvent());
+    }
+
+
+    public Medium(URI mediumURI) {
         this.mediumURI=mediumURI;
     }
 

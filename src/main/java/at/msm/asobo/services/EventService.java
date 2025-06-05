@@ -1,7 +1,7 @@
 package at.msm.asobo.services;
 
-import at.msm.asobo.dto.EventCreationDTO;
-import at.msm.asobo.dto.EventDTO;
+import at.msm.asobo.dto.event.EventCreationDTO;
+import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.exceptions.EventNotFoundException;
 import at.msm.asobo.repositories.EventRepository;

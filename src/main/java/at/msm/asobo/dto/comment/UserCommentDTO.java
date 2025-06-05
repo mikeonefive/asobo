@@ -1,5 +1,7 @@
-package at.msm.asobo.dto;
+package at.msm.asobo.dto.comment;
 
+import at.msm.asobo.dto.event.EventDTO;
+import at.msm.asobo.dto.user.UserDTO;
 import at.msm.asobo.entities.UserComment;
 
 import java.time.LocalDateTime;

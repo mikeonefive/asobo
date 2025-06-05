@@ -1,8 +1,7 @@
 package at.msm.asobo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import at.msm.asobo.dto.comment.UserCommentDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,11 +43,11 @@ public class UserComment {
     public UserComment(){
     }
 
-    public UserComment(String text, User user) {
-        this.text = text;
-        this.author = user;
-        this.creationDate = LocalDateTime.now();
-        this.modificationDate = null;
+    public UserComment(UserCommentDTO userCommentDTO) {
+        this.text = userCommentDTO.getText();
+        this.author = new User(userCommentDTO.getAuthor());
+        this.creationDate = userCommentDTO.getCreationDate();
+        this.modificationDate = userCommentDTO.getModificationDate();
     }
 
     public String getText() {

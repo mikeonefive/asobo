@@ -1,9 +1,9 @@
-package at.msm.asobo.dto;
+package at.msm.asobo.dto.event;
 
+import at.msm.asobo.dto.medium.MediumDTO;
+import at.msm.asobo.dto.comment.UserCommentDTO;
+import at.msm.asobo.dto.user.UserDTO;
 import at.msm.asobo.entities.Event;
-import at.msm.asobo.entities.User;
-import at.msm.asobo.entities.UserComment;
-import at.msm.asobo.entities.Medium;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -35,6 +35,9 @@ public class EventDTO {
     private List<UserCommentDTO> comments;
 
     private List<MediumDTO> media;
+
+    public EventDTO() {
+    }
 
     public EventDTO(Event event) {
         this.id = event.getId();

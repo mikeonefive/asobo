@@ -1,5 +1,7 @@
-package at.msm.asobo.dto;
+package at.msm.asobo.dto.admin;
 
+import at.msm.asobo.dto.comment.UserCommentDTO;
+import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.entities.User;
 
 import java.net.URI;
@@ -33,7 +35,7 @@ public class UserAdminDTO {
         this.pictureURI = user.getPictureURI();
         this.location = user.getLocation();
         this.registerDate = user.getRegisterDate();
-        this.isActive = user.getIsActive();
+        this.isActive = user.isActive();
     }
 
     public UUID getId() {

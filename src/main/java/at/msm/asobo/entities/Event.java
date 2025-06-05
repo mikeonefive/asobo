@@ -1,6 +1,7 @@
 package at.msm.asobo.entities;
 
-import at.msm.asobo.dto.EventCreationDTO;
+import at.msm.asobo.dto.event.EventCreationDTO;
+import at.msm.asobo.dto.event.EventDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,7 +62,7 @@ public class Event {
     }
 
 
-    public Event(EventCreationDTO eventCreationDTO){
+    public Event(EventCreationDTO eventCreationDTO) {
         this.title = eventCreationDTO.getTitle();
         this.description = eventCreationDTO.getTitle();
         this.date = eventCreationDTO.getDate();
@@ -78,7 +79,19 @@ public class Event {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public Event(EventDTO eventDTO){
+        this.title = eventDTO.getTitle();
+        this.description = eventDTO.getTitle();
+        this.date = eventDTO.getDate();
+        this.location = eventDTO.getLocation();
+        this.participants = eventDTO.getParticipants().stream().map(User::new).toList();//new ArrayList<User>();
+        this.creationDate = eventDTO.getCreationDate();
+        this.modificationDate = eventDTO.getModificationDate();
+        this.comments = eventDTO.getComments().stream().map(UserComment::new).toList();
+        this.media = eventDTO.getMedia().stream().map(Medium::new).toList();
+        this.pictureURI = eventDTO.getPictureURI();
     }
 
     public User getCreator() {

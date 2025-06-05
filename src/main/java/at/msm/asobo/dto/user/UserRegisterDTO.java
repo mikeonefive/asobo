@@ -1,4 +1,4 @@
-package at.msm.asobo.dto;
+package at.msm.asobo.dto.user;
 
 import at.msm.asobo.entities.User;
 import jakarta.validation.constraints.Email;

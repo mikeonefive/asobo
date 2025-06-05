@@ -30,13 +30,11 @@ public class EventDTO {
 
     private EventCreatorDTO creator;
 
-    // TODO save as user DTOs
-    private List<User> participants;
+    private List<UserDTO> participants;
 
-    // TODO usercomment DTOs?
-    private List<UserComment> comments;
+    private List<UserCommentDTO> comments;
 
-    private List<Medium> media;
+    private List<MediumDTO> media;
 
     public EventDTO(Event event) {
         this.id = event.getId();
@@ -47,10 +45,10 @@ public class EventDTO {
         this.date = event.getDate();
         this.creationDate = event.getCreationDate();
         this.modificationDate = event.getModificationDate();
-        this.media = event.getMedia();
-        this.comments = event.getComments();
+        this.media = event.getMedia().stream().map(MediumDTO::new).toList();
+        this.comments = event.getComments().stream().map(UserCommentDTO::new).toList();
         this.pictureURI = event.getPictureURI();
-        this.participants = event.getParticipants();
+        this.participants = event.getParticipants().stream().map(UserDTO::new).toList();
     }
 
     public UUID getId() {
@@ -81,7 +79,7 @@ public class EventDTO {
         return creator;
     }
 
-    public List<User> getParticipants() {
+    public List<UserDTO> getParticipants() {
         return participants;
     }
 
@@ -93,11 +91,11 @@ public class EventDTO {
         return modificationDate;
     }
 
-    public List<UserComment> getComments() {
+    public List<UserCommentDTO> getComments() {
         return comments;
     }
 
-    public List<Medium> getMedia() {
+    public List<MediumDTO> getMedia() {
         return media;
     }
 }

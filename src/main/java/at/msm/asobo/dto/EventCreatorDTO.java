@@ -11,8 +11,7 @@ public class EventCreatorDTO {
     private String username;
     private URI pictureURI;
 
-    public EventCreatorDTO() {
-    }
+    public EventCreatorDTO() {}
 
     public EventCreatorDTO(User user) {
         this.id = user.getId();

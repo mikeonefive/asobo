@@ -7,6 +7,7 @@ import java.util.UUID;
 public class MediumDTO {
 
     private UUID id;
+    private UUID eventId;
     protected URI mediumURI;
 
 
@@ -15,7 +16,24 @@ public class MediumDTO {
 
     public MediumDTO(Medium medium) {
         this.id = medium.getId();
+        this.eventId = medium.getEvent().getId();
         this.mediumURI = medium.getMediumURI();
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(UUID eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setMediumURI(URI mediumURI) {
+        this.mediumURI = mediumURI;
     }
 
     public UUID getId() {

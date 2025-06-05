@@ -12,7 +12,7 @@ public class UserCommentDTO {
     private UUID id;
     private String text;
     private UserDTO author;
-    private EventDTO event;
+    private UUID eventId;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
     // private File file;
@@ -24,7 +24,7 @@ public class UserCommentDTO {
         this.id = userComment.getId();
         this.text = userComment.getText();
         this.author = new UserDTO(userComment.getAuthor());
-        this.event = new EventDTO(userComment.getEvent());
+        this.eventId = userComment.getEvent().getId();
         this.creationDate = userComment.getCreationDate();
         this.modificationDate = userComment.getModificationDate();
     }
@@ -37,12 +37,36 @@ public class UserCommentDTO {
         return this.text;
     }
 
-    public UserDTO getAuthor() {
-        return this.author;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public EventDTO getEvent() {
-        return this.event;
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setAuthor(UserDTO author) {
+        this.author = author;
+    }
+
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(UUID eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setModificationDate(LocalDateTime modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    public UserDTO getAuthor() {
+        return this.author;
     }
 
     public LocalDateTime getCreationDate() {

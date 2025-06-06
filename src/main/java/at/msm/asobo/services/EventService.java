@@ -5,6 +5,7 @@ import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.exceptions.EventNotFoundException;
+import at.msm.asobo.mapper.EventDTOEventMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,17 +22,22 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final EventDTOEventMapper  eventDTOEventMapper;
 
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, EventDTOEventMapper eventDTOEventMapper) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.eventDTOEventMapper = eventDTOEventMapper;
     }
 
 
     public List<EventDTO> getAllEvents() {
-        return eventRepository.findAll().stream()
-                .map(EventDTO::new)
-                .toList();
+        List<Event> events = eventRepository.findAll();
+        return eventDTOEventMapper.mapEventsToEventDTOs(events);
+
+//        return eventRepository.findAll().stream()
+//                .map(eventDTOEventMapper::mapEventToEventDTO)
+//                .toList();
     }
 
     public List<EventDTO> getEventsByDate(LocalDateTime date) {

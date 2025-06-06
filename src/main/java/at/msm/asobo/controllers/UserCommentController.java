@@ -30,17 +30,17 @@ public class UserCommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserCommentDTO addNewComment(@PathVariable UUID eventId, @RequestBody @Valid UserComment comment) {
-        return this.userCommentService.addNewUserCommentToEventById(eventId, comment);
+    public UserCommentDTO addNewComment(@PathVariable UUID eventId, @RequestBody @Valid UserCommentDTO commentDTO) {
+        return this.userCommentService.addNewUserCommentToEventById(eventId, commentDTO);
     }
 
     @PutMapping("/{commentId}")
-    public UserComment updateUserComment(@PathVariable UUID eventId, @PathVariable UUID commentId, @RequestBody @Valid UserComment updatedComment) {
-        return this.userCommentService.updateUserCommentByEventIdAndCommentId(eventId, commentId, updatedComment);
+    public UserCommentDTO updateUserComment(@PathVariable UUID eventId, @PathVariable UUID commentId, @RequestBody @Valid UserCommentDTO updatedCommentDTO) {
+        return this.userCommentService.updateUserCommentByEventIdAndCommentId(eventId, commentId, updatedCommentDTO);
     }
 
     @DeleteMapping("/{commentId}")
-    public UserComment deleteUserComment(@PathVariable UUID eventId, @PathVariable UUID commentId) {
+    public UserCommentDTO deleteUserComment(@PathVariable UUID eventId, @PathVariable UUID commentId) {
         return this.userCommentService.deleteUserCommentByEventIdAndCommentId(eventId, commentId);
     }
 }

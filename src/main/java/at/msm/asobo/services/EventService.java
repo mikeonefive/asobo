@@ -56,7 +56,7 @@ public class EventService {
     public EventDTO addNewEvent(EventCreationDTO eventCreationDTO) {
         User user = userRepository.findById(eventCreationDTO.getCreator().getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Event newEvent = new Event(eventCreationDTO);
+        Event newEvent = this.eventDTOEventMapper.mapEventCreationDTOToEvent(eventCreationDTO);
         newEvent.setCreator(user);
         return new EventDTO(this.eventRepository.save(newEvent));
     }

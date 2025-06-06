@@ -16,7 +16,7 @@ public class EventMapperHelper {
 
     @Named("uuidToUser")
     public Event fromId(UUID id) {
-        return eventService.getEventByID(id);
+        return eventService.getEventById(id);
     }
 
     @Named("userToUuid")

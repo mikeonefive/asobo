@@ -9,15 +9,15 @@ import at.msm.asobo.mapper.EventDTOEventMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 
-
 @Service
+@Transactional
 public class EventService {
 
     private final EventRepository eventRepository;
@@ -30,55 +30,50 @@ public class EventService {
         this.eventDTOEventMapper = eventDTOEventMapper;
     }
 
-
     public List<EventDTO> getAllEvents() {
-        List<Event> events = eventRepository.findAll();
-        List<EventDTO> eventDTOS = eventDTOEventMapper.mapEventsToEventDTOs(events);
-        return eventDTOS;
-
-        /*return eventRepository.findAll().stream()
-                .map(EventDTO::new)
-                .toList();*/
+        List<Event> events = this.eventRepository.findAll();
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 
     public List<EventDTO> getEventsByDate(LocalDateTime date) {
-        return eventRepository.findEventsByDate(date).stream()
-                .map(EventDTO::new)
-                .toList();
+        List<Event> events = this.eventRepository.findEventsByDate(date);
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 
     public List<EventDTO> getEventsByLocation(String location) {
-        return eventRepository.findEventsByLocation(location).stream()
-                .map(EventDTO::new)
-                .toList();
+        List<Event> events = this.eventRepository.findEventsByLocation(location);
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 
     public EventDTO addNewEvent(EventCreationDTO eventCreationDTO) {
-        User user = userRepository.findById(eventCreationDTO.getCreator().getId())
+        User user = this.userRepository.findById(eventCreationDTO.getCreator().getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event newEvent = new Event(eventCreationDTO);
         newEvent.setCreator(user);
-        return new EventDTO(this.eventRepository.save(newEvent));
+        Event savedEvent = this.eventRepository.save(newEvent);
+        return this.eventDTOEventMapper.mapEventToEventDTO(savedEvent);
     }
 
-
-    public Event getEventByID(UUID id) {
-        return eventRepository.findById(id)
+    public Event getEventById(UUID id) {
+        Event event = this.eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
+        return event;
     }
 
-    /*public EventDOT getEventByID(UUID id) {
-        return eventRepository.findById(id)
+    public EventDTO getEventDTOById(UUID id) {
+        Event event = this.eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
-    }*/
-
-    public List<Event> getEventsByTitle(String title) {
-        return eventRepository.findEventsByTitle(title);
+        return this.eventDTOEventMapper.mapEventToEventDTO(event);
     }
 
-    public Event deleteEventByID(UUID id) {
-        Event eventToDelete = this.getEventByID(id);
+    public List<EventDTO> getEventsByTitle(String title) {
+        List<Event> events = this.eventRepository.findEventsByTitle(title);
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
+    }
+
+    public EventDTO deleteEventById(UUID id) {
+        Event eventToDelete = this.getEventById(id);
         this.eventRepository.delete(eventToDelete);
-        return eventToDelete;
+        return this.eventDTOEventMapper.mapEventToEventDTO(eventToDelete);
     }
 }

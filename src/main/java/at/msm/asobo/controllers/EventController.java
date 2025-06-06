@@ -2,7 +2,6 @@ package at.msm.asobo.controllers;
 
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
-import at.msm.asobo.entities.Event;
 import at.msm.asobo.services.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -47,6 +46,11 @@ public class EventController {
         return this.eventService.getAllEvents();
     }
 
+//    @GetMapping
+//    public List<EventDTO> getEventsByTitle(String title) {
+//        return this.eventService.getEventsByTitle(title);
+//    }
+
 
     @GetMapping(params = "location")
     public List<EventDTO> getEventsByLocation(@RequestParam(required = false) String location) {
@@ -83,15 +87,13 @@ public class EventController {
 
 
     @GetMapping("/{id}")
-    public EventDTO getEventByID(@PathVariable UUID id) {
-        Event foundEvent = this.eventService.getEventByID(id);
-        return new EventDTO(foundEvent);
+    public EventDTO getEventById(@PathVariable UUID id) {
+        return this.eventService.getEventDTOById(id);
     }
 
 
     @DeleteMapping("/{id}")
-    public EventDTO deleteEventByID(@PathVariable UUID id) {
-        Event deletedEvent = this.eventService.deleteEventByID(id);
-        return new EventDTO(deletedEvent);
+    public EventDTO deleteEventById(@PathVariable UUID id) {
+        return this.eventService.deleteEventById(id);
     }
 }

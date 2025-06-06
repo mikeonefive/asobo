@@ -28,7 +28,7 @@ public class UserController {
         return this.userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public UserDTO getUserById(@PathVariable UUID id) {
         return this.userService.getUserDTOById(id);
     }

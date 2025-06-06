@@ -54,7 +54,8 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private List<UserComment> comments;
 
-    @OneToMany(mappedBy = "event")
+    // TODO fix Fetch LAZY error!!!
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Medium> media;
 
     public Event() {

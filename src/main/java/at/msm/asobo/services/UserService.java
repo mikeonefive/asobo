@@ -56,8 +56,7 @@ public class UserService {
     }
 
     public UserDTO updateUserById(UUID userId, UserUpdateDTO userUpdateDTO) {
-        User existingUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+        User existingUser = this.getUserById(userId);
 
         existingUser.setActive(userUpdateDTO.isActive());
         existingUser.setEmail(userUpdateDTO.getEmail());

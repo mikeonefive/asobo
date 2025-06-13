@@ -11,8 +11,17 @@ public class EventCreatorDTO {
     private UUID id;
     private String username;
     private URI pictureURI;
+    private UUID eventId;
 
     public EventCreatorDTO() {}
+
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(UUID eventId) {
+        this.eventId = eventId;
+    }
 
     public UUID getId() {
         return this.id;

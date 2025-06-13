@@ -10,7 +10,7 @@ public class EventCreatorDTO {
 
     private UUID id;
     private String username;
-    private URI pictureURI;
+    private String pictureURI;
     private UUID eventId;
 
     public EventCreatorDTO() {}
@@ -39,12 +39,11 @@ public class EventCreatorDTO {
         this.username = username;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return this.pictureURI;
     }
 
-    public void setPictureURI(URI pictureURI) {
+    public void setPictureURI(String pictureURI) {
         this.pictureURI = pictureURI;
     }
-
 }

@@ -1,17 +1,12 @@
 package at.msm.asobo.entities;
 
-import at.msm.asobo.dto.event.EventCreationDTO;
-import at.msm.asobo.dto.event.EventDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -43,7 +38,8 @@ public class Event {
     @NotBlank(message = "Location is mandatory")
     private String location;
 
-    private URI pictureURI;
+    @Column(length = 4096)
+    private String pictureURI;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
@@ -116,11 +112,11 @@ public class Event {
         this.location = location;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return pictureURI;
     }
 
-    public void setPictureURI(URI pictureURI) {
+    public void setPictureURI(String pictureURI) {
         this.pictureURI = pictureURI;
     }
 

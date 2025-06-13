@@ -3,8 +3,7 @@ package at.msm.asobo.dto.user;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import java.net.URI;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserUpdateDTO {
 
@@ -21,13 +20,12 @@ public class UserUpdateDTO {
 
     private String location;
 
-    //@Size(max = 255, message = "Picture URI must be less than 255 characters")
-    private URI pictureURI;
-
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
     private boolean active;
+
+    private MultipartFile picture;
 
     public String getUsername() {
         return username;
@@ -45,20 +43,20 @@ public class UserUpdateDTO {
         this.email = email;
     }
 
+    public MultipartFile getPicture() {
+        return picture;
+    }
+
+    public void setPicture(MultipartFile picture) {
+        this.picture = picture;
+    }
+
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public URI getPictureURI() {
-        return pictureURI;
-    }
-
-    public void setPictureURI(URI pictureURI) {
-        this.pictureURI = pictureURI;
     }
 
     public String getPassword() {

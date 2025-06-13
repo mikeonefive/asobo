@@ -17,7 +17,7 @@ public class UserAdminDTO {
     private List<EventDTO> createdEvents;
     private List<EventDTO> attendedEvents;
     private List<UserCommentDTO> comments;
-    private URI pictureURI;
+    private String pictureURI;
     private String location;
     private LocalDateTime registerDate;
     private boolean isActive;
@@ -27,6 +27,50 @@ public class UserAdminDTO {
 
     public UUID getId() {
         return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setCreatedEvents(List<EventDTO> createdEvents) {
+        this.createdEvents = createdEvents;
+    }
+
+    public void setAttendedEvents(List<EventDTO> attendedEvents) {
+        this.attendedEvents = attendedEvents;
+    }
+
+    public void setComments(List<UserCommentDTO> comments) {
+        this.comments = comments;
+    }
+
+    public void setPictureURI(String pictureURI) {
+        this.pictureURI = pictureURI;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setRegisterDate(LocalDateTime registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public String getEmail() {
@@ -49,7 +93,7 @@ public class UserAdminDTO {
         return this.comments;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return this.pictureURI;
     }
 

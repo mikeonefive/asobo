@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -40,7 +39,8 @@ public class User {
     @JsonIgnore
     private List<UserComment> comments;
 
-    private URI pictureURI;
+    @Column(length = 4096)
+    private String pictureURI;
 
     private String location;
 
@@ -95,11 +95,11 @@ public class User {
         this.oldPassword = oldPassword;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return pictureURI;
     }
 
-    public void setPictureURI(URI pictureURI) {
+    public void setPictureURI(String pictureURI) {
         this.pictureURI = pictureURI;
     }
 

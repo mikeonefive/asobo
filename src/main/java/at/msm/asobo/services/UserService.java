@@ -1,5 +1,6 @@
 package at.msm.asobo.services;
 
+import at.msm.asobo.config.FileStorageProperties;
 import at.msm.asobo.dto.user.UserDTO;
 import at.msm.asobo.dto.user.UserRegisterDTO;
 import at.msm.asobo.dto.user.UserUpdateDTO;
@@ -7,8 +8,11 @@ import at.msm.asobo.entities.User;
 import at.msm.asobo.exceptions.UserNotFoundException;
 import at.msm.asobo.mappers.UserDTOUserMapper;
 import at.msm.asobo.repositories.UserRepository;
+import at.msm.asobo.services.files.FileStorageService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +21,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserDTOUserMapper userDTOUserMapper;
+    private final FileStorageService fileStorageService;
+    private final FileStorageProperties fileStorageProperties;
 
-    public UserService(UserRepository userRepository, UserDTOUserMapper userDTOUserMapper) {
+    public UserService(UserRepository userRepository, UserDTOUserMapper userDTOUserMapper, FileStorageService fileStorageService, FileStorageProperties fileStorageProperties) {
         this.userRepository = userRepository;
         this.userDTOUserMapper = userDTOUserMapper;
+        this.fileStorageService = fileStorageService;
+        this.fileStorageProperties = fileStorageProperties;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -43,6 +51,12 @@ public class UserService {
 
     public UserDTO registerUser(UserRegisterDTO userRegisterDTO) {
         User newUser = this.userDTOUserMapper.mapUserRegisterDTOToUser(userRegisterDTO);
+
+        if (userRegisterDTO.getProfilePicture() != null && !userRegisterDTO.getProfilePicture().isEmpty()) {
+            String fileURI = fileStorageService.store(userRegisterDTO.getProfilePicture(), this.fileStorageProperties.getProfilePictureSubfolder());
+            newUser.setPictureURI(fileURI);
+        }
+
         User savedUser = this.userRepository.save(newUser);
         return this.userDTOUserMapper.mapUserToUserDTO(savedUser);
     }
@@ -60,9 +74,16 @@ public class UserService {
         existingUser.setActive(userUpdateDTO.isActive());
         existingUser.setEmail(userUpdateDTO.getEmail());
         existingUser.setLocation(userUpdateDTO.getLocation());
-        existingUser.setPictureURI(userUpdateDTO.getPictureURI());
         existingUser.setUsername(userUpdateDTO.getUsername());
         existingUser.setPassword(userUpdateDTO.getPassword());
+
+        // Handle the picture if it is present
+        MultipartFile picture = userUpdateDTO.getPicture();
+        if (picture != null && !picture.isEmpty()) {
+            String pictureURI = fileStorageService.store(picture, this.fileStorageProperties.getProfilePictureSubfolder());
+            existingUser.setPictureURI(pictureURI);
+        }
+
         User updatedUser = userRepository.save(existingUser);
         return this.userDTOUserMapper.mapUserToUserDTO(updatedUser);
     }

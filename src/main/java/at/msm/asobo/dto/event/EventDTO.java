@@ -3,13 +3,9 @@ package at.msm.asobo.dto.event;
 import at.msm.asobo.dto.medium.MediumDTO;
 import at.msm.asobo.dto.comment.UserCommentDTO;
 import at.msm.asobo.dto.user.UserDTO;
-import at.msm.asobo.entities.Event;
-
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class EventDTO {
@@ -20,7 +16,7 @@ public class EventDTO {
 
     private String description;
 
-    private URI pictureURI;
+    private String pictureURI;
 
     private String location;
 
@@ -56,7 +52,7 @@ public class EventDTO {
         this.description = description;
     }
 
-    public void setPictureURI(URI pictureURI) {
+    public void setPictureURI(String pictureURI) {
         this.pictureURI = pictureURI;
     }
 
@@ -124,7 +120,7 @@ public class EventDTO {
         return participants;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return pictureURI;
     }
 

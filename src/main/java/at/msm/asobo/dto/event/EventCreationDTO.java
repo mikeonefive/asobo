@@ -19,7 +19,7 @@ public class EventCreationDTO {
     @NotBlank(message = "Description is mandatory for event creation")
     private String description;
 
-    private URI pictureURI;
+    private String pictureURI;
 
     @NotBlank(message = "Location is mandatory for event creation")
     private String location;
@@ -54,7 +54,7 @@ public class EventCreationDTO {
         return description;
     }
 
-    public URI getPictureURI() {
+    public String getPictureURI() {
         return pictureURI;
     }
 
@@ -88,5 +88,53 @@ public class EventCreationDTO {
 
     public List<MediumDTO> getMedia() {
         return media;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPictureURI(String pictureURI) {
+        this.pictureURI = pictureURI;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setModificationDate(LocalDateTime modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    public void setCreator(EventCreatorDTO creator) {
+        this.creator = creator;
+    }
+
+    public void setParticipants(List<UserDTO> participants) {
+        this.participants = participants;
+    }
+
+    public void setComments(List<UserCommentDTO> comments) {
+        this.comments = comments;
+    }
+
+    public void setMedia(List<MediumDTO> media) {
+        this.media = media;
     }
 }

@@ -3,7 +3,7 @@ package at.msm.asobo.dto.user;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.net.URI;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserRegisterDTO {
 
@@ -19,61 +19,80 @@ public class UserRegisterDTO {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    private URI pictureURI;
+    //@NotBlank(message = "Password confirmation is required")
+    //private String passwordConf;
+
+    private MultipartFile profilePicture;
 
     private String location;
 
     @NotBlank(message = "Salutation is mandatory for user registration")
     private String salutation;
 
-    public UserRegisterDTO() {
-    }
+    private String salutationOther;
+
 
     public String getUsername() {
-        return this.username;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public URI getPictureURI() {
-        return this.pictureURI;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public String getSalutation() {
-        return salutation;
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setPictureURI(URI pictureURI) {
-        this.pictureURI = pictureURI;
+    /*public String getPasswordConf() {
+        return passwordConf;
+    }
+
+    public void setPasswordConf(String passwordConf) {
+        this.passwordConf = passwordConf;
+    }*/
+
+    public MultipartFile getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(MultipartFile profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
+    public String getSalutation() {
+        return salutation;
+    }
+
     public void setSalutation(String salutation) {
         this.salutation = salutation;
+    }
+
+    public String getSalutationOther() {
+        return salutationOther;
+    }
+
+    public void setSalutationOther(String salutationOther) {
+        this.salutationOther = salutationOther;
     }
 }

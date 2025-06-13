@@ -40,12 +40,12 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO registerUser(@RequestBody @Valid UserRegisterDTO registerDTO) {
+    public UserDTO registerUser(@ModelAttribute @Valid UserRegisterDTO registerDTO) {
         return this.userService.registerUser(registerDTO);
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+    public UserDTO updateUser(@PathVariable UUID id, @ModelAttribute @Valid UserUpdateDTO userUpdateDTO) {
         return this.userService.updateUserById(id, userUpdateDTO);
     }
 

@@ -1,7 +1,5 @@
 package at.msm.asobo.dto.user;
 
-import jakarta.validation.constraints.NotBlank;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,6 +14,16 @@ public class UserDTO {
     private String password;
 
     private String oldPassword;
+
+    private LocalDateTime registerDate;
+
+    private boolean isActive;
+
+    private String pictureURI;
+
+    private String location;
+
+    private String salutation;
 
     public void setId(UUID id) {
         this.id = id;
@@ -41,16 +49,20 @@ public class UserDTO {
         this.oldPassword = oldPassword;
     }
 
+    public String getPictureURI() {
+        return pictureURI;
+    }
+
+    public void setPictureURI(String pictureURI) {
+        this.pictureURI = pictureURI;
+    }
+
     public void setRegisterDate(LocalDateTime registerDate) {
         this.registerDate = registerDate;
     }
 
     public void setActive(boolean active) {
         isActive = active;
-    }
-
-    public void setPictureURI(URI pictureURI) {
-        this.pictureURI = pictureURI;
     }
 
     public void setLocation(String location) {
@@ -60,16 +72,6 @@ public class UserDTO {
     public void setSalutation(String salutation) {
         this.salutation = salutation;
     }
-
-    private LocalDateTime registerDate;
-
-    private boolean isActive;
-
-    private URI pictureURI;
-
-    private String location;
-
-    private String salutation;
 
     public UserDTO() {
     }
@@ -94,10 +96,6 @@ public class UserDTO {
         return this.username;
     }
 
-    public URI getPictureURI() {
-        return this.pictureURI;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -106,7 +104,7 @@ public class UserDTO {
         return salutation;
     }
 
-    public @NotBlank(message = "Password is mandatory") String getPassword() {
+    public String getPassword() {
         return this.password;
     }
 }

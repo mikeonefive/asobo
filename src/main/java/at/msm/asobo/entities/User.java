@@ -1,9 +1,5 @@
 package at.msm.asobo.entities;
 
-import at.msm.asobo.dto.event.EventCreationDTO;
-import at.msm.asobo.dto.event.EventCreatorDTO;
-import at.msm.asobo.dto.user.UserDTO;
-import at.msm.asobo.dto.user.UserRegisterDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +27,8 @@ public class User {
     @NotBlank(message = "Password is mandatory")
     private String password;
 
+    private String oldPassword;
+
     @OneToMany(mappedBy = "creator")
     @JsonIgnore
     private List<Event> createdEvents;
@@ -51,6 +49,7 @@ public class User {
 
     private boolean isActive;
 
+    @NotBlank(message = "Salutation is mandatory")
     private String salutation;
 
     public User(){
@@ -86,6 +85,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public URI getPictureURI() {

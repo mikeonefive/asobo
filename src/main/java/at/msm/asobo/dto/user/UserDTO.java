@@ -1,8 +1,6 @@
 package at.msm.asobo.dto.user;
 
-import at.msm.asobo.entities.User;
 import jakarta.validation.constraints.NotBlank;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,6 +14,8 @@ public class UserDTO {
     private String email;
 
     private String password;
+
+    private String oldPassword;
 
     public void setId(UUID id) {
         this.id = id;
@@ -31,6 +31,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public void setRegisterDate(LocalDateTime registerDate) {
@@ -64,18 +72,6 @@ public class UserDTO {
     private String salutation;
 
     public UserDTO() {
-    }
-
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.registerDate = user.getRegisterDate();
-        this.isActive = user.isActive();
-        this.pictureURI = user.getPictureURI();
-        this.location = user.getLocation();
-        this.salutation = user.getSalutation();
     }
 
     public UUID getId() {

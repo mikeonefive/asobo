@@ -53,7 +53,7 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<UserComment> comments;
-    
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Medium> media;
 

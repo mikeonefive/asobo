@@ -16,6 +16,9 @@ public class UserUpdateDTO {
     @Email(message = "Email should be valid")
     private String email;
 
+    @NotBlank(message = "Salutation must not be blank")
+    private String salutation;
+
     private String location;
 
     //@Size(max = 255, message = "Picture URI must be less than 255 characters")
@@ -72,5 +75,13 @@ public class UserUpdateDTO {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getSalutation() {
+        return this.salutation;
+    }
+
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
     }
 }

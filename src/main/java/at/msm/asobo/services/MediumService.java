@@ -47,7 +47,7 @@ public class MediumService {
 
     public MediumDTO addMediumToEventById(UUID eventID, MediumCreationDTO creationDTO) {
         Event event = eventService.getEventById(eventID);
-        Medium newMedium = new Medium(creationDTO);
+        Medium newMedium = this.mediumDTOMediumMapper.mapMediumCreationDTOToMedium(creationDTO);
         newMedium.setEvent(event);
 
         Medium savedMedium = this.mediumRepository.save(newMedium);

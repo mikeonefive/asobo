@@ -37,12 +37,13 @@ public class UserCommentService {
     }
 
     public List<UserCommentDTO> getAllUserComments() {
-        return this.userCommentRepository.findAll().stream().map(UserCommentDTO::new).toList();
+        List<UserComment> userComments = this.userCommentRepository.findAll();
+        return this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(userComments);
     }
 
     public UserCommentDTO getUserCommentById(UUID id) {
         UserComment userComment = this.userCommentRepository.findById(id).orElseThrow(() -> new UserCommentNotFoundException(id));
-        return new UserCommentDTO(userComment);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentToUserCommentDTO(userComment);
     }
 
     public List<UserCommentDTO> getUserCommentsByCreationDate(LocalDateTime date) {
@@ -51,20 +52,23 @@ public class UserCommentService {
     }
 
     public List<UserCommentDTO> getUserCommentsByAuthor(User author) {
-        return this.userCommentRepository.findUserCommentsByAuthor(author).stream().map(UserCommentDTO::new).toList();
+        List<UserComment> userComments = this.userCommentRepository.findUserCommentsByAuthor(author);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(userComments);
     }
 
     public List<UserCommentDTO> getUserCommentsByEvent(Event event) {
-        return this.userCommentRepository.findUserCommentsByEvent(event).stream().map(UserCommentDTO::new).toList();
+        List<UserComment> userComments = this.userCommentRepository.findUserCommentsByEvent(event);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(userComments);
     }
 
     public List<UserCommentDTO> getUserCommentsByEventId(UUID eventId) {
-        return this.userCommentRepository.findUserCommentsByEventId(eventId).stream().map(UserCommentDTO::new).toList();
+        List<UserComment> userComments = this.userCommentRepository.findUserCommentsByEventId(eventId);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(userComments);
     }
 
     public UserCommentDTO getUserCommentByEventIdAndCommentId(UUID eventId, UUID commentId) {
         UserComment userComment = this.userCommentRepository.findUserCommentByEventIdAndId(eventId, commentId).orElseThrow(() -> new UserCommentNotFoundException(commentId));
-        return new UserCommentDTO(userComment);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentToUserCommentDTO(userComment);
     }
 
     public UserCommentDTO addNewUserCommentToEventById(UUID eventId, UserCommentDTO userCommentDTO) {
@@ -73,7 +77,8 @@ public class UserCommentService {
 
         UserComment newComment = this.userCommentDTOUserCommentMapper.mapUserCommentDTOToUserComment(userCommentDTO);
         newComment.setEvent(event);
-        return new UserCommentDTO(this.userCommentRepository.save(newComment));
+        UserComment savedComment = userCommentRepository.save(newComment);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentToUserCommentDTO(savedComment);
     }
 
     public UserCommentDTO updateUserCommentByEventIdAndCommentId(UUID eventId, UUID commentId, UserCommentDTO updatedCommentDTO) {
@@ -84,8 +89,9 @@ public class UserCommentService {
         existingComment.setModificationDate(LocalDateTime.now());
         UUID authorId = updatedCommentDTO.getAuthorId();
         existingComment.setAuthor(this.userService.getUserById(authorId));
+        UserComment savedExistingComment = userCommentRepository.save(existingComment);
 
-        return new UserCommentDTO(userCommentRepository.save(existingComment));
+        return this.userCommentDTOUserCommentMapper.mapUserCommentToUserCommentDTO(savedExistingComment);
     }
 
 
@@ -93,6 +99,7 @@ public class UserCommentService {
         UserCommentDTO userCommentDTO = this.getUserCommentByEventIdAndCommentId(eventId, commentId);
         UserComment userComment = this.userCommentDTOUserCommentMapper.mapUserCommentDTOToUserComment(userCommentDTO);
         this.userCommentRepository.delete(userComment);
+
         return userCommentDTO;
     }
 }

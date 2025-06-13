@@ -17,15 +17,6 @@ public class UserCommentDTO {
     public UserCommentDTO() {
     }
 
-    public UserCommentDTO(UserComment userComment) {
-        this.id = userComment.getId();
-        this.text = userComment.getText();
-        this.authorId = userComment.getAuthor().getId();
-        this.eventId = userComment.getEvent().getId();
-        this.creationDate = userComment.getCreationDate();
-        this.modificationDate = userComment.getModificationDate();
-    }
-
     public UUID getId() {
         return this.id;
     }

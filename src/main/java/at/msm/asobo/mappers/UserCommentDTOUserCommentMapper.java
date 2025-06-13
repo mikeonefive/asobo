@@ -11,6 +11,6 @@ public interface UserCommentDTOUserCommentMapper {
     UserCommentDTO mapUserCommentToUserCommentDTO(UserComment userComment);
     UserComment mapUserCommentDTOToUserComment(UserCommentDTO userCommentDTO);
 
-    List<UserCommentDTO> mapUserCommentssToUserCommentDTOs(List<UserComment> userComments);
+    List<UserCommentDTO> mapUserCommentsToUserCommentDTOs(List<UserComment> userComments);
     List<UserComment> mapUserCommentDTOsToUserComments(List<UserCommentDTO> userCommentDTOs);
 }

@@ -46,7 +46,8 @@ public class UserCommentService {
     }
 
     public List<UserCommentDTO> getUserCommentsByCreationDate(LocalDateTime date) {
-        return this.userCommentRepository.findUserCommentsByCreationDate(date).stream().map(UserCommentDTO::new).toList();
+        List<UserComment> userComments = this.userCommentRepository.findUserCommentsByCreationDate(date);
+        return this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(userComments);
     }
 
     public List<UserCommentDTO> getUserCommentsByAuthor(User author) {

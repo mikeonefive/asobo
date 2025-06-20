@@ -1,12 +1,11 @@
-const imageBaseURL = "/images/events/";
-
 $(document).ready(getAllEvents);
 
 function getAllEvents() {
     $.getJSON('/api/events')
         .done(function (jsonData) {
-            jsonData.forEach(element => {
-                console.log(element);
+            jsonData.forEach(event => {
+                console.log(event);
+                appendEventToList(event);
             });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -16,14 +15,24 @@ function getAllEvents() {
 
 
 // TODO: target events list and append each created eventCard to that list
+function appendEventToList(event) {
+    const $eventList = $("#event-list");
+    const $createdEvent = createEventCard(event);
+    $eventList.append($createdEvent);
+}
 
 
 function createEventCard(event) {
+    const $listItem = $('<li>');
+
+    const $link = $('<a>')
+        .attr('src', "/events/" + event.id);
+
     const $card = $('<div>').addClass('card event-card');
 
     const $image = $('<img>')
         .addClass('card-img-top')
-        .attr('src', imageBaseURL + event.pictureURI)
+        .attr('src', event.pictureURI)
         .attr('alt', event.title + ' picture');
 
     const $imageContainer = $('<div>')
@@ -39,6 +48,8 @@ function createEventCard(event) {
 
     $cardBody.append($title, $date, $time, $location);
     $card.append($imageContainer, $cardBody);
+    $link.append($card);
+    $listItem.append($link);
 
-    return $card;
+    return $listItem;
 }

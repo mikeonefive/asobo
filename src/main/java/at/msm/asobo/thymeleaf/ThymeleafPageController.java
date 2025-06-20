@@ -1,4 +1,4 @@
-package at.msm.asobo.Thymeleaf;
+package at.msm.asobo.thymeleaf;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

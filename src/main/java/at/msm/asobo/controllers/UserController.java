@@ -14,7 +14,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +28,7 @@ public class UserController {
         return this.userService.getAllUsers();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable UUID id) {
         return this.userService.getUserDTOById(id);
     }

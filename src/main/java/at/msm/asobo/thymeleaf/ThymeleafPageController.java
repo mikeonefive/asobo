@@ -17,4 +17,9 @@ public class ThymeleafPageController {
     public String renderPage(@PathVariable String page, Model model) {
         return page; // returns templates/{page}.html
     }
+
+    @GetMapping("/users/{id}")
+    public String userProfile(@PathVariable String id, Model model) {
+        return "user-profile"; // maps to templates/users/user-profile.html
+    }
 }

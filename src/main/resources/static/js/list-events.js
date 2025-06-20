@@ -14,7 +14,6 @@ function getAllEvents() {
 }
 
 
-// TODO: target events list and append each created eventCard to that list
 function appendEventToList(event) {
     const $eventList = $("#event-list");
     const $createdEvent = createEventCard(event);
@@ -26,14 +25,14 @@ function createEventCard(event) {
     const $listItem = $('<li>');
 
     const $link = $('<a>')
-        .attr('src', "/events/" + event.id);
+        .attr('href', "/events/" + event.id);
 
     const $card = $('<div>').addClass('card event-card');
 
     const $image = $('<img>')
         .addClass('card-img-top')
         .attr('src', event.pictureURI)
-        .attr('alt', event.title + ' picture');
+        .attr('alt', event.title);
 
     const $imageContainer = $('<div>')
         .addClass('card-image-container')

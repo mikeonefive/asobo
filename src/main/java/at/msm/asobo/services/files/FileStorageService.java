@@ -42,7 +42,6 @@ public class FileStorageService {
 
         Path targetDir = Paths.get(destinationPath).toAbsolutePath();
         Path targetFile = targetDir.resolve(filename);
-        System.out.println("targetFile: " + targetFile);
 
         try (InputStream in = file.getInputStream()) {
             Files.copy(in, targetFile, StandardCopyOption.REPLACE_EXISTING);

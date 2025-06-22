@@ -2,7 +2,6 @@ package at.msm.asobo.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.net.URI;
 import java.util.UUID;
 
 
@@ -14,21 +13,21 @@ public class Medium {
     private UUID id;
 
     @NotNull(message = "URI is mandatory for media")
-    protected URI mediumURI;
+    @Column(length = 4096)
+    private String mediumURI;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    // @JsonBackReference
     private Event event;
 
     public Medium() {
     }
 
-    public URI getMediumURI() {
-        return mediumURI;
+    public String getMediumURI() {
+        return this.mediumURI;
     }
 
-    public void setMediumURI(URI mediumURI) {
+    public void setMediumURI(String mediumURI) {
         this.mediumURI = mediumURI;
     }
 
@@ -37,7 +36,7 @@ public class Medium {
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
     public Event getEvent() {

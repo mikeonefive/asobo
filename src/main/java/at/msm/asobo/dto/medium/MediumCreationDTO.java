@@ -1,8 +1,6 @@
 package at.msm.asobo.dto.medium;
 
 import jakarta.validation.constraints.NotNull;
-
-import java.net.URI;
 import java.util.UUID;
 
 public class MediumCreationDTO {
@@ -10,7 +8,7 @@ public class MediumCreationDTO {
     protected UUID eventId;
 
     @NotNull(message = "URI is mandatory for creating a new medium")
-    protected URI mediumURI;
+    protected String mediumURI;
 
     public MediumCreationDTO() {
     }
@@ -23,11 +21,11 @@ public class MediumCreationDTO {
         this.eventId = eventId;
     }
 
-    public void setMediumURI(URI mediumURI) {
+    public void setMediumURI(String mediumURI) {
         this.mediumURI = mediumURI;
     }
 
-    public URI getMediumURI() {
+    public String getMediumURI() {
         return this.mediumURI;
     }
 }

@@ -9,6 +9,7 @@ const app = express();
 app.use('/uploads', createProxyMiddleware({
     target: 'http://localhost:8080',
     changeOrigin: true,
+    logLevel: 'debug',
 }));
 
 // Static files (CSS, JS, images)

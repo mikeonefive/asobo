@@ -12,7 +12,7 @@ public class FileStorageProperties {
     private String eventGalleriesSubfolder;
 
     public String getBasePath() {
-        return basePath;
+        return this.basePath;
     }
 
     public void setBasePath(String basePath) {
@@ -20,7 +20,7 @@ public class FileStorageProperties {
     }
 
     public String getProfilePictureSubfolder() {
-        return profilePictureSubfolder;
+        return this.profilePictureSubfolder;
     }
 
     public void setProfilePictureSubfolder(String profilePictureSubfolder) {
@@ -28,7 +28,7 @@ public class FileStorageProperties {
     }
 
     public String getEventCoverPictureSubfolder() {
-        return eventCoverPictureSubfolder;
+        return this.eventCoverPictureSubfolder;
     }
 
     public void setEventCoverPictureSubfolder(String eventPictureSubfolder) {
@@ -36,7 +36,7 @@ public class FileStorageProperties {
     }
 
     public String getEventGalleriesSubfolder() {
-        return eventGalleriesSubfolder;
+        return this.eventGalleriesSubfolder;
     }
 
     public void setEventGalleriesSubfolder(String eventGalleriesSubfolder) {

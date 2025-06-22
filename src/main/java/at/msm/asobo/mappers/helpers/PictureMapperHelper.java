@@ -13,14 +13,18 @@ public class PictureMapperHelper {
     @Autowired
     private FileStorageService fileStorageService;
 
-    private FileStorageProperties fileStorageProperties;
+    private final FileStorageProperties fileStorageProperties;
+
+    public PictureMapperHelper(FileStorageProperties fileStorageProperties) {
+        this.fileStorageProperties = fileStorageProperties;
+    }
 
     @Named("mapUserPicture")
     public String mapUserPicture(MultipartFile picture) {
         if (picture == null || picture.isEmpty()) {
             return null;
         }
-        return fileStorageService.store(picture, fileStorageProperties.getProfilePictureSubfolder());
+        return fileStorageService.store(picture, this.fileStorageProperties.getProfilePictureSubfolder());
     }
 
     @Named("mapEventPicture")
@@ -28,7 +32,15 @@ public class PictureMapperHelper {
         if (picture == null || picture.isEmpty()) {
             return null;
         }
-        return fileStorageService.store(picture, fileStorageProperties.getEventCoverPictureSubfolder());
+        return fileStorageService.store(picture, this.fileStorageProperties.getEventCoverPictureSubfolder());
+    }
+
+    @Named("mapGalleryPicture")
+    public String mapGalleryPicture(MultipartFile picture) {
+        if (picture == null || picture.isEmpty()) {
+            return null;
+        }
+        return fileStorageService.store(picture, this.fileStorageProperties.getEventGalleriesSubfolder());
     }
 
     /*@Named("stringToUri")

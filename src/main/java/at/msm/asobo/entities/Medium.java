@@ -14,7 +14,7 @@ public class Medium {
     private UUID id;
 
     @NotNull(message = "URI is mandatory for media")
-    protected URI mediumURI;
+    protected String mediumURI;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -24,11 +24,11 @@ public class Medium {
     public Medium() {
     }
 
-    public URI getMediumURI() {
+    public String getMediumURI() {
         return mediumURI;
     }
 
-    public void setMediumURI(URI mediumURI) {
+    public void setMediumURI(String mediumURI) {
         this.mediumURI = mediumURI;
     }
 

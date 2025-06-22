@@ -19,9 +19,11 @@ public interface MediumDTOMediumMapper {
 
     List<MediumDTO> mapMediaToMediaDTOList(List<Medium> media);
 
+    @Mapping(target = "mediumFile", ignore = true)
+    MediumCreationDTO mapMediumToMediumCreationDTO(Medium medium);
 
-    // MediumCreationDTO mapMediumToMediumCreationDTO(Medium medium);
+    @Mapping(target = "mediumURI", ignore = true)
     Medium mapMediumCreationDTOToMedium(MediumCreationDTO mediumCreationDTO);
-    // List<MediumCreationDTO> mapMediaToMediaCreationDTOList(List<MediumCreationDTO> mediaCreationDTO);
-    // List<Medium> mapMediaCreationDTOToMediaList(List<MediumCreationDTO> mediaCreationDTO);
+    List<MediumCreationDTO> mapMediaToMediaCreationDTOList(List<MediumCreationDTO> mediaCreationDTO);
+    List<Medium> mapMediaCreationDTOToMediaList(List<MediumCreationDTO> mediaCreationDTO);
 }

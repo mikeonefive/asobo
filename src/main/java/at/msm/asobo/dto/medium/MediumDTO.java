@@ -7,7 +7,7 @@ public class MediumDTO {
 
     private UUID id;
     private UUID eventId;
-    protected URI mediumURI;
+    protected String mediumURI;
 
     public MediumDTO() {
     }
@@ -24,7 +24,7 @@ public class MediumDTO {
         this.eventId = eventId;
     }
 
-    public void setMediumURI(URI mediumURI) {
+    public void setMediumURI(String mediumURI) {
         this.mediumURI = mediumURI;
     }
 
@@ -32,7 +32,7 @@ public class MediumDTO {
         return this.id;
     }
 
-    public URI getMediumURI() {
+    public String getMediumURI() {
         return this.mediumURI;
     }
 }

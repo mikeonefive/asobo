@@ -1,16 +1,15 @@
 package at.msm.asobo.dto.medium;
 
 import jakarta.validation.constraints.NotNull;
-
-import java.net.URI;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public class MediumCreationDTO {
 
-    protected UUID eventId;
+    private UUID eventId;
 
     @NotNull(message = "URI is mandatory for creating a new medium")
-    protected URI mediumURI;
+    private MultipartFile mediumFile;
 
     public MediumCreationDTO() {
     }
@@ -23,11 +22,11 @@ public class MediumCreationDTO {
         this.eventId = eventId;
     }
 
-    public void setMediumURI(URI mediumURI) {
-        this.mediumURI = mediumURI;
+    public void setMediumFile(MultipartFile mediumURI) {
+        this.mediumFile = mediumURI;
     }
 
-    public URI getMediumURI() {
-        return this.mediumURI;
+    public MultipartFile getMediumFile() {
+        return this.mediumFile;
     }
 }

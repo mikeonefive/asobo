@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/events/{eventID}/media")
+@RequestMapping("/api/events/{eventID}/media")
 public class MediumController {
 
    private final MediumService mediumService;

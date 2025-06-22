@@ -1,13 +1,12 @@
 package at.msm.asobo.dto.medium;
 
-import java.net.URI;
 import java.util.UUID;
 
 public class MediumDTO {
 
     private UUID id;
     private UUID eventId;
-    protected String mediumURI;
+    private String mediumURI;
 
     public MediumDTO() {
     }

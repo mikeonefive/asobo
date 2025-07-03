@@ -15,8 +15,8 @@ function getAllEvents() {
 
 function appendEventToList(event) {
     const $eventList = $("#event-list");
-    const $createdEvent = createEventItem(event);
-    $eventList.append($createdEvent);
+    const $createdEventItem = createEventItem(event);
+    $eventList.append($createdEventItem);
 }
 
 

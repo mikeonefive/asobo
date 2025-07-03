@@ -26,11 +26,13 @@ function setPageScript(page) {
     $('body script.page-script').remove();
 
     if (page === 'events') {
-        $('body').append('<script src="../js/events/events-list.js" class="page-script"></script>',);
+        $('body').append('<script src="../js/events/events-list.js" class="page-script"></script>');
     } else if (page === 'single-event') {
         $('body').append('<script src="../js/events/event-page.js" class="page-script"></script>');
     } else if (page === 'create-event') {
         $('body').append('<script src="../js/forms/submit-event.js" class="page-script"></script>');
+    } else if (page === 'users') {
+        $('body').append('<script src="../js/users/users.js" class="page-script"></script>');
     }
 }
 

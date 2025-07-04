@@ -130,3 +130,13 @@ footer {
 footer .footer-content {
     justify-content: space-between;
 }
+
+/*
+.footer-page-title {
+    color: #690F93;
+}
+ */
+
+.footer-icon {
+    color: #690F93;
+}

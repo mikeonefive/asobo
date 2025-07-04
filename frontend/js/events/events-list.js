@@ -15,8 +15,8 @@ function getAllEvents() {
 
 function appendEventToList(event) {
     const $eventList = $("#event-list");
-    const $createdEvent = createEventItem(event);
-    $eventList.append($createdEvent);
+    const $createdEventItem = createEventItem(event);
+    $eventList.append($createdEventItem);
 }
 
 
@@ -24,7 +24,7 @@ function createEventItem(event) {
     const $listItem = $('<li>');
 
     const $link = $('<a>')
-        .attr('href', "/events/" + event.id);
+        .attr('href', "#events?id=" + event.id);
 
     const $card = $('<div>').addClass('card event-card');
 

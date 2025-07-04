@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/* delete before submission of project */
+
 @Controller
 public class ThymeleafPageController {
     @GetMapping

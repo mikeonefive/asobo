@@ -2,7 +2,7 @@ $("#register-button").on("click", function (e) {
     e.preventDefault();
 
     let formData = new FormData();
-    let salutation = $("#salutation").val();
+    let salutation = $("#salutation").val() + ".";
     salutation === "Other" ? $("#salutation-other").val() : salutation;
     formData.append("salutation", salutation);
     formData.append("username", $("input[name='username']").val());
@@ -17,7 +17,7 @@ $("#register-button").on("click", function (e) {
     }
 
     $.ajax({
-        url: "/api/users",
+        url: HOSTADDRESS + "/api/users",
         type: "POST",
         data: formData,
         processData: false,

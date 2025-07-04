@@ -5,7 +5,7 @@ function getUser() {
     const userID = urlElements[urlElements.length-1];
     console.log(location.pathname.split("/"));
     console.log("userID: " + userID)
-    $.getJSON('/api/users/id/' + userID)
+    $.getJSON(HOSTADDRESS + '/api/users/id/' + userID)
         .done(function (user) {
             console.log("Fetch single user.");
             createUserProfileHtml(user);

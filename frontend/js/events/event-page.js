@@ -1,8 +1,17 @@
 $(document).ready(getEvent);
 
 function getEvent() {
-    const urlElements = location.pathname.split('/');
-    const eventID = urlElements[urlElements.length-1];
+    const hash = location.hash.substring(1); // remove '#'
+    const [page, query] = hash.split('?');
+    if (page !== 'events') return; // not the right page
+
+    const params = new URLSearchParams(query);
+    const eventID = params.get('id');
+
+    if (!eventID) {
+        console.log('No event ID provided in URL -> list all events instead.');
+        return;
+    }
 
     $.getJSON(HOSTADDRESS + '/api/events/' + eventID)
         .done(function (jsonData) {
@@ -11,9 +20,10 @@ function getEvent() {
             showMediaThumbnails(jsonData.media);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('Error', textStatus, errorThrown);
+            console.log('Error fetching event:', textStatus, errorThrown);
         });
 }
+
 
 
 function addEventToPage(event) {

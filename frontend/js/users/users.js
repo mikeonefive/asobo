@@ -43,9 +43,15 @@ function createUserItem(user) {
     const $link = $('<a>')
         .attr('href', "#users?id=" + user.id);
 
+    console.log("pic url: " + picUrl);
+
+    if (!picUrl) {
+        picUrl = DEFAULT_USER_PIC;
+    }
+
     const $image = $('<img>')
         .addClass('table-user-image')
-        .attr('src', user.pictureURI)
+        .attr('src', picUrl)
         .attr('alt', 'Profile picture of user ' + user.username);
 
     $link.append($image);

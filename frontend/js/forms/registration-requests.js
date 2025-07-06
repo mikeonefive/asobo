@@ -1,4 +1,4 @@
-$("#register-button").on("click", function (e) {
+$("#register-button").on("click", async function (e) {
     e.preventDefault();
 
     let formData = new FormData();
@@ -18,7 +18,26 @@ $("#register-button").on("click", function (e) {
         formData.append("profilePicture", fileInput.files[0]);
     }
 
-    $.ajax({
+    const url = HOSTADDRESS + '/api/users';
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        $(".register-form").html(`User: ${data.username} registered successfully`);
+        console.log("Registered:", data);
+    } catch (error) {
+        console.error('Error while registering user: ' + error.message);
+    }
+
+    /*$.ajax({
         url: HOSTADDRESS + "/api/users",
         type: "POST",
         data: formData,
@@ -30,5 +49,5 @@ $("#register-button").on("click", function (e) {
         error: function (xhr) {
             console.error("Error:", xhr.responseText);
         }
-    });
+    });*/
 });

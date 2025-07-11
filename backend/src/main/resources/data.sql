@@ -9,6 +9,8 @@ INSERT INTO public.event (title,"location",id,pictureuri,description,creator_id,
     ('Cooking!','Vienna, AT','045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'/uploads/event-cover-pictures/55daceaa-0a26-407d-b709-d1df1cdd91f5_cooking.jpg','Cooking together brings people closer through creativity, teamwork, and shared joy — turning simple ingredients into lasting memories.','cb0d70b4-8ac6-4045-8a77-55be2583f2a8'::uuid,NULL,'2025-07-04 17:00:46.048244','2025-06-22 19:59:21.048244');
 
 INSERT INTO public.medium (event_id,id,mediumuri) VALUES
-	('aaed8676-8b38-4c7a-b8b1-66dd683a1a96'::uuid,'51d1c642-f28d-41aa-81f8-16ef30da76fa'::uuid,'/uploads/event-galleries/f40bf03b-c55b-4c6a-801b-9b764fc99262_tv.jpg'),
-    ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'055fcc61-736b-8be1-baa3-080748e06f19'::uuid,'/uploads/event-galleries/55daceaa-0a26-407d-b709-d1df1cdd91f5_bandb.jpg')
-    ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'a38f22f7-d721-4dd3-b22e-0db366e0b104'::uuid,'/uploads/event-galleries/01fcf097-dd14-4b0a-bd82-43b6fea23141_batman.jpg');
+	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'1e76e3cc-97d5-4aa9-8ea2-05769f6ba2b7'::uuid,'/uploads/event-galleries/045fbc61-736a-4be1-baa3-070748e07f17/4c1753f6-59e6-4c91-847f-937a9bcd0bfc_hulk.jpg'),
+	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'726d5b62-ab54-41f0-bae7-c6da1fb07ef9'::uuid,'/uploads/event-galleries/045fbc61-736a-4be1-baa3-070748e07f17/3c583915-7f51-4909-96da-b2a154bae1ed_therock.jpg'),
+	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'055fcc61-736b-8be1-baa3-080748e06f19'::uuid,'/uploads/event-galleries/045fbc61-736a-4be1-baa3-070748e07f17/55daceaa-0a26-407d-b709-d1df1cdd91f5_bandb.jpg'),
+	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'a38f22f7-d721-4dd3-b22e-0db366e0b104'::uuid,'/uploads/event-galleries/045fbc61-736a-4be1-baa3-070748e07f17/01fcf097-dd14-4b0a-bd82-43b6fea23141_batman.jpg'),
+	 ('aaed8676-8b38-4c7a-b8b1-66dd683a1a96'::uuid,'51d1c642-f28d-41aa-81f8-16ef30da76fa'::uuid,'/uploads/event-galleries/aaed8676-8b38-4c7a-b8b1-66dd683a1a96/f40bf03b-c55b-4c6a-801b-9b764fc99262_tv.jpg');

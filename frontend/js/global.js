@@ -1,6 +1,7 @@
 // TODO: this is just for development purposes,
 // needs to be deleted once the site is fully functioning
 const HOSTADDRESS = "http://127.0.0.1:8080";
+const DEFAULT_USER_PIC = "uploads/profile-pictures/default.png";
 
 $(document).ready(function () {
     const url = new URL(window.location.href);

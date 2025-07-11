@@ -1,6 +1,23 @@
-$(document).ready(getUsers);
+$(document).ready(getAllUsers);
 
-function getUsers() {
+async function getAllUsers() {
+    const url = HOSTADDRESS + '/api/admin/users';
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.statusText}`);
+        }
+
+        const users = await response.json();
+        users.map(users => {appendUserToList(users);})
+        console.log('User list loaded!');
+    } catch (error) {
+        console.error('Error while fetching users: ' + error.message);
+    }
+}
+
+/*function getAllUsers() {
     $.getJSON(HOSTADDRESS + '/api/admin/users')
         .done(function (jsonData) {
             console.log("Fetch all users.");
@@ -11,7 +28,7 @@ function getUsers() {
         .fail(function (jqXHR, textStatus, errorThrown) {
             console.log('Error', textStatus, errorThrown);
         });
-}
+}*/
 
 function appendUserToList(user) {
     const $userList = $("#user-table");
@@ -26,9 +43,15 @@ function createUserItem(user) {
     const $link = $('<a>')
         .attr('href', "#users?id=" + user.id);
 
+    let picUrl = user.pictureURI;
+
+    if (!picUrl) {
+        picUrl = DEFAULT_USER_PIC;
+    }
+
     const $image = $('<img>')
         .addClass('table-user-image')
-        .attr('src', user.pictureURI)
+        .attr('src', picUrl)
         .attr('alt', 'Profile picture of user ' + user.username);
 
     $link.append($image);
@@ -53,7 +76,7 @@ function createUserItem(user) {
     const $location = $('<td>').addClass('location-text text-muted mt-2').text(user.location);
 
     $listItem.append($isActive, $imageContainer, $userID, $username,$salutation, $firstName, $surname, $email, $date, $location);
-
+    console.log(user.active);
 
     return $listItem;
 }

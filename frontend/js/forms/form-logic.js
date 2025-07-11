@@ -1,5 +1,5 @@
 // event listener for salutation selection
-$(document).ready(function () {
+$(function () {
     const $toggleSalutationSelect = $('#salutation');
     const $otherInput = $('#salutation-other-group');
 

@@ -85,6 +85,7 @@ a.btn-purple {
 .register-form div.form-group {
     margin: 0.7em;
     width: 100%;
+    margin-left: 0;
 }
 
 .register-form .btn-purple {
@@ -104,19 +105,47 @@ a.btn-purple {
     white-space: nowrap;
 }
 
-.profile-pic-box {
-    position: relative;
+.registration-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.profile-picture-box {
     width: 100%;
-    max-width: 300px;      /* or any size you prefer */
-    aspect-ratio: 1 / 1;   /* makes it a square */
+    max-width: 250px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
     border: 2px dashed #888;
     border-radius: 8px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
-    background-color: #f8f8f8;
-    overflow: hidden;
+    position: relative;
+}
+
+.register-profile-picture-button {
+    text-align: center;
+    color: #555;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    z-index: 1;
+}
+
+.profile-picture-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Make sure it fills the box without distortion */
+}
+
+#profile-pic-input {
+    pointer-events: none;
 }
 
 .search-bar {

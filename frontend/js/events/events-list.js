@@ -11,23 +11,10 @@ async function getAllEvents() {
 
         const events = await response.json();
         events.map(event => {appendEventToList(event);})
-        console.log('Event list loaded!');
     } catch (error) {
         console.error('Error while fetching events: ' + error.message);
     }
 }
-
-/*function getAllEvents() {
-    $.getJSON(HOSTADDRESS + '/api/events')
-        .done(function (jsonData) {
-            jsonData.forEach(event => {
-                appendEventToList(event);
-            });
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('Error', textStatus, errorThrown);
-        });
-}*/
 
 
 function appendEventToList(event) {

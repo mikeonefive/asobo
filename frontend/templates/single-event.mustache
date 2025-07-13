@@ -1,30 +1,44 @@
 <div class="container">
-    <!-- First Row for Image -->
-    <div class="row text-start">
-        <!-- Image column -->
-        <div class="col-md-6" id="event-image-container"></div>
-
-        <!-- TODO make the join button work for the particular event! -->
-        <!-- Event Info Column -->
-        <div class="col-md-6 text-start">
-            <div class="mb-3">
-                <div class="row">
-                    <div class="col" id="event-basic-info-container"></div>
-                    <div class="col-md-4">
-                        <a href="" class="btn btn-purple imin-btn">I'm in!</a>
-                    </div>
-                    <div class="col-md-8"><!-- spacer --></div>
-                </div>
+    <template id="event-template">
+        <!-- First Row for Image -->
+        <div class="row text-start">
+            <!-- Image column -->
+            <div class="col-md-6 event-image-container">
+                <img class="card-img-top" src="" alt="Event Image" />
             </div>
 
-            <div class="row">
-                <div class="col-md-8">
-                    <div id="event-description-container" class="mb-3 p-3 infobox"></div>
+            <!-- TODO make the join button work for the particular event! -->
+            <!-- Event Info Column -->
+            <div class="col-md-6 text-start">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col" id="event-basic-info-container">
+                            <div class="d-flex justify-content-between">
+                                <span id="event-title" class="fw-bold"></span>
+                                <span id="event-date" class="date-font-color ms-1"></span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span id="event-location" class="date-font-color"></span>
+                                <span id="event-time" class="date-font-color ms-1"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="" class="btn btn-purple imin-btn">I'm in!</a>
+                        </div>
+                        <div class="col-md-8"><!-- spacer --></div>
+                    </div>
                 </div>
-                <div class="col-md-4"><!-- spacer --></div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="event-description-container" class="mb-3 p-3 infobox"></div>
+                    </div>
+                    <div class="col-md-4"><!-- spacer --></div>
+                </div>
             </div>
         </div>
-    </div>
+    </template>
+    <div id="single-event-container"></div>
 
     <!-- TODO comment sections -->
     <!-- Comment Box & Participants Row -->
@@ -39,13 +53,14 @@
             <div class="fw-bold">Going</div>
             <div class="mt-2" id="participants-avatar-container"></div>
         </div>
+
     </div>
 
     <!-- Comments & Gallery Row -->
     <div class="row text-start mt-3 gx-5">
         <div class="col-md-6 text-start">
 
-            <template id="comment-tpl">
+            <template id="comment-template">
                 <div class="comment-box">
                     <div class="d-flex gap-3">
                         <img class="user-avatar" src="" alt="User Avatar" />
@@ -59,22 +74,8 @@
                     </div>
                 </div>
             </template>
+            <div id="comments-list" class="comments-list"></div>
 
-            <div id="comments-list" class="comments-list">
-                <!-- Comment 2 -->
-                <div class="comment-box">
-                    <div class="d-flex gap-3">
-                        <img src="https://randomuser.me/api/portraits/women/64.jpg" alt="User Avatar" class="user-avatar">
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0 comment-username">Lara Smith</h6>
-                                <span class="comment-time">1 hour ago</span>
-                            </div>
-                            <p class="mb-2">Totally! See you guys next time!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- GALLERY -->

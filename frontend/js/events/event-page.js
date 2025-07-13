@@ -35,7 +35,6 @@ $("#media-thumbnail-container").on("change", "#media-input", async function (e) 
         $mediaThumbnailContainer.before($singleMediaContainer);
 
     } catch (error) {
-        //console.error('Error while creating event: ' + error.message);
         console.error('Network or fetch error:', error);
     }
 });
@@ -59,62 +58,33 @@ async function getEvent() {
     } catch (error) {
         console.error(error.message);
     }
-
-    /*$.getJSON(HOSTADDRESS + '/api/events/' + eventID)
-        .done(function (jsonData) {
-            addEventToPage(jsonData);
-            showParticipantsAvatars(jsonData.participants);
-            showMediaThumbnails(jsonData.media);
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('Error fetching event:', textStatus, errorThrown);
-        });*/
 }
 
 
 function addEventToPage(event) {
-    const $eventImageContainer = $("#event-image-container");
-    const $createdEvent = createEventImage(event);
-    $eventImageContainer.append($createdEvent);
-
-    const $basicInfoContainer = $("#event-basic-info-container");
-    const $createdBasicInfo = createBasicInfo(event);
-    $basicInfoContainer.append($createdBasicInfo);
-
-    const $descriptionContainer = $("#event-description-container");
-    $descriptionContainer.text(event.description);
-}
-
-
-function createEventImage(event) {
-    const $image = $('<img>')
-        .addClass('card-img-top')
+    const $template = $('#event-template').contents().clone();
+    $template.find('.event-image-container img')
         .attr('src', event.pictureURI)
         .attr('alt', event.title);
 
-    return $image;
-}
+    $template.find('#event-basic-info-container #event-title')
+        .text(event.title);
 
-
-function createBasicInfo(event) {
-    const $container = $('<div>');
-
-    // Line 1: Title & Date
-    const $line1 = $('<div>').addClass('d-flex justify-content-between');
-    const $title = $('<span>').addClass('fw-bold').text(event.title);
     const formattedDate = moment(event.date).format('ddd, MMMM D, YYYY');
-    const $date = $('<span>').addClass('date-font-color ms-1').text(formattedDate);
-    $line1.append($title, $date);
+    $template.find('#event-basic-info-container #event-date')
+        .text(formattedDate);
 
-    // Line 2: Location & Time
-    const $line2 = $('<div>').addClass('d-flex justify-content-between');
-    const $location = $('<span>').addClass('date-font-color').text("in " + event.location);
+    $template.find('#event-basic-info-container #event-location')
+        .text(`in ${event.location}`);
+
     const formattedTime = moment(event.date).format('h:mm a');
-    const $time = $('<span>').addClass('date-font-color ms-5').text(formattedTime);
-    $line2.append($location, $time);
+    $template.find('#event-basic-info-container #event-time')
+        .text(formattedTime);
 
-    $container.append($line1, $line2);
-    return $container;
+    $template.find('#event-description-container')
+        .text(event.description);
+
+    $('#single-event-container').append($template);
 }
 
 

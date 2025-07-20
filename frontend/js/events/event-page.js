@@ -1,4 +1,4 @@
-$(document).ready(getEvent);
+$(document).ready(getAndShowEvent);
 
 $("#media-thumbnail-container").on("click", "#add-media-container", function() {
     $("#media-input").click();
@@ -40,7 +40,7 @@ $("#media-thumbnail-container").on("change", "#media-input", async function (e) 
 });
 
 
-async function getEvent() {
+async function getAndShowEvent() {
     const eventID = getParamFromURL('id');
     const url = EVENTSADDRESS + eventID;
 
@@ -54,7 +54,6 @@ async function getEvent() {
         addEventToPage(event);
         showParticipantsAvatars(event.participants);
         showMediaThumbnails(event.media);
-        console.log(`Event ${event.title} loaded!`);
     } catch (error) {
         console.error(error.message);
     }
@@ -90,19 +89,20 @@ function addEventToPage(event) {
 
 function showParticipantsAvatars(participants) {
     participants.forEach(participant => {
-        createParticipantAvatar(participant);
+        createUserAvatar(participant);
     });
 }
 
 
-function createParticipantAvatar(participant) {
+function createUserAvatar(participant) {
     const $participantsAvatarContainer = $("#participants-avatar-container");
-    const $createdAvatar = $('<img>')
-        .addClass('user-avatar')
+    const $avatar = $('#participant-avatar-template')
+        .contents()
+        .clone()
         .attr('src', participant.pictureURI)
         .attr('alt', participant.username);
 
-    $participantsAvatarContainer.append($createdAvatar);
+    $participantsAvatarContainer.append($avatar);
 }
 
 

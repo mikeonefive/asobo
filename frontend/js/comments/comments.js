@@ -1,4 +1,6 @@
-$(document).ready(getAllComments);
+$(document).ready(getAllComments());
+$(document).ready(postComment());
+
 
 async function getAllComments() {
     const eventID = getParamFromURL('id');
@@ -11,7 +13,6 @@ async function getAllComments() {
         }
 
         const comments = await response.json();
-        console.log(comments);
         comments.forEach(comment => {
             $('#comments-list').append(createCommentElement(comment));
         })
@@ -35,4 +36,42 @@ function createCommentElement(comment) {
     $template.find('p').text(comment.text);
 
     return $template;
+}
+
+
+async function postComment() {
+    const eventId = getParamFromURL('id');
+
+    // TODO change this as soon as we have login, this is just a test user ID
+    const authorId = '7767118c-19bd-4c28-8129-c0abda74b46c';
+
+    $('#post-comment-btn').on("click", async function (event) {
+        event.preventDefault();
+        console.log('Comment Button clicked!');
+        const text = $('#new-comment-content').val().trim();
+        if (!text) {
+            return alert('Please enter a comment');
+        }
+
+        try {
+            const url = `${EVENTSADDRESS}${eventId}/comments`;
+            const response = await fetch(`${EVENTSADDRESS}${eventId}/comments`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({authorId, eventId, text})
+            });
+
+        if (!response.ok) {
+            throw new Error(`Error while creating comment: ${response.statusText}`);
+        }
+
+        const newComment = await response.json();
+        $('#comments-list').append(createCommentElement(newComment));
+        $('#new-comment-content').val('');  // clear comment box
+
+        } catch (err) {
+            console.error('Error posting comment: ', err);
+            alert('Could not post comment. Please try again.');
+        }
+    });
 }

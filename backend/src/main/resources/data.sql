@@ -20,6 +20,7 @@ INSERT INTO public."event" (creation_date,"date",modification_date,creator_id,id
 
 INSERT INTO public.event_participants (attended_events_id,participants_id) VALUES
 	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'7767118c-19bd-4c28-8129-c0abda74b46c'::uuid);
+	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'7da69d8e-55c7-4a96-ac6d-cb207e4e8a21'::uuid);
 
 INSERT INTO public.medium (event_id,id,mediumuri) VALUES
 	 ('045fbc61-736a-4be1-baa3-070748e07f17'::uuid,'1e76e3cc-97d5-4aa9-8ea2-05769f6ba2b7'::uuid,'/uploads/event-galleries/045fbc61-736a-4be1-baa3-070748e07f17/4c1753f6-59e6-4c91-847f-937a9bcd0bfc_hulk.jpg'),

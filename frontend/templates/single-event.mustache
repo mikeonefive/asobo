@@ -1,4 +1,5 @@
 <div class="container">
+
     <template id="event-template">
         <!-- First Row for Image -->
         <div class="row text-start">
@@ -7,7 +8,7 @@
                 <img class="card-img-top" src="" alt="Event Image" />
             </div>
 
-            <!-- TODO make the join button work for the particular event! -->
+            <!-- TODO make the join button work for that particular event! -->
             <!-- Event Info Column -->
             <div class="col-md-6 text-start">
                 <div class="mb-3">
@@ -44,8 +45,8 @@
     <!-- Comment Box & Participants Row -->
     <div class="row text-start mt-4 align-items-center gx-5">
         <div class="col-md-6 d-flex gap-2">
-            <textarea name="content" class="form-control card" rows="1" placeholder="Your new comment goes here!"></textarea>
-            <input type="submit" value="Post!" class="btn btn-purple">
+            <textarea id="new-comment-content" name="content" class="form-control card" rows="1" placeholder="Your new comment goes here!"></textarea>
+            <input type="button" value="Post!" id="post-comment-btn" class="btn btn-purple">
         </div>
 
         <!-- Participants -->
@@ -53,8 +54,11 @@
             <div class="fw-bold">Going</div>
             <div class="mt-2" id="participants-avatar-container"></div>
         </div>
-
     </div>
+    <!-- Hidden template for one avatar -->
+    <template id="participant-avatar-template">
+        <img class="user-avatar" src="" alt="" />
+    </template>
 
     <!-- Comments & Gallery Row -->
     <div class="row text-start mt-3 gx-5">

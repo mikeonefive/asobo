@@ -3,8 +3,8 @@ $(document).ready(postComment());
 
 
 async function getAllComments() {
-    const eventID = getParamFromURL('id');
-    const url = EVENTSADDRESS + eventID + '/comments';
+    const eventId = getParamFromURL('id');
+    const url = EVENTSADDRESS + eventId + '/comments';
 
     try {
         const response = await fetch(url);
@@ -24,7 +24,6 @@ async function getAllComments() {
 
 function createCommentElement(comment) {
     const $template = $('#comment-template').contents().clone();
-
     const formattedDate = moment(comment.creationDate).format('MMMM D, YYYY, h:mm a');
 
     $template.find('.user-avatar')
@@ -40,22 +39,20 @@ function createCommentElement(comment) {
 
 
 async function postComment() {
+    const url = `${EVENTSADDRESS}${eventId}/comments`;
     const eventId = getParamFromURL('id');
-
     // TODO change this as soon as we have login, this is just a test user ID
     const authorId = '7767118c-19bd-4c28-8129-c0abda74b46c';
 
     $('#post-comment-btn').on("click", async function (event) {
         event.preventDefault();
-        console.log('Comment Button clicked!');
         const text = $('#new-comment-content').val().trim();
         if (!text) {
             return alert('Please enter a comment');
         }
 
         try {
-            const url = `${EVENTSADDRESS}${eventId}/comments`;
-            const response = await fetch(`${EVENTSADDRESS}${eventId}/comments`, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({authorId, eventId, text})
@@ -67,7 +64,7 @@ async function postComment() {
 
         const newComment = await response.json();
         $('#comments-list').append(createCommentElement(newComment));
-        $('#new-comment-content').val('');  // clear comment box
+        $('#new-comment-content').val('');          // clear comment box
 
         } catch (err) {
             console.error('Error posting comment: ', err);

@@ -1,8 +1,10 @@
-$(document).ready(getAllComments);
+$(document).ready(getAllComments());
+$(document).ready(postComment());
+
 
 async function getAllComments() {
-    const eventID = getParamFromURL('id');
-    const url = EVENTSADDRESS + eventID + '/comments';
+    const eventId = getParamFromURL('id');
+    const url = EVENTSADDRESS + '/' + eventId + '/comments';
 
     try {
         const response = await fetch(url);
@@ -11,7 +13,6 @@ async function getAllComments() {
         }
 
         const comments = await response.json();
-        console.log(comments);
         comments.forEach(comment => {
             $('#comments-list').append(createCommentElement(comment));
         })
@@ -20,52 +21,54 @@ async function getAllComments() {
     }
 }
 
-function appendCommentToList(comment) {
-    /* <div class="comment-box">
-        <div class="d-flex gap-3">
-            <img src="https://randomuser.me/api/portraits/men/34.jpg" alt="User Avatar" class="user-avatar">
-                <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="mb-0 comment-username">John Doe</h6>
-                        <span class="comment-time">2 hours ago</span>
-                    </div>
-                    <p class="mb-2">Thanks for the great time. I had so much fun at the movie night.</p>
-                </div>
-        </div>
-    </div> */
-    const $commentBox = $('div')
-        .addClass('comment-box');
 
-    const $userAvatarContainer = $('div')
-        .addClass('d-flex', 'gap-3');
+function createCommentElement(comment) {
+    const $template = $('#comment-template').contents().clone();
+    const formattedDate = moment(comment.creationDate).format('MMMM D, YYYY, h:mm a');
 
-    const $image = $('img')
-        .addClass('user-avatar')
-        .attr('src', comment.pictureURI);
+    $template.find('.user-avatar')
+        .attr('src', comment.pictureURI)
+        .attr('alt', `${comment.username}’s avatar`);
 
-    const $commentContainer = $('div')
-        .addClass('flex-grow-1');
+    $template.find('.comment-username').text(comment.username);
+    $template.find('.comment-time').text(formattedDate);
+    $template.find('p').text(comment.text);
 
-    const $usernameContainer = $('div')
-        .addClass('d-flex', 'justify-content-between', 'align-items-center', 'mb-2');
-
-
+    return $template;
 }
 
 
-function createCommentElement(comment) {
-    const frag = document.getElementById('comment-tpl')
-        .content
-        .cloneNode(true);
+async function postComment() {
+    const eventId = getParamFromURL('id');
+    const url = `${EVENTSADDRESS}/${eventId}/comments`;
+    // TODO change this as soon as we have login, this is just a test user ID
+    const authorId = '7767118c-19bd-4c28-8129-c0abda74b46c';
 
-    const formattedDate = moment(comment.creationDate).format('MMMM D, YYYY, h:mm a');
+    $('#post-comment-btn').on("click", async function (event) {
+        event.preventDefault();
+        const text = $('#new-comment-content').val().trim();
+        if (!text) {
+            return alert('Please enter a comment');
+        }
 
-    frag.querySelector('.user-avatar').src         = comment.pictureURI;
-    frag.querySelector('.user-avatar').alt         = `${comment.username}’s avatar`;
-    frag.querySelector('.comment-username').textContent = comment.username;
-    frag.querySelector('.comment-time').textContent     = formattedDate;
-    frag.querySelector('p').textContent                  = comment.text;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({authorId, eventId, text})
+            });
 
-    // return the actual element, not the <template> itself
-    return frag;
+        if (!response.ok) {
+            throw new Error(`Error while creating comment: ${response.statusText}`);
+        }
+
+        const newComment = await response.json();
+        $('#comments-list').append(createCommentElement(newComment));
+        $('#new-comment-content').val('');          // clear comment box
+
+        } catch (err) {
+            console.error('Error posting comment: ', err);
+            alert('Could not post comment. Please try again.');
+        }
+    });
 }

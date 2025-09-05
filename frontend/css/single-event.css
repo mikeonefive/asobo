@@ -79,6 +79,8 @@
     display: flex;
     flex-wrap: wrap;      
     gap: 0.5vw;           /* spacing between thumbnails */
+    flex-direction: row-reverse;
+    justify-content: flex-end;
 }
 
 .single-media-container {

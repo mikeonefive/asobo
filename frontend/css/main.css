@@ -105,6 +105,14 @@ a.btn-purple {
     white-space: nowrap;
 }
 
+#login-username-error {
+    display: none;
+    white-space: nowrap;
+    top: 235px;
+    transform: translateY(-50%);
+    left: 60%;
+}
+
 .registration-wrapper {
     max-width: 500px;
     margin: 0 auto;

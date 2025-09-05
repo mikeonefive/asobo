@@ -1,3 +1,6 @@
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const USERNAME_REGEX = /^[a-zA-Z0-9._-]{3,20}$/;
+
 // event listener for salutation selection
 $(function () {
     const $toggleSalutationSelect = $('#salutation');
@@ -18,27 +21,65 @@ $(function () {
     // And again when changed
     $toggleSalutationSelect.on('change', updateVisibility);
 
-    emailValidation();
-    passwordValidation();
+    const { page, params } = parseHashAndQuery();
+
+    if (page === 'register') {
+        const $emailInput = $('#register-email');
+        const $emailErrorItem = $('#register-email-error');
+        registerPasswordValidation();
+        emailValidation($emailInput, $emailErrorItem);
+    } else if (page === 'login') {
+        const $usernameInput = $('#login-username');
+        const $usernameErrorItem = $('#login-username-error');
+        usernameValidation($usernameInput, $usernameErrorItem);
+    }
 });
 
-function emailValidation() {
-    const $emailInput = $('#register-email');
-    const $emailError = $('#register-email-error');
+function usernameValidation($usernameInput, $usernameErrorItem) {
+    $usernameInput.on('input', function () {
+        const value = $usernameInput.val().trim();
 
-    $emailInput.on('input', function () {
-        const value = $emailInput.val();
-        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        if (!value) {
+            $usernameErrorItem.hide();
+            return;
+        }
 
-        if (value && !isValid) {
-            $emailError.show();
+        if (value.includes("@")) {
+            // Email case
+            const isValid = EMAIL_REGEX.test(value);
+            if (!isValid) {
+                $usernameErrorItem.show().text("Invalid email format");
+            } else {
+                $usernameErrorItem.hide();
+            }
         } else {
-            $emailError.hide();
+            // Username case
+
+            const isValid = USERNAME_REGEX.test(value);
+            if (!isValid) {
+                $usernameErrorItem.show().text("Invalid username");
+            } else {
+                $usernameErrorItem.hide();
+            }
         }
     });
 }
 
-function passwordValidation() {
+
+function emailValidation($inputItem, $errorItem) {
+    $inputItem.on('input', function () {
+        const value = $inputItem.val();
+        const isValid = EMAIL_REGEX.test(value);
+
+        if (value && !isValid) {
+            $errorItem.show();
+        } else {
+            $errorItem.hide();
+        }
+    });
+}
+
+function registerPasswordValidation() {
     const $pw = $('#register-password');
     const $pwConfirmation = $('#register-password-conf');
     const $pwError = $('#pw-notmatching-error');
@@ -47,9 +88,6 @@ function passwordValidation() {
         const $pwText = $pw.val().trim().normalize();
         const $pwConfirmationText = $pwConfirmation.val().trim().normalize();
 
-        console.log("pw:", $pwText);
-        console.log("confirmation:", $pwConfirmationText);
-        console.log("pws equal? " + ($pwText === $pwConfirmationText));
         if ($pwText === $pwConfirmationText) {
             $pwError.hide();
         } else {

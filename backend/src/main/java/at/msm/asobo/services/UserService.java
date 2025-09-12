@@ -13,6 +13,7 @@ import at.msm.asobo.services.files.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,6 +57,16 @@ public class UserService {
     }
 
     public UserPublicDTO registerUser(UserRegisterDTO userRegisterDTO) {
+        Optional<User> existingUser = userRepository.findByEmail(userRegisterDTO.getEmail());
+        if (existingUser.isPresent()) {
+            throw new RuntimeException("User already exists!");
+        }
+
+        Optional<User> existingUsername = userRepository.findByUsername(userRegisterDTO.getEmail());
+        if (existingUsername.isPresent()) {
+            throw new RuntimeException("Username already exists!");
+        }
+
         User newUser = this.userDTOUserMapper.mapUserRegisterDTOToUser(userRegisterDTO);
 
         String hashedPassword = this.passwordService.hashPassword(userRegisterDTO.getPassword());
@@ -67,6 +78,9 @@ public class UserService {
         }
 
         User savedUser = this.userRepository.save(newUser);
+
+        // TODO: generate (and return?) JWT token
+
         return this.userDTOUserMapper.mapUserToUserPublicDTO(savedUser);
     }
 

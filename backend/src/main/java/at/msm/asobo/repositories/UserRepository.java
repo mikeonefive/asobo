@@ -1,6 +1,8 @@
 package at.msm.asobo.repositories;
 
 import at.msm.asobo.entities.User;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     public Optional<User> findByUsername(String username);
 
+    public Optional<User> findByEmail(String email);
 }

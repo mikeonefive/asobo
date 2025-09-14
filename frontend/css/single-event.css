@@ -93,6 +93,16 @@
     object-fit: cover;
 }
 
+.carousel-item img,
+.carousel-item video {
+    width: 100%;
+    aspect-ratio: 4/3;         /* or 16/9 depending on media */
+    /* object-fit: contain;    /* keep full media visible */
+    object-fit: cover;         /* makes sure the media fills the space without stretching */
+    /* background-color: black; */
+
+}
+
 .add-media-button {
     width: 100%;
     height: 100%;

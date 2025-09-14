@@ -15,11 +15,11 @@
 
 /* JOIN BUTTON */
 .imin-btn {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .btn-post-comment:hover {
-    color: #FFFFFF;
+    color: white;
 }
 
 /* INFOBOX */
@@ -75,12 +75,27 @@
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+.edit-comment-btn {
+    font-size: 0.8rem;
+    color: white;
+    margin: 0.2rem;
+}
+.edit-comment-btn:hover {
+    color: white;           /* stays white when hovering */
+}
+
+.remove-comment-btn {
+    font-size: 0.8rem;
+    margin: 0.2rem;
+}
+
+
+/* GALLERY & MEDIA */
 #media-thumbnail-container {
     display: flex;
     flex-wrap: wrap;      
     gap: 0.5vw;           /* spacing between thumbnails */
-    flex-direction: row-reverse;
-    justify-content: flex-end;
+    flex-direction: row;
 }
 
 .single-media-container {
@@ -94,13 +109,23 @@
     object-fit: cover;
 }
 
+.carousel-item img,
+.carousel-item video {
+    width: 100%;
+    aspect-ratio: 4/3;         /* or 16/9 depending on media */
+    /* object-fit: contain;    /* keep full media visible */
+    object-fit: cover;         /* makes sure the media fills the space without stretching */
+    /* background-color: black; */
+
+}
+
 .add-media-button {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 6rem;
+    font-size: clamp(1.5rem, 6vw, 6rem);
     font-weight: bold;
     background-color: var(--asobo-light-gray);
     color: var(--asobo-purple);

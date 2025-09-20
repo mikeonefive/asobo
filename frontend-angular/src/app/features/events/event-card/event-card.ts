@@ -1,8 +1,12 @@
 import {Component, Input} from '@angular/core';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.html',
+  imports: [
+    DatePipe
+  ],
   styleUrl: './event-card.scss'
 })
 export class EventCard {

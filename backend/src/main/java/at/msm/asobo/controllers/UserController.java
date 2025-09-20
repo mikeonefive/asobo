@@ -58,6 +58,7 @@ public class UserController {
         if (authentication != null && authentication.isAuthenticated()) {
             UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
             loggedInUsername = principal.getUsername();
+            this.userService.getUserByUsername(loggedInUsername);
         }
 
         // Optional: prevent accessing private profiles of others

@@ -83,7 +83,6 @@ async function editComment() {
         const commentId = $(this).data('comment-id');
         const url = `${baseURL}/${commentId}`;
 
-
         const $commentBox = $(this).closest('.comment-box');
         const $textElement = $commentBox.find('p');
         const originalText = $textElement.text();

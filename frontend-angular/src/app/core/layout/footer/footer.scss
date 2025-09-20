@@ -1,0 +1,13 @@
+@use 'variables' as *;
+
+footer {
+  flex-shrink: 0;
+}
+
+footer .footer-content {
+  justify-content: space-between;
+}
+
+.footer-icon {
+  color: $asobo-purple;
+}

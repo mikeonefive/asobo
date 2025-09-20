@@ -15,4 +15,8 @@ export class EventService {
   public getAllEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(environment.eventsAddress);
   }
+
+  public getEventById(id: string): Observable<Event> {
+    return this.http.get<Event>(environment.eventsAddress + '/' + id);
+  }
 }

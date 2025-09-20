@@ -1,15 +1,18 @@
 import {Component, Input} from '@angular/core';
 import {DatePipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.html',
   imports: [
-    DatePipe
+    DatePipe,
+    RouterLink
   ],
   styleUrl: './event-card.scss'
 })
 export class EventCard {
+  @Input() id!: string;
   @Input() title!: string;
   @Input() pictureURI!: string;
   @Input() date!: string;

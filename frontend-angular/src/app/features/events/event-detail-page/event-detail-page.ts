@@ -3,12 +3,14 @@ import {EventService} from '../event-service';
 import {Event} from '../models/event';
 import {ActivatedRoute} from '@angular/router';
 import {DatePipe} from '@angular/common';
+import {NewComment} from "../new-comment/new-comment";
 
 @Component({
   selector: 'app-event-detail-page',
-  imports: [
-    DatePipe
-  ],
+    imports: [
+        DatePipe,
+        NewComment
+    ],
   templateUrl: './event-detail-page.html',
   styleUrl: './event-detail-page.scss'
 })

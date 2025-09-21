@@ -38,14 +38,14 @@
 
 <!-- Comment Box & Participants Row -->
 <div class="row text-start mt-4 align-items-center gx-5">
-  <div class="col-md-6 d-flex gap-2">
-    <textarea id="new-comment-content" name="content" class="form-control card" rows="1" placeholder="Your new comment goes here!"></textarea>
-    <input type="button" value="Post!" id="post-comment-btn" class="btn btn-purple">
-  </div>
-
-  <!-- Participants -->
-  <div class="col-md-6 text-start">
-    <div class="fw-bold">Going</div>
-    <div class="mt-2" id="participants-avatar-container"></div>
-  </div>
+    <div class="col-md-6">
+        <app-new-comment></app-new-comment>
+    </div>
+      <!-- Participants -->
+      <div class="col-md-6 text-start">
+        <div class="fw-bold">Going</div>
+        <div class="mt-2" id="participants-avatar-container">
+            <img class="user-avatar" src="" alt="" />
+        </div>
+      </div>
 </div>

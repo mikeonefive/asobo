@@ -1,0 +1,27 @@
+.login-form div.form-group {
+  margin: 0.7em;
+  width: 100%;
+  margin-left: 0;
+}
+
+#login-username-error {
+  display: none;
+  white-space: nowrap;
+  top: 235px;
+  transform: translateY(-50%);
+  left: 60%;
+}
+
+.login-form .btn-purple {
+  width: 60%;
+}
+
+.login-text-link {
+  color: var(--asobo-purple);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-text-link:hover {
+  text-decoration: underline;
+}

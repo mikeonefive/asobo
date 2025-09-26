@@ -41,3 +41,9 @@
   height: 100%;
   object-fit: cover; /* Make sure it fills the box without distortion */
 }
+
+.register-form div.form-group {
+  margin: 0.7em;
+  width: 100%;
+  margin-left: 0;
+}

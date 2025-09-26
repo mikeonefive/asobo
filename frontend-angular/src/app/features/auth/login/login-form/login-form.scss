@@ -1,16 +1,18 @@
+@use 'variables' as *;
+
 .login-form div.form-group {
   margin: 0.7em;
   width: 100%;
   margin-left: 0;
 }
 
-#login-username-error {
+/*#login-username-error {
   display: none;
   white-space: nowrap;
   top: 235px;
   transform: translateY(-50%);
   left: 60%;
-}
+}*/
 
 .login-form .btn-purple {
   width: 60%;
@@ -22,6 +24,33 @@
   font-weight: bold;
 }
 
-.login-text-link:hover {
+.signup-text-link {
+  color: $asobo-purple;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-text-link:hover {
   text-decoration: underline;
 }
+
+.form-group {
+  position: relative;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.error-message {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 10px;
+  transform: translateY(-50%);
+  color: red;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+

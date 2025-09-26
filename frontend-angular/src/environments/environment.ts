@@ -7,4 +7,6 @@ export const environment = {
   apiBaseUrl: API_BASE_URL,
   eventsAddress: `${API_BASE_URL}/events`,
   frontendBaseUrl: FRONTEND_URL,
+  minIdentifierLength: 3,
+  minPWLength: 6,
 };

@@ -1,3 +1,4 @@
+@if (!loggedIn) {
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
   <!-- Username / Email -->
   <div class="form-group position-relative">
@@ -58,3 +59,8 @@
     <a routerLink="/register" class="signup-text-link">Sign up here.</a>
   </div>
 </form>
+} @else {
+  <div class="alert alert-success mt-3">
+    You are logged in!
+  </div>
+}

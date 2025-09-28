@@ -28,7 +28,7 @@ export class NewComment {
     if (!eventId || !this.text.trim())
       return;
 
-    this.commentService.createComment({
+    this.commentService.create({
       text: this.text,
       authorId: this.authorId,
       eventId: eventId

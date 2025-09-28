@@ -61,14 +61,34 @@ export class EventDetailPage {
 
   getAllComments(eventId: string): void {
     this.commentService.getAll(eventId).subscribe({
-      next: (comments: Comment[]) => { this.comments = comments
-        console.log(comments);
-      },
+      next: (comments: Comment[]) => this.comments = comments,
       error: (err) => console.error('Error fetching comments:', err)
     });
   }
 
   onCommentCreated(comment: Comment) {
     this.comments.push(comment);
+  }
+
+  deleteComment(commentToDelete: Comment) {
+    this.commentService.delete(commentToDelete).subscribe({
+      next: () => {
+        this.comments = this.comments.filter(c => c.id !== commentToDelete.id);
+      },
+      error: (err) => {
+        console.error('Failed to delete comment!', err);
+      }
+    });
+  }
+
+  editComment(commentToEdit: Comment) {
+    this.commentService.edit(commentToEdit).subscribe({
+      next: () => {
+        console.log('edit comment:', commentToEdit);
+      },
+      error: (err) => {
+        console.error('Failed to edit comment!:', err);
+      }
+    });
   }
 }

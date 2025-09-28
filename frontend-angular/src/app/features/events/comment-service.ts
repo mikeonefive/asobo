@@ -2,30 +2,42 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Comment} from '../events/models/comment'
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
 
+  private baseUrl = environment.eventsAddress;
+
   constructor(private http: HttpClient) {}
 
 
   getAll(eventId: string): Observable<Comment[]> {
-    return this.http.get<Comment[]>(`${environment.eventsAddress}/${eventId}/comments`);
+    return this.http.get<Comment[]>(`${this.baseUrl}/${eventId}/comments`);
   }
 
 
-  createComment(comment: Comment): Observable<Comment> {
+  create(comment: Comment): Observable<Comment> {
     const createdComment = {
       'text': comment.text.trim(),
       'authorId': comment.authorId,
       'eventId': comment.eventId
     };
 
-    const url: string = `${environment.eventsAddress}/${comment.eventId}/comments`;
-    return this.http.post<Comment>(url, createdComment);
+    return this.http.post<Comment>(`${this.baseUrl}/${comment.eventId}/comments`, createdComment);
+  }
+
+
+  delete(comment: Comment): Observable<Comment> {
+    return this.http.delete<Comment>(`${this.baseUrl}/${comment.eventId}/comments/${comment.id}`);
+  }
+
+
+  edit(comment: Comment): Observable<Comment> {
+    console.log('comment to edit ', comment);
+    return new Observable<Comment>();
   }
 }
 

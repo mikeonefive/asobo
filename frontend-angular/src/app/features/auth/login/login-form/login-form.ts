@@ -13,9 +13,11 @@ import {AuthService} from '../../auth-service';
 export class LoginForm {
   loginForm: FormGroup;
   loggedIn: boolean;
+  username: string;
 
   constructor(private formBuilder: FormBuilder, private auth: AuthService) {
     this.loggedIn = false;
+    this.username = 'Dummy';
     this.loginForm = this.formBuilder.group({
       identifier: ['', [
         Validators.required,
@@ -40,6 +42,7 @@ export class LoginForm {
         console.log('Login successful:', response);
         // TODO: save JWT, navigate, etc.
         localStorage.setItem('jwt', response.token);
+        this.username = response.user.username;
         this.loggedIn = true;
       },
       error: (err) => {

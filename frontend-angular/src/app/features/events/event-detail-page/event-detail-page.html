@@ -54,4 +54,11 @@
   <div class="col-md-6 text-start">
     <app-comments-list [comments]="comments" (commentDeleted)="deleteComment($event)" (commentEdited)="editComment($event)"/>
   </div>
+
+  <!-- Photos & Video -->
+  <div class="col-md-6 mt-3 text-start">
+    <app-gallery [mediaItems]="mediaItems"
+    (mediaAdded)="uploadMedia($event)" />
+    <!--(mediaDeleted)="deleteMedia($event)"/> -->
+  </div>
 </div>

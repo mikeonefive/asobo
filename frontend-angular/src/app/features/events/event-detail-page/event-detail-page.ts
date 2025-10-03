@@ -10,6 +10,9 @@ import {CommentService} from '../comment-service';
 import {Comment} from '../models/comment';
 import {Participant} from '../models/participant';
 import {Observable} from 'rxjs';
+import {Gallery} from '../gallery/gallery';
+import {MediaService} from '../media-service';
+import {MediaItem} from '../models/media-item';
 
 @Component({
   selector: 'app-event-detail-page',
@@ -18,6 +21,7 @@ import {Observable} from 'rxjs';
     NewComment,
     Participants,
     CommentsList,
+    Gallery,
   ],
   templateUrl: './event-detail-page.html',
   styleUrl: './event-detail-page.scss'
@@ -32,13 +36,15 @@ export class EventDetailPage {
   description?: string;
   comments: Comment[] = [];
   participants: Participant[] = [];
+  mediaItems: MediaItem[] = [];
 
   constructor(private route: ActivatedRoute,
               private eventService: EventService,
-              private commentService: CommentService) {
+              private commentService: CommentService,
+              private mediaService: MediaService) {
   }
 
-  // TODO don't double fetch participants & comments find a good solution
+
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id');
     if (eventId) {
@@ -50,11 +56,11 @@ export class EventDetailPage {
   }
 
   loadEvent(eventId: string): Observable<Event> {
-    console.log(this.eventService.getEventById(eventId));
     return this.eventService.getEventById(eventId);
   }
 
   private populateEvent(event: Event): void {
+    this.id = event.id;
     this.title = event.title;
     this.pictureURI = event.pictureURI;
     this.date = event.date;
@@ -62,14 +68,20 @@ export class EventDetailPage {
     this.location = event.location;
     this.description = event.description;
     this.participants = event.participants;
+
     this.commentService.getAllByEventId(event.id).subscribe(comments => {
       this.comments = comments;
     });
+    this.mediaService.getAllByEventId(event.id).subscribe(mediaItems => {
+      this.mediaItems = mediaItems;
+    });
   }
+
 
   onCommentCreated(comment: Comment) {
     this.comments.push(comment);
   }
+
 
   deleteComment(commentToDelete: Comment) {
     this.commentService.delete(commentToDelete).subscribe({
@@ -82,6 +94,7 @@ export class EventDetailPage {
     });
   }
 
+
   editComment(commentToEdit: Comment) {
     this.commentService.edit(commentToEdit).subscribe({
       next: () => {
@@ -92,4 +105,19 @@ export class EventDetailPage {
       }
     });
   }
+
+  uploadMedia(file: File) {
+    this.mediaService.upload(this.id, file).subscribe({
+      next: (mediaItem) => this.mediaItems = [...this.mediaItems, mediaItem],
+      error: (err) => console.error('Upload failed', err)
+    });
+  }
+
+  // deleteMedia(file: File) {
+  //   this.mediaService.delete(this.id, file).subscribe({
+  //     next: (mediaItem) => this.mediaItems = this.mediaItems.filter(c => c.id !== mediaItem.id),
+  //     error: (err) => console.error('Delete failed', err)
+  //   });
+  // }
+
 }

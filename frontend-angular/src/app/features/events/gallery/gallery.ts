@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MediaItem} from '../models/media-item';
+import {List} from "../../../core/data_structures/lists/list";
+import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 
 @Component({
   selector: 'app-gallery',
@@ -7,7 +9,7 @@ import {MediaItem} from '../models/media-item';
   styleUrl: './gallery.scss'
 })
 export class Gallery {
-  @Input() mediaItems!: MediaItem[];
+  @Input() mediaItems!: List<MediaItem>;
   @Output() mediaAdded = new EventEmitter<File>();
   @Output() mediaDeleted = new EventEmitter<File>();
 
@@ -19,4 +21,6 @@ export class Gallery {
     this.mediaAdded.emit(file);
     input.value = '';
   }
+
+  protected readonly UrlUtilService = UrlUtilService;
 }

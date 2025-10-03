@@ -1,5 +1,6 @@
 import {Participant} from './participant';
 import {Comment} from './comment';
+import {List} from '../../../core/data_structures/lists/list';
 
 export interface Event {
   id: string;
@@ -9,6 +10,6 @@ export interface Event {
   time: string;
   location: string;
   description: string;
-  participants: Participant[];
-  comments: Comment[];
+  participants: List<Participant>;
+  comments: List<Comment>;
 }

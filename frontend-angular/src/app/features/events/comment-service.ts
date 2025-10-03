@@ -2,20 +2,21 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Comment} from '../events/models/comment'
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
+import {List} from '../../core/data_structures/lists/list';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
 
-  private baseUrl = environment.eventsAddress;
-
   constructor(private http: HttpClient) {}
 
 
-  getAllByEventId(eventId: string): Observable<Comment[]> {
-    return this.http.get<Comment[]>(`${this.baseUrl}/${eventId}/comments`);
+  getAllByEventId(eventId: string): Observable<List<Comment>> {
+    return this.http
+      .get<Comment[]>(`${environment.eventsAddress}/${eventId}/comments`)
+      .pipe(map(comments => new List<Comment>(comments)));
   }
 
 
@@ -26,12 +27,12 @@ export class CommentService {
       'eventId': comment.eventId
     };
 
-    return this.http.post<Comment>(`${this.baseUrl}/${comment.eventId}/comments`, createdComment);
+    return this.http.post<Comment>(`${environment.eventsAddress}/${comment.eventId}/comments`, createdComment);
   }
 
 
   delete(comment: Comment): Observable<Comment> {
-    return this.http.delete<Comment>(`${this.baseUrl}/${comment.eventId}/comments/${comment.id}`);
+    return this.http.delete<Comment>(`${environment.eventsAddress}/${comment.eventId}/comments/${comment.id}`);
   }
 
 

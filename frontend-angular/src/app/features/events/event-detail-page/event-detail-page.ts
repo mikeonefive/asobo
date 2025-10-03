@@ -13,6 +13,8 @@ import {Observable} from 'rxjs';
 import {Gallery} from '../gallery/gallery';
 import {MediaService} from '../media-service';
 import {MediaItem} from '../models/media-item';
+import {List} from '../../../core/data_structures/lists/list';
+import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 
 @Component({
   selector: 'app-event-detail-page',
@@ -34,9 +36,9 @@ export class EventDetailPage {
   time!: string;
   location!: string;
   description?: string;
-  comments: Comment[] = [];
-  participants: Participant[] = [];
-  mediaItems: MediaItem[] = [];
+  comments: List<Comment> = new List<Comment>([]);
+  participants: List<Participant> = new List<Participant>([]);
+  mediaItems: List<MediaItem> = new List<MediaItem>([]);
 
   constructor(private route: ActivatedRoute,
               private eventService: EventService,
@@ -69,24 +71,24 @@ export class EventDetailPage {
     this.description = event.description;
     this.participants = event.participants;
 
-    this.commentService.getAllByEventId(event.id).subscribe(comments => {
+    this.commentService.getAllByEventId(event.id).subscribe((comments: List<Comment>) => {
       this.comments = comments;
     });
-    this.mediaService.getAllByEventId(event.id).subscribe(mediaItems => {
+    this.mediaService.getAllByEventId(event.id).subscribe((mediaItems: List<MediaItem>) => {
       this.mediaItems = mediaItems;
     });
   }
 
 
   onCommentCreated(comment: Comment) {
-    this.comments.push(comment);
+    this.comments.add(comment);
   }
 
 
-  deleteComment(commentToDelete: Comment) {
-    this.commentService.delete(commentToDelete).subscribe({
+  deleteComment(comment: Comment) {
+    this.commentService.delete(comment).subscribe({
       next: () => {
-        this.comments = this.comments.filter(c => c.id !== commentToDelete.id);
+        this.comments.remove(comment);
       },
       error: (err) => {
         console.error('Failed to delete comment!', err);
@@ -95,10 +97,10 @@ export class EventDetailPage {
   }
 
 
-  editComment(commentToEdit: Comment) {
-    this.commentService.edit(commentToEdit).subscribe({
+  editComment(comment: Comment) {
+    this.commentService.edit(comment).subscribe({
       next: () => {
-        console.log('edit comment:', commentToEdit);
+        console.log('edit comment:', comment);
       },
       error: (err) => {
         console.error('Failed to edit comment!:', err);
@@ -108,7 +110,7 @@ export class EventDetailPage {
 
   uploadMedia(file: File) {
     this.mediaService.upload(this.id, file).subscribe({
-      next: (mediaItem) => this.mediaItems = [...this.mediaItems, mediaItem],
+      next: (mediaItem) => this.mediaItems.add(mediaItem),
       error: (err) => console.error('Upload failed', err)
     });
   }
@@ -120,4 +122,5 @@ export class EventDetailPage {
   //   });
   // }
 
+  protected readonly UrlUtilService = UrlUtilService;
 }

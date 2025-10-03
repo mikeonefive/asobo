@@ -4,6 +4,8 @@ import {Comment} from '../models/comment';
 import {DatePipe} from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {List} from '../../../core/data_structures/lists/list';
+import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 
 @Component({
   selector: 'app-comments-list',
@@ -17,7 +19,8 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './comments-list.scss'
 })
 export class CommentsList {
-  @Input() comments!: Comment[];
+  @Input() comments!: List<Comment>;
   @Output() commentDeleted = new EventEmitter<Comment>();
   @Output() commentEdited = new EventEmitter<Comment>();
+  protected readonly UrlUtilService = UrlUtilService;
 }

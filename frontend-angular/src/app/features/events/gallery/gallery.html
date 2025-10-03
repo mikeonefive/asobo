@@ -3,7 +3,7 @@
 
   @for (mediaitem of mediaItems; track mediaitem.id) {
     <div class="single-media-container">
-      <img [src]="mediaitem.mediumURI" alt="{{ mediaitem }}">
+      <img [src]="UrlUtilService.getMediaUrl(mediaitem.mediumURI)" alt="{{ mediaitem }}">
     </div>
   }
 

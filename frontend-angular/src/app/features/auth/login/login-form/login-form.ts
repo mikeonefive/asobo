@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';  // Add this import
 import {environment} from '../../../../../environments/environment';
 import {AuthService} from '../../auth-service';
 import {PasswordModule} from "primeng/password";
@@ -20,18 +21,17 @@ import {ButtonModule} from "primeng/button";
 })
 export class LoginForm {
   loginForm: FormGroup;
-  loggedIn: boolean;
-  username: string;
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthService) {
-    this.loggedIn = false;
-    this.username = 'Dummy';
+  constructor(
+      private formBuilder: FormBuilder,
+      public authService: AuthService,
+      private router: Router
+  ) {
     this.loginForm = this.formBuilder.group({
       identifier: ['', [
         Validators.required,
         Validators.minLength(environment.minIdentifierLength),
-        /*Validators.email*/]
-      ],
+      ]],
       password: ['', [
         Validators.required,
         Validators.minLength(environment.minPWLength)]
@@ -45,16 +45,14 @@ export class LoginForm {
       return;
     }
 
-    this.auth.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        // TODO: save JWT, navigate, etc.
-        localStorage.setItem('jwt', response.token);
-        this.username = response.user.username;
-        this.loggedIn = true;
+        this.router.navigate(['/dashboard']); // TODO: decide where to navigate to after login
       },
       error: (err) => {
         console.error('Login failed:', err);
+        // TODO: Show error message to user
       }
     });
   }

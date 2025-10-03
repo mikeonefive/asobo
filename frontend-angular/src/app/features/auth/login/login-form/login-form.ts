@@ -1,26 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {environment} from '../../../../../environments/environment';
 import {AuthService} from '../../auth-service';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
+import {PasswordModule} from "primeng/password";
+import {ButtonModule} from "primeng/button";
 
 @Component({
   selector: 'app-login-form',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
+    PasswordModule,
+    ButtonModule,
   ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginForm {
   loginForm: FormGroup;
@@ -66,4 +62,6 @@ export class LoginForm {
   get getFormControls() {
     return this.loginForm.controls;
   }
+
+  protected readonly environment = environment;
 }

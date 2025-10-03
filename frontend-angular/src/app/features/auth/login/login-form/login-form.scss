@@ -1,6 +1,6 @@
 @use 'variables' as *;
 
-.login-form div.form-group {
+.login-form .form-group {
   margin: 0.7em;
   width: 100%;
   margin-left: 0;
@@ -24,6 +24,34 @@
   font-weight: bold;
 }
 
+.login-password {
+  width: 100%;
+  position: relative;
+}
+
+.login-password .p-password {
+  width: 100%;
+  display: block;
+}
+
+.login-password .p-password input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.login-password .p-password {
+  --p-icon-size: 1.2rem;
+}
+
+.login-password .p-password-toggle-mask-icon {
+  inset-inline-end: 0rem !important;
+  top: 50% !important;
+  margin-top: 0 !important;
+  transform: translateY(-50%) !important;
+  position: absolute;
+  cursor: pointer;
+}
+
 .signup-text-link {
   color: $asobo-purple;
   text-decoration: none;
@@ -34,12 +62,17 @@
   text-decoration: underline;
 }
 
-.form-group {
+/*.form-group {
   position: relative;
-}
+}*/
 
 .form-control {
   width: 100%;
+}
+
+.form-control #login-password {
+  width: 100%;
+  border: none;
 }
 
 .error-message {

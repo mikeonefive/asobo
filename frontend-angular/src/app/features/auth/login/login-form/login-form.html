@@ -1,4 +1,4 @@
-@if (!this.loggedIn) {
+@if (!this.authService.isLoggedIn()) {
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
 
         <!-- Username -->
@@ -61,6 +61,6 @@
     </form>
 } @else {
   <div class="alert alert-success mt-3 text-center">
-    Hi <span class="fw-bold">{{this.username}}</span> you are logged in!
+    Hi <span class="fw-bold">{{this.authService.currentUser()?.username}}</span> you are logged in!
   </div>
 }

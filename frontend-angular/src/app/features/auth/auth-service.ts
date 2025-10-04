@@ -73,7 +73,7 @@ export class AuthService {
     return null;
   }
 
-  // Optional: Refresh user data from backend
+  // Refresh user data from backend
   refreshUser(): Observable<User> {
     return this.http.get<User>('/api/auth/me')
       .pipe(

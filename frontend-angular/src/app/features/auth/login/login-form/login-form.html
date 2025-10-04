@@ -29,9 +29,11 @@
         </div>
 
         <!-- Password -->
+        <!-- [feedback]="false" removes pw strength indicator -->
         <div class="form-group login-password form-control">
             <p-password
                     [toggleMask]="true"
+                    [feedback]="false"
                     placeholder="Password"
                     formControlName="password"
                     id="login-password"

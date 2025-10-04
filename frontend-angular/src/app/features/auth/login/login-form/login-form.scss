@@ -6,14 +6,6 @@
   margin-left: 0;
 }
 
-/*#login-username-error {
-  display: none;
-  white-space: nowrap;
-  top: 235px;
-  transform: translateY(-50%);
-  left: 60%;
-}*/
-
 .login-form .btn-purple {
   width: 60%;
 }
@@ -35,8 +27,13 @@
 }
 
 .login-password .p-password input {
-  width: 100%;
+  width: 89%;
   padding-right: 2.5rem;
+}
+
+.login-password .p-password input::placeholder,
+.login-password .p-password-toggle-mask-icon {
+  color: var(--bs-secondary-color);
 }
 
 .login-password .p-password {
@@ -50,6 +47,7 @@
   transform: translateY(-50%) !important;
   position: absolute;
   cursor: pointer;
+
 }
 
 .signup-text-link {
@@ -61,10 +59,6 @@
 .signup-text-link:hover {
   text-decoration: underline;
 }
-
-/*.form-group {
-  position: relative;
-}*/
 
 .form-control {
   width: 100%;

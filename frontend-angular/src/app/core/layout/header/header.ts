@@ -31,6 +31,4 @@ export class Header {
       username: user?.username || 'Guest'
     };
   }
-
-  protected readonly environment = environment;
 }

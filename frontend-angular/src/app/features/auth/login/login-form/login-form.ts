@@ -2,7 +2,6 @@ import {Component, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {environment} from '../../../../../environments/environment';
 import {AuthService} from '../../auth-service';
 import {PasswordModule} from "primeng/password";
 import {ButtonModule} from "primeng/button";
@@ -22,6 +21,7 @@ import {ButtonModule} from "primeng/button";
 })
 export class LoginForm {
   loginForm: FormGroup;
+  loginFailed: boolean;
 
   constructor(
       private formBuilder: FormBuilder,
@@ -29,15 +29,14 @@ export class LoginForm {
       private router: Router,
       private route: ActivatedRoute,
   ) {
+    this.loginFailed = false;
     this.loginForm = this.formBuilder.group({
       identifier: ['', [
         Validators.required,
-        Validators.minLength(environment.minIdentifierLength),
       ]],
       password: ['', [
         Validators.required,
-        Validators.minLength(environment.minPWLength)]
-      ]
+      ]]
     });
   }
 
@@ -50,12 +49,17 @@ export class LoginForm {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
+        this.loginFailed = false;
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
         this.router.navigate([returnUrl]); // TODO: decide where to navigate to after login
       },
       error: (err) => {
-        console.error('Login failed:', err);
+        console.log('Login failed with status code', err.status);
         // TODO: Show error message to user
+        if (err.status === 401) {
+          console.log("401 unauthorized");
+          this.loginFailed = true;
+        }
       }
     });
   }

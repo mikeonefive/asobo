@@ -18,12 +18,6 @@
                     @if (this.getFormControls['identifier'].errors?.['required']) {
                         <span>Username or email is required.</span>
                     }
-                    @if (this.getFormControls['identifier'].errors?.['minlength']) {
-                        <span>Must be at least 3 characters.</span>
-                    }
-                    @if (this.getFormControls['identifier'].errors?.['email']) {
-                        <span>Invalid email format.</span>
-                    }
                 </small>
             }
         </div>
@@ -40,19 +34,21 @@
                     fluid
             />
 
-
             <!-- Password validation -->
             @if (this.getFormControls['password'].touched && this.getFormControls['password'].invalid) {
                 <small class="error-message">
                     @if (this.getFormControls['password'].errors?.['required']) {
                         <span>Password is required.</span>
                     }
-                    @if (this.getFormControls['password'].errors?.['minlength']) {
-                        <span>Password must be at least 6 characters.</span>
-                    }
                 </small>
             }
         </div>
+
+        @if (this.loginFailed) {
+          <div class="login-failed">
+              <small>Username and password do not match.</small>
+          </div>
+        }
 
         <!-- Submit -->
         <div class="form-group d-flex justify-content-center">

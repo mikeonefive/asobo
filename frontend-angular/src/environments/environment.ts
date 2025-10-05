@@ -13,4 +13,5 @@ export const environment = {
   minIdentifierLength: 3,
   minPWLength: 6,
   userProfileBaseUrl: `/user/`,
+  userDummyProfilePicRelativeUrl: '/uploads/profile-pictures/default.png',
 };

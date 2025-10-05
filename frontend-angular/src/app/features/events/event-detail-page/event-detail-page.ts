@@ -39,6 +39,7 @@ export class EventDetailPage {
   comments: List<Comment> = new List<Comment>([]);
   participants: List<Participant> = new List<Participant>([]);
   mediaItems: List<MediaItem> = new List<MediaItem>([]);
+  protected readonly UrlUtilService = UrlUtilService;
 
   constructor(private route: ActivatedRoute,
               private eventService: EventService,
@@ -103,7 +104,7 @@ export class EventDetailPage {
         console.log('edit comment:', comment);
       },
       error: (err) => {
-        console.error('Failed to edit comment!:', err);
+        console.error('Failed to edit comment!', err);
       }
     });
   }
@@ -111,16 +112,16 @@ export class EventDetailPage {
   uploadMedia(file: File) {
     this.mediaService.upload(this.id, file).subscribe({
       next: (mediaItem) => this.mediaItems.add(mediaItem),
-      error: (err) => console.error('Upload failed', err)
+      error: (err) => console.error('Failed to upload media!', err)
     });
   }
 
-  // deleteMedia(file: File) {
-  //   this.mediaService.delete(this.id, file).subscribe({
-  //     next: (mediaItem) => this.mediaItems = this.mediaItems.filter(c => c.id !== mediaItem.id),
-  //     error: (err) => console.error('Delete failed', err)
-  //   });
-  // }
+  deleteMedia(file: File) {
+    this.mediaService.delete(this.id, file).subscribe({
+      next: (mediaItem) => this.mediaItems.remove(mediaItem),
+      error: (err) => console.error('Failed to delete media!', err)
+    });
+  }
 
-  protected readonly UrlUtilService = UrlUtilService;
+
 }

@@ -9,17 +9,17 @@ import {RegisterPage} from './features/register/register-page/register-page';
 export const routes: Routes = [
   // public routes
   { path: 'login', component: LoginPage },
-  { path: 'register', component: RegisterPage},
+  { path: 'register', component: RegisterPage },
 
   // everything else needs authentication
   {
     path:'',
     canActivate: [authGuard],
     children: [
-      {path: 'user/:username', component: UserProfile},
-      {path: 'events', component: EventsPage},
-      {path: 'events/:id', component: EventDetailPage},
-      {path: '', redirectTo: '/events', pathMatch: 'full'},
+      { path: 'user/:username', component: UserProfile },
+      { path: 'events', component: EventsPage },
+      { path: 'events/:id', component: EventDetailPage },
+      { path: '', redirectTo: '/events', pathMatch: 'full' },
     ]
   },
 

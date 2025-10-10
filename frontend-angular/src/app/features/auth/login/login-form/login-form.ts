@@ -13,7 +13,6 @@ import {ButtonModule} from "primeng/button";
     ReactiveFormsModule,
     PasswordModule,
     ButtonModule,
-    RouterLink,
   ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',

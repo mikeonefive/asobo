@@ -1,9 +1,10 @@
 @use '../../../../styles/variables' as *;
 
-.asobo-logo {
+#asobo-header-logo {
   height: auto;
   max-width: 100%;     /* prevents overflow on small screens */
   width: 80px;         /* base size for desktop */
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

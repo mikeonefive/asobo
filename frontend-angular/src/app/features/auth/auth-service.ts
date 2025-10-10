@@ -1,9 +1,9 @@
-import {computed, Injectable, signal} from '@angular/core';
+import {computed, Injectable, signal, inject} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Router} from '@angular/router';
-import {User} from './login/models/user';
-import {LoginResponse} from './login/models/login-response';
+import {User} from './models/user';
+import {LoginResponse} from './models/login-response';
 import {environment} from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -18,10 +18,8 @@ export class AuthService {
   public currentUser = this.currentUserSignal.asReadonly();
   public isLoggedIn = computed(() => !!this.currentUser() && !!this.getToken());
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
   login(credentials: { identifier: string; password: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(environment.loginEndpoint, credentials)
@@ -31,6 +29,15 @@ export class AuthService {
           this.setSession(response);
         })
       );
+  }
+
+  register(formData: FormData): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(environment.registerEndpoint, formData)
+        .pipe(
+            tap(response => {
+              this.setSession(response);
+            })
+        );
   }
 
   private setSession(authResult: LoginResponse): void {

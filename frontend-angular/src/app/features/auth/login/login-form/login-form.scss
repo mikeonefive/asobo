@@ -10,12 +10,6 @@
   width: 60%;
 }
 
-.login-text-link {
-  color: var(--asobo-purple);
-  text-decoration: none;
-  font-weight: bold;
-}
-
 .login-password {
   width: 100%;
   position: relative;
@@ -47,17 +41,6 @@
   transform: translateY(-50%) !important;
   position: absolute;
   cursor: pointer;
-
-}
-
-.signup-text-link {
-  color: $asobo-purple;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.signup-text-link:hover {
-  text-decoration: underline;
 }
 
 .form-control {
@@ -69,22 +52,9 @@
   border: none;
 }
 
-.error-message {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  margin-left: 10px;
-  transform: translateY(-50%);
-  color: red;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
 .login-failed {
   color: red;
   white-space: nowrap;
   pointer-events: none;
   text-align: center;
 }
-
-

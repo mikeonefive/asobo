@@ -17,7 +17,7 @@ public class UserPublicDTO {
 
     private LocalDateTime registerDate;
 
-   //private boolean isActive;
+    private boolean isActive;
 
     private String pictureURI;
 
@@ -50,6 +50,14 @@ public class UserPublicDTO {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public void setEmail(String email) {

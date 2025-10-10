@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../../environments/environment';
-import {Comment} from '../models/comment'
+import {environment} from '../../../environments/environment';
+import {Comment} from '../events/models/comment'
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {List} from '../../../core/data_structures/lists/list';
-import {CreateComment} from '../models/create-comment';
+import {List} from '../../core/data_structures/lists/list';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +15,13 @@ export class CommentService {
 
   getAllByEventId(eventId: string): Observable<List<Comment>> {
     return this.http
-      .get<Comment[]>(`${environment.eventsAddress}/${eventId}/comments`)
+      .get<Comment[]>(this.getCommentsUrl(eventId))
       .pipe(map(comments => new List<Comment>(comments)));
   }
 
 
   create(comment: CreateComment): Observable<Comment> {
-    return this.http.post<Comment>(`${environment.eventsAddress}/${comment.eventId}/comments`, comment);
+    return this.http.post<Comment>(this.getCommentsUrl(comment.eventId), comment);
   }
 
 
@@ -34,6 +33,11 @@ export class CommentService {
   edit(comment: Comment): Observable<Comment> {
     console.log('comment to edit ', comment);
     return new Observable<Comment>();
+  }
+
+
+  private getCommentsUrl(eventId: string): string {
+    return `${environment.eventsAddress}/${eventId}/comments`;
   }
 }
 

@@ -15,7 +15,7 @@ export class MediaService {
 
   getAllByEventId(eventId: string): Observable<List<MediaItem>> {
     return this.http
-      .get<MediaItem[]>(`${environment.eventsAddress}/${eventId}/media`)
+      .get<MediaItem[]>(`${this.getMediaUrl(eventId)}`)
       .pipe(map(items => new List<MediaItem>(items)));
   }
 
@@ -23,11 +23,16 @@ export class MediaService {
   upload(eventId: string, file: File): Observable<MediaItem> {
     const form = new FormData();
     form.append('mediumFile', file);
-    return this.http.post<MediaItem>(`${environment.eventsAddress}/${eventId}/media`, form);
+    return this.http.post<MediaItem>(`${this.getMediaUrl(eventId)}`, form);
   }
 
 
   delete(eventId: string, item: MediaItem): Observable<MediaItem> {
     return this.http.delete<MediaItem>(`${environment.eventsAddress}/${eventId}/media/${item.id}`);
+  }
+
+
+  private getMediaUrl(eventId: string): string {
+    return `${environment.eventsAddress}/${eventId}/media`;
   }
 }

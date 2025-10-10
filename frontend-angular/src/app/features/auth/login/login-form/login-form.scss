@@ -1,0 +1,90 @@
+@use 'variables' as *;
+
+.login-form .form-group {
+  margin: 0.7em;
+  width: 100%;
+  margin-left: 0;
+}
+
+.login-form .btn-purple {
+  width: 60%;
+}
+
+.login-text-link {
+  color: var(--asobo-purple);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-password {
+  width: 100%;
+  position: relative;
+}
+
+.login-password .p-password {
+  width: 100%;
+  display: block;
+}
+
+.login-password .p-password input {
+  width: 89%;
+  padding-right: 2.5rem;
+}
+
+.login-password .p-password input::placeholder,
+.login-password .p-password-toggle-mask-icon {
+  color: var(--bs-secondary-color);
+}
+
+.login-password .p-password {
+  --p-icon-size: 1.2rem;
+}
+
+.login-password .p-password-toggle-mask-icon {
+  inset-inline-end: 0rem !important;
+  top: 50% !important;
+  margin-top: 0 !important;
+  transform: translateY(-50%) !important;
+  position: absolute;
+  cursor: pointer;
+
+}
+
+.signup-text-link {
+  color: $asobo-purple;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-text-link:hover {
+  text-decoration: underline;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-control #login-password {
+  width: 100%;
+  border: none;
+}
+
+.error-message {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 10px;
+  transform: translateY(-50%);
+  color: red;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.login-failed {
+  color: red;
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: center;
+}
+
+

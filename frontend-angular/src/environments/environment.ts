@@ -8,5 +8,10 @@ export const environment = {
   backendUrl: BACKEND_URL,
   apiBaseUrl: API_BASE_URL,
   eventsAddress: `${API_BASE_URL}/events`,
+  loginEndpoint: `${API_BASE_URL}/auth/login`,
   frontendBaseUrl: FRONTEND_URL,
+  minIdentifierLength: 3,
+  minPWLength: 6,
+  userProfileBaseUrl: `/user/`,
+  userDummyProfilePicRelativeUrl: '/uploads/profile-pictures/default.png',
 };

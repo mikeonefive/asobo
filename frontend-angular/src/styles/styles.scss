@@ -82,7 +82,7 @@ a.btn-purple {
   display: none;
 }
 
-.login-text-link, .signup-text-link {
+.login-text-link {
   color: var(--asobo-purple);
   text-decoration: none;
   font-weight: bold;
@@ -90,6 +90,12 @@ a.btn-purple {
 
 .login-text-link:hover, .signup-text-link:hover {
   text-decoration: underline;
+}
+
+app-login-page {
+  width: 25%;
+  margin: 0 auto;
+  min-width: 180px;
 }
 
 .table-user-image {

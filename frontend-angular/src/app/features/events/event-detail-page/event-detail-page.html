@@ -45,10 +45,11 @@
         <app-new-comment [author]="currentUser" (commentCreated)="onCommentCreated($event)"></app-new-comment>
     }
   </div>
-    <!-- Participants -->
-    <div class="col-md-6 text-start">
-      <app-participants [participants]="participants"/>
-    </div>
+
+  <!-- Participants -->
+  <div class="col-md-6 text-start">
+    <app-participants [participants]="participants"/>
+  </div>
 </div>
 
 <!-- Existing comments list -->

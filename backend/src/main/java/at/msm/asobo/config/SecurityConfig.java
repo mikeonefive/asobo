@@ -1,5 +1,6 @@
 package at.msm.asobo.config;
 
+import at.msm.asobo.security.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,15 +26,17 @@ import java.util.List;
 public class SecurityConfig {
 
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-
     private final CustomUserDetailsService customUserDetailsService;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     public SecurityConfig(
             TokenAuthenticationFilter tokenAuthenticationFilter,
-            CustomUserDetailsService customUserDetailsService
+            CustomUserDetailsService customUserDetailsService,
+            RestAuthenticationEntryPoint restAuthenticationEntryPoint
     ) {
         this.tokenAuthenticationFilter = tokenAuthenticationFilter;
         this.customUserDetailsService = customUserDetailsService;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 
     @Bean
@@ -77,6 +80,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/**").authenticated()
                 .anyRequest().authenticated()
         );
+
+        http.exceptionHandling(exception -> exception
+                .authenticationEntryPoint(restAuthenticationEntryPoint));
 
         return http.build();
     }

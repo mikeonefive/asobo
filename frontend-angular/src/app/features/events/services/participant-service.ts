@@ -19,7 +19,7 @@ export class ParticipantService {
       .pipe(map(participants => new List<Participant>(participants)));
   }
 
-  public joinEvent(eventId: string, user: User): Observable<Participant> {
+  joinEvent(eventId: string, user: User): Observable<Participant> {
     return this.http.post<Participant>(this.getEventParticipantsUrl(eventId), user);
   }
 

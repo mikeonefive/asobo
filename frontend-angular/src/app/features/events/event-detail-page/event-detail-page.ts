@@ -150,7 +150,9 @@ export class EventDetailPage {
 
     this.participantService.joinEvent(this.id, this.currentUser).subscribe({
       next: (participant: Participant) => this.participants.add(participant),
-      error: (err) => console.error('Error joining event:', err)
+      error: (err) => {
+        alert(err.error.message);
+        console.error('Error joining event:', err); }
     });
   }
 }

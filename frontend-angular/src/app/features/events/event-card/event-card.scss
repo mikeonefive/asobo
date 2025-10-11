@@ -18,6 +18,11 @@
   border-radius: 15px;
   overflow: hidden;
   filter: drop-shadow(3px 3px 5px gray);
+  transition: transform .2s;
+}
+
+.event-card:hover {
+  transform: scale(1.05);
 }
 
 .event-card .card-title {

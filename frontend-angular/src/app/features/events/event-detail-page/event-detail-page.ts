@@ -15,7 +15,6 @@ import {MediaService} from '../services/media-service';
 import {MediaItem} from '../models/media-item';
 import {List} from '../../../core/data_structures/lists/list';
 import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
-import {User} from '../../auth/login/models/user';
 import {AuthService} from '../../auth/auth-service';
 import {User} from '../../auth/login/models/user';
 import {ParticipantService} from '../services/participant-service';
@@ -38,6 +37,7 @@ export class EventDetailPage {
   private commentService =  inject(CommentService);
   private mediaService =  inject(MediaService);
   authService =  inject(AuthService);
+  participantService =  inject(ParticipantService);
 
   id!: string;
   title!: string;

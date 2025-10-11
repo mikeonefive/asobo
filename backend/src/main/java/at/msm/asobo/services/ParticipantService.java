@@ -42,7 +42,6 @@ public class ParticipantService {
 
         participants.add(participant);
         event.setParticipants(participants);
-
         this.eventService.updateEvent(event);
 
         return this.userDTOUserMapper.mapUserToUserPublicDTO(participant);

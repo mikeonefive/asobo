@@ -22,7 +22,7 @@
         </div>
         <div class="col-md-4">
           @if(authService.isLoggedIn()) {
-            <a href="" class="btn btn-purple imin-btn">I'm in!</a>
+            <a class="btn btn-purple imin-btn" (click)="joinEvent()">I'm in!</a>
           }
         </div>
         <div class="col-md-8"><!-- spacer --></div>
@@ -62,7 +62,7 @@
   <!-- Photos & Video -->
   <div class="col-md-6 mt-3 text-start">
     <app-gallery [mediaItems]="mediaItems"
-    (mediaAdded)="uploadMedia($event)"
-    (mediaDeleted)="deleteMedia($event)" />
+    (mediaAdded)="uploadMedia($event)" />
+    <!--(mediaDeleted)="deleteMedia($event)"/> -->
   </div>
 </div>

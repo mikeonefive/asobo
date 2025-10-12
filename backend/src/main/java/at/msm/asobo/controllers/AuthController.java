@@ -1,7 +1,7 @@
 package at.msm.asobo.controllers;
 
 import at.msm.asobo.dto.auth.LoginResponseDTO;
-import at.msm.asobo.dto.user.UserLoginDTO;
+import at.msm.asobo.dto.auth.UserLoginDTO;
 import at.msm.asobo.dto.user.UserRegisterDTO;
 import at.msm.asobo.services.UserService;
 import jakarta.validation.Valid;

@@ -2,6 +2,7 @@ package at.msm.asobo.services;
 
 import at.msm.asobo.config.FileStorageProperties;
 import at.msm.asobo.dto.auth.LoginResponseDTO;
+import at.msm.asobo.dto.auth.UserLoginDTO;
 import at.msm.asobo.dto.user.*;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.exceptions.UserNotFoundException;
@@ -10,6 +11,7 @@ import at.msm.asobo.repositories.UserRepository;
 import at.msm.asobo.security.JwtUtil;
 import at.msm.asobo.security.UserPrincipal;
 import at.msm.asobo.services.files.FileStorageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+    @Value("${jwt.expiration-ms}")
+    private long EXPIRATION_MS;
 
     private final UserRepository userRepository;
     private final UserDTOUserMapper userDTOUserMapper;
@@ -97,7 +101,7 @@ public class UserService {
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
-        String token = jwtUtil.generateToken(userPrincipal);
+        String token = jwtUtil.generateToken(userPrincipal, EXPIRATION_MS);
 
         return new LoginResponseDTO(token, this.userDTOUserMapper.mapUserToUserPublicDTO(savedUser));
     }
@@ -116,7 +120,12 @@ public class UserService {
         // Get the authenticated principal
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        String token = jwtUtil.generateToken(userPrincipal);
+        long expirationTime = EXPIRATION_MS;
+        if (userLoginDTO.isRememberMe()) {
+            expirationTime = 30 * 24 * 60 * 60 * 1000L; // 30 days;
+        }
+
+        String token = jwtUtil.generateToken(userPrincipal, expirationTime);
 
         User user = userRepository.findById(UUID.fromString(userPrincipal.getUserId()))
                 .orElseThrow(() -> new UserNotFoundException("User not found"));

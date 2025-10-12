@@ -36,7 +36,8 @@ export class LoginForm {
       ]],
       password: ['', [
         Validators.required,
-      ]]
+      ]],
+      rememberMe: [false]
     });
   }
 

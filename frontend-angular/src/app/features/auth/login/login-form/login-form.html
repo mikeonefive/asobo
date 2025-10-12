@@ -28,6 +28,7 @@
             <p-password
                     [toggleMask]="true"
                     [feedback]="false"
+                    [showClear]="getFormControls['password'].value?.length > 0"
                     placeholder="Password"
                     formControlName="password"
                     id="login-password"

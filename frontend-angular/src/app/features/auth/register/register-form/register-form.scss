@@ -50,8 +50,10 @@
       --p-icon-size: 1.2rem;
 
       input {
-        width: 89%;
-        padding-right: 2.5rem;
+        width: 100%;
+        padding: 0;
+        border: none;
+        box-shadow: none;
       }
 
       input::placeholder {
@@ -155,10 +157,10 @@
 }
 
 .profile-picture-box {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
   margin: 1.2rem auto 1.5rem;
   border: 2px dashed $asobo-purple;
-  border-radius: 8px;
+  border-radius: 50%;
   background-color: color-mix(in srgb, $asobo-purple 7%, transparent);
   cursor: pointer;
   overflow: hidden;
@@ -167,7 +169,7 @@
   justify-content: center;
   position: relative;
   width: 100%;
-  max-width: 250px;
+  max-width: 300px;
   aspect-ratio: 1 / 1;
 }
 

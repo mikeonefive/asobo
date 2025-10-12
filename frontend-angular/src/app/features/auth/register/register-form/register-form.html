@@ -165,11 +165,16 @@
   <div class="form-group register-password form-control">
     <p-password
       [toggleMask]="true"
-      [feedback]="false"
+      [feedback]="true"
+      [showClear]="getFormControls['password'].value?.length > 0"
       placeholder="Password"
       formControlName="password"
       id="register-password"
       fluid
+      promptLabel="Choose a password"
+      weakLabel="Too simple"
+      mediumLabel="Average complexity"
+      strongLabel="Complex password"
     />
 
     <!-- Password validation -->
@@ -186,6 +191,7 @@
     <p-password
       [toggleMask]="true"
       [feedback]="false"
+      [showClear]="getFormControls['passwordConfirmation'].value?.length > 0"
       placeholder="Confirm Password"
       formControlName="passwordConfirmation"
       id="register-password-confirmation"

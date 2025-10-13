@@ -19,6 +19,7 @@
   overflow: hidden;
   filter: drop-shadow(3px 3px 5px gray);
   transition: transform .2s;
+  border: none;
 }
 
 .event-card:hover {
@@ -41,7 +42,8 @@
   height: 23vh;
   width: 100%;
   overflow: hidden;
-  border-radius: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .card-image-container img {

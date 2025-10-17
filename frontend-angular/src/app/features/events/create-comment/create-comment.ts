@@ -19,21 +19,21 @@ export class CreateComment {
 
   @Input() author!: User | null ;
   @Output() commentCreated: EventEmitter<Comment> = new EventEmitter<Comment>();
-  text = signal('');
+  text: string = '';
 
   async submit(): Promise<void> {
     const eventId: string | null = this.route.snapshot.paramMap.get('id');
-    if (!eventId || !this.text().trim() || !this.author)
+    if (!eventId || !this.text.trim() || !this.author)
       return;
 
     this.commentService.create({
-      text: this.text().trim(),
+      text: this.text.trim(),
       authorId: this.author.id,
       eventId: eventId
     }).subscribe({
       next: (newComment: Comment) => {
         this.commentCreated.emit(newComment);
-        this.text.set('');
+        this.text = '';
       },
       error: (err: Error) => {
         console.error('Error posting comment', err);

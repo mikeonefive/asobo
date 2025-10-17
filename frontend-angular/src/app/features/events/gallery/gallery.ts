@@ -6,6 +6,7 @@ import {Carousel} from 'primeng/carousel';
 import {PrimeTemplate} from 'primeng/api';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
+import {MediaUtilService} from '../../../shared/utils/media/media-util-service';
 
 @Component({
   selector: 'app-gallery',
@@ -46,4 +47,6 @@ export class Gallery {
     this.mediaAdded.emit(file);
     input.value = '';
   }
+
+  protected readonly MediaUtilService = MediaUtilService;
 }

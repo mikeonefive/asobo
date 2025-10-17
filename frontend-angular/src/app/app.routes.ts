@@ -6,9 +6,11 @@ import {HomePage} from './core/home/home-page/home-page';
 import {authGuard} from './features/auth/auth.guard';
 import {UserProfile} from './features/users/user-profile/user-profile';
 import {RegistrationPage} from './features/auth/register/registration-page/registration-page';
+import {AboutPage} from './core/about/about-page/about-page';
 
 export const routes: Routes = [
   // public routes
+  { path: 'about', component: AboutPage },
   { path: 'login', component: LoginPage },
   { path: 'register', component: RegistrationPage },
   { path: 'events/:id', component: EventDetailPage },

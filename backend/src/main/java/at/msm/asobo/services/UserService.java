@@ -31,6 +31,9 @@ public class UserService {
     @Value("${jwt.expiration-ms}")
     private long EXPIRATION_MS;
 
+    @Value("${jwt.remember-me-expiration-ms}")
+    private long REMEMBER_ME_EXPIRATION_MS;
+
     private final UserRepository userRepository;
     private final UserDTOUserMapper userDTOUserMapper;
     private final FileStorageService fileStorageService;
@@ -125,7 +128,7 @@ public class UserService {
 
         long expirationTime = EXPIRATION_MS;
         if (userLoginDTO.isRememberMe()) {
-            expirationTime = 30 * 24 * 60 * 60 * 1000L; // 30 days;
+            expirationTime = REMEMBER_ME_EXPIRATION_MS; // 30 days;
         }
 
         String token = jwtUtil.generateToken(userPrincipal, expirationTime);

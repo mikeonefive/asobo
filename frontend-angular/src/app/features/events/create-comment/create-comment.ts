@@ -19,7 +19,7 @@ export class CreateComment {
 
   @Input() author!: User | null ;
   @Output() commentCreated: EventEmitter<Comment> = new EventEmitter<Comment>();
-  text = '';
+  text: string = '';
 
   async submit(): Promise<void> {
     const eventId: string | null = this.route.snapshot.paramMap.get('id');

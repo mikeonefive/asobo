@@ -8,6 +8,7 @@ import {ButtonModule} from "primeng/button";
 import {SelectModule} from 'primeng/select';
 import {FormUtilService} from '../../../../shared/utils/form/form-util-service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-registration-form',
@@ -91,7 +92,7 @@ export class RegistrationForm {
     // Username availability check
     this.registerForm.get('username')?.valueChanges
       .pipe(
-        filter(username => username.length >= 3),
+        filter(username => username.length >= environment.minIdentifierLength),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap(username => this.authService.checkUsernameAvailability(username))

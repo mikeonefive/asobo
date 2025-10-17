@@ -161,7 +161,7 @@ export class RegistrationForm {
 
   private hasSpecialCharacter = (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
-    if (!value || !/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+    if (!value || !environment.specialCharactersForPW.test(value)) {
       return { specialCharacter: true };
     }
     return null;
@@ -174,7 +174,7 @@ export class RegistrationForm {
       return;
 
     const value = passwordControl.value;
-    const errors = passwordControl.errors || {};
+    const passwordErrors = passwordControl.errors || {};
 
     // Only show checkmarks if password has content
     if (!value) {
@@ -185,7 +185,7 @@ export class RegistrationForm {
     }
 
     this.passwordRequirements.forEach((requirement) => {
-      requirement.met = !errors[requirement.key];
+      requirement.met = !passwordErrors[requirement.key];
     });
   }
 
@@ -230,11 +230,11 @@ export class RegistrationForm {
     let strength = 0;
 
     // Check each requirement
-    if (password.length >= 8) strength++;
+    if (password.length >= environment.minPWLength) strength++;
     if (/[A-Z]/.test(password)) strength++;
     if (/[a-z]/.test(password)) strength++;
     if (/\d/.test(password)) strength++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+    if (environment.specialCharactersForPW.test(password)) strength++;
 
     if (strength <= 2) return 'weak';
     if (strength <= 3) return 'medium';
@@ -300,7 +300,6 @@ export class RegistrationForm {
     if (!formDataObj) {
       return;
     }
-    console.log('Form submitted:', formDataObj);
 
     const formData = new FormData();
 

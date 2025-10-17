@@ -13,6 +13,7 @@ export const environment = {
   frontendBaseUrl: FRONTEND_URL,
   minIdentifierLength: 3,
   minPWLength: 6,
+  specialCharactersForPW: /[!@#$%^&*(),.?":;{}|<>]/,
   userProfileBaseUrl: `/user/`,
   userDummyProfilePicRelativeUrl: '/uploads/profile-pictures/default.png',
 };

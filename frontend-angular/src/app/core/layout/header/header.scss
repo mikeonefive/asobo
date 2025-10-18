@@ -1,5 +1,9 @@
 @use '../../../../styles/variables' as *;
 
+/*.navbar {
+  background-color: color-mix(in srgb, $asobo-purple 5%, transparent) !important ;
+}*/
+
 #asobo-header-logo {
   height: auto;
   max-width: 100%;     /* prevents overflow on small screens */
@@ -71,19 +75,14 @@
   }
 }
 
+#create-event-nav-anchor {
+  list-style: none;
+}
 
-
-  #create-event-nav-anchor {
-    list-style: none;
-  }
-
-  .add-event-plus {
-    font-size: 1.5em;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    transform: translateY(-2px);
-  }
-
-
-
+.add-event-plus {
+  font-size: 1.5em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  transform: translateY(-2px);
+}

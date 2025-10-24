@@ -25,6 +25,6 @@ public class ParticipantController {
 
     @GetMapping()
     public List<UserPublicDTO> getParticipantsByEventId(@PathVariable UUID eventId) {
-        return this.participantService.getAllParticipantsByEventId(eventId);
+        return this.participantService.getAllParticipantsAsDTOsByEventId(eventId);
     }
 }

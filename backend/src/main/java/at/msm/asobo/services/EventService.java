@@ -3,15 +3,20 @@ package at.msm.asobo.services;
 import at.msm.asobo.config.FileStorageProperties;
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
+import at.msm.asobo.dto.event.EventUpdateDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.exceptions.EventNotFoundException;
 import at.msm.asobo.mappers.EventDTOEventMapper;
+import at.msm.asobo.mappers.MediumDTOMediumMapper;
+import at.msm.asobo.mappers.UserCommentDTOUserCommentMapper;
+import at.msm.asobo.mappers.UserDTOUserMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.repositories.UserRepository;
 import at.msm.asobo.services.files.FileStorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,8 +29,12 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final EventDTOEventMapper eventDTOEventMapper;
+    private final UserDTOUserMapper userDTOUserMapper;
+    private final UserCommentDTOUserCommentMapper userCommentDTOUserCommentMapper;
+    private final MediumDTOMediumMapper mediumDTOMediumMapper;
     private final UserService userService;
     private final FileStorageService fileStorageService;
+    private final FileStorageProperties fileStorageProperties;
 
     @Value("${app.file-storage.event-coverpicture-subfolder}")
     private String eventCoverPictureSubfolder;
@@ -34,12 +43,20 @@ public class EventService {
                         UserRepository userRepository,
                         EventDTOEventMapper eventDTOEventMapper,
                         UserService userService,
-                        FileStorageService fileStorageService) {
+                        FileStorageService fileStorageService,
+                        FileStorageProperties fileStorageProperties,
+                        UserDTOUserMapper userDTOUserMapper,
+                        UserCommentDTOUserCommentMapper userCommentDTOUserCommentMapper,
+                        MediumDTOMediumMapper mediumDTOMediumMapper) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.eventDTOEventMapper = eventDTOEventMapper;
         this.userService = userService;
         this.fileStorageService = fileStorageService;
+        this.fileStorageProperties = fileStorageProperties;
+        this.userDTOUserMapper = userDTOUserMapper;
+        this.userCommentDTOUserCommentMapper = userCommentDTOUserCommentMapper;
+        this.mediumDTOMediumMapper = mediumDTOMediumMapper;
     }
 
     public List<EventDTO> getAllEvents() {
@@ -97,8 +114,24 @@ public class EventService {
         return this.eventDTOEventMapper.mapEventToEventDTO(eventToDelete);
     }
 
-    public EventDTO updateEvent(Event event) {
-        Event eventToUpdate = this.eventRepository.save(event);
+    public EventDTO updateEvent(EventUpdateDTO eventUpdateDTO) {
+        Event existingEvent = this.getEventById(eventUpdateDTO.getId());
+
+        existingEvent.setTitle(eventUpdateDTO.getTitle());
+        existingEvent.setDescription(eventUpdateDTO.getDescription());
+        existingEvent.setLocation(eventUpdateDTO.getLocation());
+        existingEvent.setDate(eventUpdateDTO.getDate());
+        existingEvent.setParticipants(userDTOUserMapper.mapUserPublicDTOsToUsers(eventUpdateDTO.getParticipants()));
+        existingEvent.setComments(userCommentDTOUserCommentMapper.mapUserCommentDTOsToUserComments(eventUpdateDTO.getComments()));
+        existingEvent.setMedia(mediumDTOMediumMapper.mapMediumDTOsToMediumList(eventUpdateDTO.getMedia()));
+
+        MultipartFile picture = eventUpdateDTO.getPicture();
+        if (picture != null && !picture.isEmpty()) {
+            String pictureURI = this.fileStorageService.store(picture, this.fileStorageProperties.getEventCoverPictureSubfolder());
+            existingEvent.setPictureURI(pictureURI);
+        }
+
+        Event eventToUpdate = this.eventRepository.save(existingEvent);
         return this.eventDTOEventMapper.mapEventToEventDTO(eventToUpdate);
     }
 }

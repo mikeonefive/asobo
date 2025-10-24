@@ -3,6 +3,7 @@ package at.msm.asobo.services;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
+import at.msm.asobo.mappers.EventDTOEventMapper;
 import at.msm.asobo.mappers.UserDTOUserMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -14,19 +15,28 @@ public class ParticipantService {
     private final UserService userService;
     private final EventService eventService;
     private final UserDTOUserMapper userDTOUserMapper;
+    private final EventDTOEventMapper eventDTOEventMapper;
 
     public ParticipantService(UserService userService,
                               EventService eventService,
-                              UserDTOUserMapper userDTOUserMapper) {
+                              UserDTOUserMapper userDTOUserMapper,
+                              EventDTOEventMapper eventDTOEventMapper) {
         this.userService = userService;
         this.eventService = eventService;
         this.userDTOUserMapper = userDTOUserMapper;
+        this.eventDTOEventMapper = eventDTOEventMapper;
     }
 
-    public List<UserPublicDTO> getAllParticipantsByEventId(UUID eventId) {
-        Event event = this.eventService.getEventById(eventId);
-        List<User> participants = event.getParticipants();
+    // return list of DTOs
+    public List<UserPublicDTO> getAllParticipantsAsDTOsByEventId(UUID eventId) {
+        List<User> participants = this.getAllParticipantsByEventId(eventId);
         return this.userDTOUserMapper.mapUsersToUserPublicDTOs(participants);
+    }
+
+    // return list of user entities
+    private List<User> getAllParticipantsByEventId(UUID eventId) {
+        Event event = this.eventService.getEventById(eventId);
+        return event.getParticipants();
     }
 
     public List<UserPublicDTO> toggleParticipantInEvent(UUID eventId, UUID participantId) {
@@ -36,15 +46,12 @@ public class ParticipantService {
 
         if (participants.contains(participant)) {
             participants.remove(participant);
-            event.setParticipants(participants);
-            this.eventService.updateEvent(event);
-            return this.userDTOUserMapper.mapUsersToUserPublicDTOs(participants);
+        } else {
+            participants.add(participant);
         }
 
-        participants.add(participant);
         event.setParticipants(participants);
-        this.eventService.updateEvent(event);
-
+        this.eventService.updateEvent(this.eventDTOEventMapper.mapEventToEventUpdateDTO(event));
         return this.userDTOUserMapper.mapUsersToUserPublicDTOs(participants);
     }
 }

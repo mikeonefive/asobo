@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserAlreadyJoinedException extends RuntimeException {
 
     public UserAlreadyJoinedException() {
-        super("You have already joined this event!");
+        super("User has already joined this event!");
     }
 
     public UserAlreadyJoinedException(String message) {

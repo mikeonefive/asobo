@@ -72,7 +72,7 @@ export class RegistrationForm {
         ],
       ],
       passwordConfirmation: ['', [Validators.required]],
-    }, { validators: this.passwordMatchValidator.bind(this) });
+    }, { validators: this.validatePasswordMatch.bind(this) });
 
     // Salutation change handler
     this.registerForm.get('salutation')?.valueChanges.subscribe(value => {
@@ -121,8 +121,8 @@ export class RegistrationForm {
     });
   }
 
-  // Form-level validator: check if passwords match
-  private passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
+  // form-level validation: check if passwords match
+  private validatePasswordMatch(form: AbstractControl): ValidationErrors | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('passwordConfirmation')?.value;
 

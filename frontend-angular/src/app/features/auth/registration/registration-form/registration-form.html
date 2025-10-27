@@ -1,8 +1,9 @@
 <!--@if (!this.authService.isLoggedIn()) {-->
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
   <div class="form-group position-relative">
-    <div class="profile-picture-box" id="profile-picture-box" (click)="onProfileBoxClick($event)">
+    <!--<div class="profile-picture-box" id="profile-picture-box" (click)="fileInput.click()">
       <input
+        #fileInput
         type="file"
         id="profile-pic-input"
         name="profile_picture"
@@ -22,7 +23,13 @@
           <span class="picture-label">Add profile picture</span>
         </div>
       }
-    </div>
+    </div>-->
+
+    <app-profile-picture-upload
+      [currentImage]="previewUrl()"
+      (fileSelected)="handleFileSelected($event)"
+      [showPlusBeforeUpload] = "true"
+    />
   </div>
 
   <div class="form-group position-relative">

@@ -19,7 +19,7 @@ export class Header {
   private userProfileService = inject(UserProfileService);
 
   goHome() {
-    console.log('Logo clicked');  // 🔹 add this to test
+    console.log('Logo clicked');
     this.router.navigate(['/']);
   }
 

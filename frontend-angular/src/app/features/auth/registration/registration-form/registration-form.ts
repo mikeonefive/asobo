@@ -9,6 +9,7 @@ import {SelectModule} from 'primeng/select';
 import {FormUtilService} from '../../../../shared/utils/form/form-util-service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
 import {environment} from '../../../../../environments/environment';
+import {ProfilePictureUpload} from "../../../users/profile-picture-upload/profile-picture-upload";
 
 @Component({
   selector: 'app-registration-form',
@@ -18,6 +19,7 @@ import {environment} from '../../../../../environments/environment';
     PasswordModule,
     ButtonModule,
     SelectModule,
+    ProfilePictureUpload,
   ],
   templateUrl: './registration-form.html',
   styleUrl: './registration-form.scss',
@@ -255,39 +257,8 @@ export class RegistrationForm {
     }
   }
 
-  onProfileBoxClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.id !== 'profile-pic-input') {
-      const input = document.getElementById('profile-pic-input') as HTMLInputElement;
-      input.click();
-    }
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image.');
-      return;
-    }
-
+  handleFileSelected(file: File) {
     this.selectedImage = file;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewUrl.set(reader.result);
-
-      const box = document.getElementById('profile-picture-box') as HTMLElement;
-      if (box) {
-        box.style.border = 'none';
-        box.style.backgroundColor = 'transparent';
-      }
-    };
-    reader.readAsDataURL(file);
   }
 
   onSubmit() {

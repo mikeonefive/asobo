@@ -3,6 +3,7 @@ import {RouterLink, Router} from '@angular/router';
 import {AuthService} from '../../../features/auth/auth-service';
 import {environment} from '../../../../environments/environment';
 import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
+import {UserProfileService} from '../../../features/users/user-profile/user-profile-service';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,7 @@ import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 export class Header {
   private router = inject(Router);
   authService = inject(AuthService);
+  private userProfileService = inject(UserProfileService);
 
   goHome() {
     console.log('Logo clicked');  // 🔹 add this to test
@@ -22,18 +24,6 @@ export class Header {
   }
 
   get userProfile() {
-    const user = this.authService.currentUser();
-    return {
-      userProfileUrl: user?.username
-        ? `${environment.userProfileBaseUrl}${user?.username}`
-        : '/login',
-      pictureUrl: user?.pictureURI
-        ? UrlUtilService.getMediaUrl(user.pictureURI)
-        : UrlUtilService.getMediaUrl(environment.userDummyProfilePicRelativeUrl),
-      pictureAlt: user?.username
-        ? `${user.username}'s profile picture`
-        : 'User profile picture',
-      username: user?.username || 'Guest'
-    };
+    return this.userProfileService.userProfile()
   }
 }

@@ -16,6 +16,12 @@ export class ProfilePictureUpload {
   fileSelected = output<File>();
   preview = signal<string | null>(null);
 
+  ngOnInit() {
+    if (!this.showPlusBeforeUpload()) {
+      this.removePictureBoxBorder();
+    }
+  }
+
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -32,12 +38,16 @@ export class ProfilePictureUpload {
       this.preview.set(e.target.result);
       this.fileSelected.emit(file);
 
-      const box = this.profilePictureBox()?.nativeElement;
-      if (box && this.showPlusBeforeUpload()) {
-        box.style.border = 'none';
-        box.style.backgroundColor = 'transparent';
-      }
+      this.removePictureBoxBorder();
     };
     reader.readAsDataURL(file);
+  }
+
+  private removePictureBoxBorder() : void {
+    const box = this.profilePictureBox()?.nativeElement;
+    if (box) {
+      box.style.border = 'none';
+      box.style.backgroundColor = 'transparent';
+    }
   }
 }

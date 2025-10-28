@@ -1,17 +1,15 @@
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {AuthService} from '../../auth/auth-service';
 import {Router} from '@angular/router';
-import {Avatar} from 'primeng/avatar';
 import {UserProfileService} from './user-profile-service';
-import {Toast} from 'primeng/toast';
-import {FileUpload, FileUploadHandlerEvent} from 'primeng/fileupload';
+import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
+import {InputMask} from 'primeng/inputmask';
 
 @Component({
   selector: 'app-user-profile',
   imports: [
-    Avatar,
-    Toast,
-    FileUpload
+    ProfilePictureUpload,
+    InputMask
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss'
@@ -21,9 +19,13 @@ export class UserProfile {
   authService = inject(AuthService);
   private router = inject(Router);
 
+  previewUrl = signal<string | ArrayBuffer | null>(null);
   userProfile = this.userProfileService.userProfile;
+  selectedImage: File | null = null;
+  selectedImageUrl = computed(() => this.userProfile().pictureUrl);
+  displayImage = computed(() => this.previewUrl() || this.selectedImageUrl());
 
-  onImageSelect($event: FileUploadHandlerEvent) {
-    // TODO
+  handleFileSelected(file: File) {
+    this.selectedImage = file;
   }
 }

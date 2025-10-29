@@ -5,13 +5,39 @@
       [currentImage]="displayImage()"
       (fileSelected)="handleFileSelected($event)"
     />
-    <p-iconfield>
-      <p-inputicon class="pi pi-pen-to-square" />
-      <input type="text" pInputText placeholder="Search" />
-    </p-iconfield>
-    <p-iconfield>
-      <input type="text" pInputText />
-      <p-inputicon class="pi pi-spinner pi-spin" />
-    </p-iconfield>
+
+    <div class="d-flex justify-content-center mt-5">
+      <div class="d-flex flex-column gap-4">
+        <p-iconfield>
+          <input
+            type="text"
+            pInputText
+            placeholder="First Name"
+            [(ngModel)]="firstName"
+            [disabled]="!isEditingFirstName()"
+          />
+          <p-inputicon
+            class="pi {{ !isEditingFirstName() ? 'pi-pen-to-square' : '' }}"
+            (click)="toggleEdit('firstName')"
+            style="cursor: pointer;"
+          />
+        </p-iconfield>
+
+        <p-iconfield>
+          <input
+            type="text"
+            pInputText
+            placeholder="Surname"
+            [(ngModel)]="surname"
+            [disabled]="!isEditingSurname()"
+          />
+          <p-inputicon
+            class="pi {{ !isEditingSurname() ? 'pi-pen-to-square' : '' }}"
+            (click)="toggleEdit('surname')"
+            style="cursor: pointer;"
+          />
+        </p-iconfield>
+      </div>
+    </div>
   </div>
 }

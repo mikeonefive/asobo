@@ -5,13 +5,17 @@ import {UserProfileService} from './user-profile-service';
 import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
+import {InputText} from 'primeng/inputtext';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
   imports: [
     ProfilePictureUpload,
     IconField,
-    InputIcon
+    InputIcon,
+    InputText,
+    FormsModule
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss'
@@ -26,6 +30,19 @@ export class UserProfile {
   selectedImage: File | null = null;
   selectedImageUrl = computed(() => this.userProfile().pictureUrl);
   displayImage = computed(() => this.previewUrl() || this.selectedImageUrl());
+
+  isEditingFirstName = signal(false);
+  isEditingSurname = signal(false);
+  firstName = signal('');
+  surname = signal('');
+
+  toggleEdit(field: 'firstName' | 'surname') {
+    if (field === 'firstName') {
+      this.isEditingFirstName.set(!this.isEditingFirstName());
+    } else {
+      this.isEditingSurname.set(!this.isEditingSurname());
+    }
+  }
 
   handleFileSelected(file: File) {
     this.selectedImage = file;

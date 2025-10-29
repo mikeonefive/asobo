@@ -1,0 +1,22 @@
+p-iconfield input:disabled {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 1; // Override default opacity
+}
+
+// Or make it look completely normal when disabled
+p-iconfield input:disabled {
+  background-color: white;
+  border-color: #ced4da;
+  color: #212529;
+  opacity: 1;
+}
+
+// Make it blend in more
+p-iconfield input:disabled {
+  background-color: transparent;
+  border: 1px solid #e9ecef;
+  color: #495057;
+}

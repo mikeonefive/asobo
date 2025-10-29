@@ -5,6 +5,13 @@
       [currentImage]="displayImage()"
       (fileSelected)="handleFileSelected($event)"
     />
-    
+    <p-iconfield>
+      <p-inputicon class="pi pi-pen-to-square" />
+      <input type="text" pInputText placeholder="Search" />
+    </p-iconfield>
+    <p-iconfield>
+      <input type="text" pInputText />
+      <p-inputicon class="pi pi-spinner pi-spin" />
+    </p-iconfield>
   </div>
 }

@@ -3,13 +3,15 @@ import {AuthService} from '../../auth/auth-service';
 import {Router} from '@angular/router';
 import {UserProfileService} from './user-profile-service';
 import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
-import {InputMask} from 'primeng/inputmask';
+import {IconField} from 'primeng/iconfield';
+import {InputIcon} from 'primeng/inputicon';
 
 @Component({
   selector: 'app-user-profile',
   imports: [
     ProfilePictureUpload,
-    InputMask
+    IconField,
+    InputIcon
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss'

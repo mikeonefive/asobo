@@ -25,6 +25,7 @@ public interface MediumDTOMediumMapper {
     MediumCreationDTO mapMediumToMediumCreationDTO(Medium medium);
 
     @Mapping(target = "mediumURI", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "eventId", target = "event.id")
     Medium mapMediumCreationDTOToMedium(MediumCreationDTO mediumCreationDTO);
 

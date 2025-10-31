@@ -42,8 +42,8 @@ public class ParticipantService {
         return event.getParticipants();
     }
 
-    public List<UserPublicDTO> toggleParticipantInEvent(UUID eventId, UserPublicDTO participant) {
-        User existingParticipant = this.userService.getUserById(participant.getId());
+    public List<UserPublicDTO> toggleParticipantInEvent(UUID eventId, UserPublicDTO participantDTO) {
+        User existingParticipant = this.userService.getUserById(participantDTO.getId());
         Event event = this.eventService.getEventById(eventId);
         List<User> participants = event.getParticipants();
 

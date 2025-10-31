@@ -26,7 +26,7 @@ public class EventDTOEventMapper {
         this.mediumDTOMediumMapper = mediumDTOMediumMapper;
     }
 
-    // ========== Event → EventDTO ==========
+    // Event → EventDTO
     public EventDTO mapEventToEventDTO(Event event) {
         if (event == null) {
             return null;
@@ -39,6 +39,9 @@ public class EventDTOEventMapper {
         dto.setPictureURI(event.getPictureURI());
         dto.setLocation(event.getLocation());
         dto.setDate(event.getDate());
+        dto.setCreationDate(event.getCreationDate());
+        dto.setModificationDate(event.getModificationDate());
+        dto.setCreator(this.userDTOUserMapper.mapUserToUserPublicDTO(event.getCreator()));
 
         // Map participants
         if (event.getParticipants() != null) {
@@ -58,7 +61,7 @@ public class EventDTOEventMapper {
         return dto;
     }
 
-    // ========== EventDTO → Event ==========
+    // EventDTO → Event
     public Event mapEventDTOToEvent(EventDTO dto) {
         if (dto == null) {
             return null;
@@ -71,14 +74,18 @@ public class EventDTOEventMapper {
         event.setPictureURI(dto.getPictureURI());
         event.setLocation(dto.getLocation());
         event.setDate(dto.getDate());
+        event.setCreationDate(dto.getCreationDate());
+        event.setModificationDate(dto.getModificationDate());
+        event.setCreator(this.userDTOUserMapper.mapUserPublicDTOToUser(dto.getCreator()));
 
+        // TODO: this is where the replacing of mappers to factory patterns ticket #37 comes in
         // Note: participants, comments, and media should be handled separately
         // in the service layer with proper entity references
 
         return event;
     }
 
-    // ========== Event → EventUpdateDTO ==========
+    // Event → EventUpdateDTO
     public EventUpdateDTO mapEventToEventUpdateDTO(Event event) {
         if (event == null) {
             return null;
@@ -88,9 +95,10 @@ public class EventDTOEventMapper {
         dto.setId(event.getId());
         dto.setTitle(event.getTitle());
         dto.setDescription(event.getDescription());
+        // Note: picture is MultipartFile, not mapped from entity
         dto.setLocation(event.getLocation());
         dto.setDate(event.getDate());
-        // Note: picture is MultipartFile, not mapped from entity
+        // Note: modification date & creation date are set in the database, EventUpdateDTO only has the values that can be updated by the user
 
         // Map participants
         if (event.getParticipants() != null) {
@@ -113,41 +121,42 @@ public class EventDTOEventMapper {
         return dto;
     }
 
-    // ========== EventUpdateDTO → Event ==========
-    public Event mapEventUpdateDTOToEvent(EventUpdateDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+    // ? Maybe we don't need this at all because updateDTO only has the fields that will be updated and we never map directly ?
+    // EventUpdateDTO → Event
+//    public Event mapEventUpdateDTOToEvent(EventUpdateDTO dto) {
+//        if (dto == null) {
+//            return null;
+//        }
+//
+//        Event event = new Event();
+//        event.setId(dto.getId());
+//        event.setTitle(dto.getTitle());
+//        event.setDescription(dto.getDescription());
+//        event.setLocation(dto.getLocation());
+//        event.setDate(dto.getDate());
+//        // Note: pictureURI and relationships handled in service layer
+//
+//        return event;
+//    }
 
-        Event event = new Event();
-        event.setId(dto.getId());
-        event.setTitle(dto.getTitle());
-        event.setDescription(dto.getDescription());
-        event.setLocation(dto.getLocation());
-        event.setDate(dto.getDate());
-        // Note: pictureURI and relationships handled in service layer
+    // ? maybe we don't need that ? Event → EventCreationDTO
+//    public EventCreationDTO mapEventToEventCreationDTO(Event event) {
+//        if (event == null) {
+//            return null;
+//        }
+//
+//        EventCreationDTO dto = new EventCreationDTO();
+//        dto.setId(event.getId());
+//        dto.setTitle(event.getTitle());
+//        dto.setDescription(event.getDescription());
+//        dto.setLocation(event.getLocation());
+//        dto.setDate(event.getDate());
+//        // eventPicture (MultipartFile) is ignored as specified
+//
+//        return dto;
+//    }
 
-        return event;
-    }
-
-    // ========== Event → EventCreationDTO ==========
-    public EventCreationDTO mapEventToEventCreationDTO(Event event) {
-        if (event == null) {
-            return null;
-        }
-
-        EventCreationDTO dto = new EventCreationDTO();
-        dto.setId(event.getId());
-        dto.setTitle(event.getTitle());
-        dto.setDescription(event.getDescription());
-        dto.setLocation(event.getLocation());
-        dto.setDate(event.getDate());
-        // eventPicture (MultipartFile) is ignored as specified
-
-        return dto;
-    }
-
-    // ========== EventCreationDTO → Event ==========
+    // EventCreationDTO → Event
     public Event mapEventCreationDTOToEvent(EventCreationDTO dto) {
         if (dto == null) {
             return null;
@@ -158,12 +167,13 @@ public class EventDTOEventMapper {
         event.setDescription(dto.getDescription());
         event.setLocation(dto.getLocation());
         event.setDate(dto.getDate());
+        event.setCreator(this.userDTOUserMapper.mapUserPublicDTOToUser(dto.getCreator()));
         // pictureURI is ignored and handled in service layer
 
         return event;
     }
 
-    // ========== List mappings ==========
+    // List mappings
     public List<EventDTO> mapEventsToEventDTOs(List<Event> events) {
         if (events == null) {
             return new ArrayList<>();
@@ -191,23 +201,23 @@ public class EventDTOEventMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<Event> mapEventUpdateDTOsToEvents(List<EventUpdateDTO> eventUpdateDTOs) {
-        if (eventUpdateDTOs == null) {
-            return new ArrayList<>();
-        }
-        return eventUpdateDTOs.stream()
-                .map(this::mapEventUpdateDTOToEvent)
-                .collect(Collectors.toList());
-    }
+//    public List<Event> mapEventUpdateDTOsToEvents(List<EventUpdateDTO> eventUpdateDTOs) {
+//        if (eventUpdateDTOs == null) {
+//            return new ArrayList<>();
+//        }
+//        return eventUpdateDTOs.stream()
+//                .map(this::mapEventUpdateDTOToEvent)
+//                .collect(Collectors.toList());
+//    }
 
-    public List<EventCreationDTO> mapEventsToEventCreationDTOs(List<Event> events) {
-        if (events == null) {
-            return new ArrayList<>();
-        }
-        return events.stream()
-                .map(this::mapEventToEventCreationDTO)
-                .collect(Collectors.toList());
-    }
+//    public List<EventCreationDTO> mapEventsToEventCreationDTOs(List<Event> events) {
+//        if (events == null) {
+//            return new ArrayList<>();
+//        }
+//        return events.stream()
+//                .map(this::mapEventToEventCreationDTO)
+//                .collect(Collectors.toList());
+//    }
 
     public List<Event> mapEventCreationDTOsToEvents(List<EventCreationDTO> eventCreationDTOs) {
         if (eventCreationDTOs == null) {

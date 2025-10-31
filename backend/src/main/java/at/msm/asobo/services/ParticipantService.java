@@ -1,11 +1,11 @@
 package at.msm.asobo.services;
 
-import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.mappers.EventDTOEventMapper;
 import at.msm.asobo.mappers.UserDTOUserMapper;
+import at.msm.asobo.repositories.EventRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -14,15 +14,17 @@ import java.util.UUID;
 public class ParticipantService {
 
     private final UserService userService;
+    private final EventRepository eventRepository;
     private final EventService eventService;
     private final UserDTOUserMapper userDTOUserMapper;
     private final EventDTOEventMapper eventDTOEventMapper;
 
-    public ParticipantService(UserService userService,
+    public ParticipantService(UserService userService, EventRepository eventRepository,
                               EventService eventService,
                               UserDTOUserMapper userDTOUserMapper,
                               EventDTOEventMapper eventDTOEventMapper) {
         this.userService = userService;
+        this.eventRepository = eventRepository;
         this.eventService = eventService;
         this.userDTOUserMapper = userDTOUserMapper;
         this.eventDTOEventMapper = eventDTOEventMapper;
@@ -40,18 +42,18 @@ public class ParticipantService {
         return event.getParticipants();
     }
 
-    public List<UserPublicDTO> toggleParticipantInEvent(UUID eventId, UUID participantId) {
-        User participant = this.userService.getUserById(participantId);
+    public List<UserPublicDTO> toggleParticipantInEvent(UUID eventId, UserPublicDTO participant) {
+        User existingParticipant = this.userService.getUserById(participant.getId());
         Event event = this.eventService.getEventById(eventId);
         List<User> participants = event.getParticipants();
 
-        if (participants.contains(participant)) {
-            participants.remove(participant);
+        if (participants.contains(existingParticipant)) {
+            participants.remove(existingParticipant);
         } else {
-            participants.add(participant);
+            participants.add(existingParticipant);
         }
 
-        EventDTO updatedEventDTO = this.eventService.updateEvent(this.eventDTOEventMapper.mapEventToEventUpdateDTO(event));
-        return updatedEventDTO.getParticipants();
+        this.eventRepository.save(event);
+        return this.userDTOUserMapper.mapUsersToUserPublicDTOs(participants);
     }
 }

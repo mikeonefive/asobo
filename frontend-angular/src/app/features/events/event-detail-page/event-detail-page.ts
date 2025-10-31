@@ -48,6 +48,7 @@ export class EventDetailPage {
   location!: string;
   description?: string;
   comments: List<Comment> = new List<Comment>([]);
+  // TODO? make participants list a signal and use computed so we don't have to manually check in a couple places???
   participants: List<Participant> = new List<Participant>([]);
   mediaItems: List<MediaItem> = new List<MediaItem>([]);
   currentUser: User | null = this.authService.currentUser();

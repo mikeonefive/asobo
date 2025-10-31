@@ -9,16 +9,21 @@
     <div class="d-flex justify-content-center mt-5 profile-section">
       <div class="d-flex flex-column gap-3">
         <p-iconfield>
-          <p-float-label variant="on">
-            <input
-              type="text"
-              pInputText
-              placeholder="Username"
-              [(ngModel)]="username"
-              [disabled]="!isEditingUsername()"
-            />
-            <label for="profile-username">Username</label>
-          </p-float-label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <input
+                type="text"
+                id="profile-username"
+                pInputText
+                [(ngModel)]="username"
+                [disabled]="!isEditingUsername()"
+              />
+              <label for="profile-username">Username</label>
+            </p-float-label>
+          </p-inputgroup>
           <p-inputicon
             class="pi {{ !isEditingUsername() ? 'pi-pen-to-square' : '' }}"
             (click)="toggleEdit('username')"
@@ -27,15 +32,21 @@
         </p-iconfield>
 
         <p-iconfield>
-          <p-float-label variant="on">
-            <input
-              type="text"
-              pInputText
-              [(ngModel)]="firstName"
-              [disabled]="!isEditingFirstName()"
-            />
-            <label for="profile-firstname">First Name</label>
-          </p-float-label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-id-card"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <input
+                type="text"
+                id="profile-firstname"
+                pInputText
+                [(ngModel)]="firstName"
+                [disabled]="!isEditingFirstName()"
+              />
+              <label for="profile-firstname">First Name</label>
+            </p-float-label>
+          </p-inputgroup>
           <p-inputicon
             class="pi {{ !isEditingFirstName() ? 'pi-pen-to-square' : '' }}"
             (click)="toggleEdit('firstName')"
@@ -44,15 +55,21 @@
         </p-iconfield>
 
         <p-iconfield>
-          <p-float-label variant="on">
-            <input
-              type="text"
-              pInputText
-              [(ngModel)]="surname"
-              [disabled]="!isEditingSurname()"
-            />
-            <label for="profile-surname">Surname</label>
-          </p-float-label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-address-book"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <input
+                type="text"
+                id="profile-surname"
+                pInputText
+                [(ngModel)]="surname"
+                [disabled]="!isEditingSurname()"
+              />
+              <label for="profile-surname">Surname</label>
+            </p-float-label>
+          </p-inputgroup>
           <p-inputicon
             class="pi {{ !isEditingSurname() ? 'pi-pen-to-square' : '' }}"
             (click)="toggleEdit('surname')"
@@ -61,23 +78,74 @@
         </p-iconfield>
 
         <p-iconfield>
-          <p-float-label variant="on">
-            <input
-              type="text"
-              id="profile-location"
-              pInputText
-
-              [(ngModel)]="location"
-              [disabled]="!isEditingLocation()"
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-map-marker"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <input
+                type="text"
+                id="profile-location"
+                pInputText
+                [(ngModel)]="location"
+                [disabled]="!isEditingLocation()"
+              />
+              <label for="profile-location">Location</label>
+            </p-float-label>
+          </p-inputgroup>
+            <p-inputicon
+              class="pi {{ !isEditingLocation() ? 'pi-pen-to-square' : '' }}"
+              (click)="toggleEdit('location')"
+              style="cursor: pointer;"
             />
-            <label for="profile-location">Location</label>
-          </p-float-label>
+        </p-iconfield>
+
+        <p-iconfield>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-at"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <input
+                type="email"
+                id="profile-email"
+                pInputText
+                [(ngModel)]="email"
+                [disabled]="!isEditingEmail()"
+              />
+              <label for="profile-email">Email</label>
+            </p-float-label>
+          </p-inputgroup>
           <p-inputicon
-            class="pi {{ !isEditingLocation() ? 'pi-pen-to-square' : '' }}"
-            (click)="toggleEdit('location')"
+            class="pi {{ !isEditingEmail() ? 'pi-pen-to-square' : '' }}"
+            (click)="toggleEdit('email')"
             style="cursor: pointer;"
           />
         </p-iconfield>
+
+        <p-iconfield>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-lock"></i>
+            </p-inputgroup-addon>
+            <span class="p-float-label">
+        <p-password
+          [toggleMask]="true"
+          [feedback]="false"
+          [showClear]="getFormControls['password'].value?.length > 0"
+          placeholder="Password"
+          formControlName="password"
+          id="register-password"
+          fluid
+          (onFocus)="toggleRequirements()"
+          (onBlur)="toggleRequirements()"
+          inputStyleClass="w-100"
+        />
+        <label for="profile-password">Password</label>
+      </span>
+          </p-inputgroup>
+        </p-iconfield>
+
       </div>
     </div>
   </div>

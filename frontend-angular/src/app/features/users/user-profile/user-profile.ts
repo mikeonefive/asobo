@@ -1,13 +1,16 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {AuthService} from '../../auth/auth-service';
+import {AuthService} from '../../auth/services/auth-service';
 import {Router} from '@angular/router';
 import {UserProfileService} from './user-profile-service';
 import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
 import {InputText} from 'primeng/inputtext';
-import {FormsModule} from '@angular/forms';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FloatLabel} from 'primeng/floatlabel';
+import {InputGroup} from 'primeng/inputgroup';
+import {InputGroupAddon} from 'primeng/inputgroupaddon';
+import {Password} from 'primeng/password';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,7 +20,11 @@ import {FloatLabel} from 'primeng/floatlabel';
     InputIcon,
     InputText,
     FormsModule,
-    FloatLabel
+    FloatLabel,
+    InputGroup,
+    InputGroupAddon,
+    Password,
+    ReactiveFormsModule
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss',
@@ -37,12 +44,16 @@ export class UserProfile {
   isEditingFirstName = signal(false);
   isEditingSurname = signal(false);
   isEditingLocation = signal(false);
+  isEditingEmail = signal(false);
   username = signal('')
   firstName = signal('');
   surname = signal('');
   location = signal('');
+  email = signal('');
 
-  toggleEdit(field: 'username' | 'firstName' | 'surname' | 'location') {
+  showPasswordRequirements = false;
+
+  toggleEdit(field: 'username' | 'firstName' | 'surname' | 'location' | 'email') {
     if (field === 'username') {
       this.isEditingUsername.set(!this.isEditingUsername)
     } else if (field === 'firstName') {
@@ -51,10 +62,20 @@ export class UserProfile {
       this.isEditingSurname.set(!this.isEditingSurname());
     } else if (field === 'location') {
       this.isEditingLocation.set(!this.isEditingLocation());
+    } else if (field === 'email') {
+      this.isEditingEmail.set(!this.isEditingEmail());
     }
   }
 
   handleFileSelected(file: File) {
     this.selectedImage = file;
+  }
+
+  toggleRequirements(): void {
+    this.showPasswordRequirements = !this.showPasswordRequirements;
+  }
+
+  get getFormControls() {
+    return this.userForm.controls;
   }
 }

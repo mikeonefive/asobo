@@ -2,9 +2,9 @@ import {computed, Injectable, signal, inject} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Router} from '@angular/router';
-import {User} from './models/user';
-import {LoginResponse} from './models/login-response';
-import {environment} from '../../../environments/environment';
+import {User} from '../models/user';
+import {LoginResponse} from '../models/login-response';
+import {environment} from '../../../../environments/environment';
 import {jwtDecode} from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })

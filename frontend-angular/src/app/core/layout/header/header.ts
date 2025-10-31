@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {RouterLink, Router} from '@angular/router';
-import {AuthService} from '../../../features/auth/auth-service';
+import {AuthService} from '../../../features/auth/services/auth-service';
 import {environment} from '../../../../environments/environment';
 import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 import {UserProfileService} from '../../../features/users/user-profile/user-profile-service';

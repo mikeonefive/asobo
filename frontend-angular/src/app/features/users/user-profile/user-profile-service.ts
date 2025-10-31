@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { computed } from '@angular/core';
-import { AuthService } from '../../auth/auth-service';
+import { AuthService } from '../../auth/services/auth-service';
 import { UrlUtilService } from '../../../shared/utils/url/url-util-service';
 import { environment } from '../../../../environments/environment';
 import { UserProfile } from './models/user-profile-model';
@@ -13,6 +13,7 @@ export class UserProfileService {
   private authService = inject(AuthService);
 
   userProfile = computed<UserProfile>(() => {
+    // rewrite that not current user is fetchd, but user of profile
     const user = this.authService.currentUser();
     return {
       userProfileUrl: user?.username

@@ -8,15 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserUpdateDTO {
 
     @NotBlank(message = "Username must not be blank")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @Size(min = 3, max = 50, message = "Username must have between 3 and 50 characters")
     private String username;
 
     @NotBlank(message = "First name is mandatory for user registration")
-    @Size(min = 1, max = 50, message = "First name must be between 1 and 50 characters")
+    @Size(min = 1, max = 50, message = "First name must have between 1 and 50 characters")
     private String firstName;
 
     @NotBlank(message = "Surname is mandatory for user registration")
-    @Size(min = 1, max = 80, message = "First name must be between 1 and 80 characters")
+    @Size(min = 1, max = 80, message = "First name must have between 1 and 80 characters")
     private String surname;
 
     @NotBlank(message = "Email must not be blank")
@@ -28,8 +28,11 @@ public class UserUpdateDTO {
 
     private String location;
 
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Size(min = 6, message = "Password must contain at least 6 characters")
     private String password;
+
+    @Size(min=1, message = "About me must contain at least 1 character")
+    private String aboutMe;
 
     private boolean active;
 
@@ -89,6 +92,14 @@ public class UserUpdateDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAboutMe() {
+        return this.aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public boolean isActive() {

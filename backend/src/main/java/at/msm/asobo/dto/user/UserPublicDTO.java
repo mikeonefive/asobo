@@ -15,6 +15,8 @@ public class UserPublicDTO {
 
     private String email;
 
+    private String aboutMe;
+
     private LocalDateTime registerDate;
 
     private boolean isActive;
@@ -50,6 +52,14 @@ public class UserPublicDTO {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getAboutMe() {
+        return this.aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public boolean isActive() {

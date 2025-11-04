@@ -38,6 +38,8 @@ public class User {
 
     private String oldPassword;
 
+    private String aboutMe;
+
     @OneToMany(mappedBy = "creator")
     @JsonIgnore
     private List<Event> createdEvents;
@@ -122,6 +124,14 @@ public class User {
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public String getAboutMe() {
+        return this.aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getPictureURI() {

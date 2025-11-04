@@ -159,6 +159,7 @@ public class UserService {
         existingUser.setFirstName(userUpdateDTO.getFirstName());
         existingUser.setSurname(userUpdateDTO.getSurname());
         existingUser.setPassword(userUpdateDTO.getPassword());
+        existingUser.setAboutMe(userUpdateDTO.getAboutMe());
 
         // Handle the picture if it is present
         MultipartFile picture = userUpdateDTO.getPicture();

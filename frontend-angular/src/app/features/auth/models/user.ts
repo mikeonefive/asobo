@@ -4,6 +4,7 @@ export interface User {
   email: string;
   firstName: string;
   surname: string;
+  aboutMe: string;
   registerDate: Date;
   isActive: boolean;
   pictureURI: string;

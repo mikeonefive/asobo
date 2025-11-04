@@ -143,7 +143,6 @@ export class AuthService {
         // Warning 1 minute (60 seconds) before expiration
         if (timeUntilExpiry <= 60 && timeUntilExpiry > 0) {
           console.warn(`Token expiring in ${Math.floor(timeUntilExpiry)} seconds!`);
-          // You can show a toast/notification here
         }
 
         // Logout if expired

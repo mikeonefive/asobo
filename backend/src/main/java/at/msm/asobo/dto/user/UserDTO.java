@@ -19,6 +19,8 @@ public class UserDTO {
 
     private String oldPassword;
 
+    private String aboutMe;
+
     private LocalDateTime registerDate;
 
     private boolean isActive;
@@ -67,6 +69,14 @@ public class UserDTO {
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public String getAboutMe() {
+        return this.aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getPictureURI() {

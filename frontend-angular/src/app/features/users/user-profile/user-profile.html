@@ -227,8 +227,9 @@
                 <p-float-label variant="on">
                   <p-password
                     id="profile-password"
+                    formControlName="password"
                     [toggleMask]="true"
-                    [feedback]="true"
+                    [feedback]="false"
                     (onFocus)="onPasswordFocus()"
                     (onBlur)="onPasswordBlur()"
                   />
@@ -236,10 +237,44 @@
                 </p-float-label>
               </p-inputgroup>
             </p-iconfield>
+
+            <!-- Password validation errors -->
+            @if (this.getFormControls['password'].touched && this.getFormControls['password'].invalid) {
+              <small class="error-message">
+                @if (this.getFormControls['password'].errors?.['required']) {
+                  <span>Password is required.</span>
+                }
+              </small>
+            }
+
+            <!-- Real-time Password Requirements Checklist -->
+            @if (showPasswordRequirements && getFormControls['password'].value) {
+              <div class="requirements-checklist">
+                <!-- Password Strength Display -->
+                <div class="strength-indicator">
+                  <div class="strength-meter">
+                    <div class="strength-bar" [ngClass]="getPasswordStrength()"></div>
+                  </div>
+                  <p class="strength-label">{{ getPasswordStrengthLabel() }}</p>
+                </div>
+
+                <p class="requirements-title">Password Requirements:</p>
+                <ul>
+                  @for (requirement of passwordRequirements; track requirement.key) {
+                    <li [class.met]="requirement.met">
+              <span class="requirement-icon">
+                {{ requirement.met ? '✓' : '○' }}
+              </span>
+                      {{ requirement.label }}
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
           </div>
 
-          <!-- Password Confirmation (shown when password has value) -->
-          @if (password() && isEditingPassword()) {
+          <!-- Password Confirmation (shown when password has valid value) -->
+          @if (showPasswordConfirmation()) {
             <div class="update-field">
               <p-iconfield>
                 <p-inputgroup>
@@ -257,6 +292,21 @@
                   </p-float-label>
                 </p-inputgroup>
               </p-iconfield>
+              <!-- Password confirmation validation -->
+              @if (this.getFormControls['passwordConfirmation'].touched && this.getFormControls['passwordConfirmation'].invalid) {
+                <small class="error-message">
+                  @if (this.getFormControls['passwordConfirmation'].errors?.['required']) {
+                    <span>Password confirmation is required.</span>
+                  }
+                </small>
+              }
+
+              <!-- Password mismatch error -->
+              @if (updateForm.hasError('passwordMismatch') && getFormControls['passwordConfirmation'].touched) {
+                <small class="error-message">
+                  <span>Passwords do not match!</span>
+                </small>
+              }
             </div>
 
             <!-- Password Update Buttons -->
@@ -264,7 +314,7 @@
               <button
                 class="btn btn-purple btn-primary mb-3"
                 (click)="updatePassword()"
-                [disabled]="!password() || password().length < 8 || password() !== passwordConfirmation()">
+                [disabled]="disablePWUpdateButton()">
                 Update Password
               </button>
               <button class="btn btn-purple btn-primary mb-3" (click)="cancelPasswordEdit()">

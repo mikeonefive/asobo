@@ -1,21 +1,22 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, computed, inject, signal, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { AuthService } from '../../auth/services/auth-service';
-import { UserProfileService } from '../services/user-profile-service';
-import { ProfilePictureUpload } from '../profile-picture-upload/profile-picture-upload';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
-import { InputText } from 'primeng/inputtext';
-import { FloatLabel } from 'primeng/floatlabel';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddon } from 'primeng/inputgroupaddon';
-import { Password } from 'primeng/password';
+import {AuthService} from '../../auth/services/auth-service';
+import {UserProfileService} from '../services/user-profile-service';
+import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
+import {IconField} from 'primeng/iconfield';
+import {InputIcon} from 'primeng/inputicon';
+import {InputText} from 'primeng/inputtext';
+import {FloatLabel} from 'primeng/floatlabel';
+import {InputGroup} from 'primeng/inputgroup';
+import {InputGroupAddon} from 'primeng/inputgroupaddon';
+import {Password} from 'primeng/password';
 import {environment} from '../../../../environments/environment';
 import {FormUtilService} from '../../../shared/utils/form/form-util-service';
 import {PasswordRequirement, PasswordValidationService} from '../../auth/services/password-validation-service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
 import {UserValidationService} from '../services/user-validation-service';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-user-profile',
@@ -30,6 +31,7 @@ import {UserValidationService} from '../services/user-validation-service';
     InputGroupAddon,
     Password,
     ReactiveFormsModule,
+    NgClass,
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss',
@@ -66,10 +68,6 @@ export class UserProfile implements OnInit {
 
   username = signal('');
 
-  // Password fields
-  password = signal('');
-  passwordConfirmation = signal('');
-
   constructor() {
     this.salutations = environment.defaultSalutations;
 
@@ -84,19 +82,28 @@ export class UserProfile implements OnInit {
       username: ['', [Validators.required, Validators.minLength(environment.minIdentifierLength)]],
       email: ['', [Validators.required, FormUtilService.validateEmailCustom]],
       location: ['', [Validators.required]],
-      password: ['', this.passwordValidator.getPasswordValidators()],
-      passwordConfirmation: ['', [Validators.required]],
+      password: [''], // make pw optional
+      passwordConfirmation: [''],
     }, {
-      //validators: this.passwordValidator.passwordMatchValidator()
+      validators: this.passwordValidator.passwordMatchValidator()
     });
 
     this.checkUsernameAvailability();
     this.checkEmailAvailability();
+
+    this.updateForm.get('password')?.valueChanges.subscribe(() => {
+      this.passwordValidator.updatePasswordRequirements(
+        this.updateForm.get('password'),
+        this.passwordRequirements
+      );
+    });
   }
 
   ngOnInit() {
     // Disable all form controls initially
     this.updateForm.disable();
+    this.enableField('password');
+    this.enableField('passwordConfirmation');
 
     // Get username from route params and load profile
     this.route.params.subscribe(params => {
@@ -111,6 +118,13 @@ export class UserProfile implements OnInit {
         }
       }
     });
+  }
+
+  private enableField(fieldName: string) {
+    const fields = this.editingFields();
+    fields.add(fieldName);
+    this.editingFields.set(new Set(fields));
+    this.updateForm.get(fieldName)?.enable();
   }
 
   private checkUsernameAvailability(): void {
@@ -195,12 +209,29 @@ export class UserProfile implements OnInit {
   }
 
   // Editing state helpers
-  isEditingUsername() { return this.editingFields().has('username'); }
-  isEditingFirstName() { return this.editingFields().has('firstName'); }
-  isEditingSurname() { return this.editingFields().has('surname'); }
-  isEditingLocation() { return this.editingFields().has('location'); }
-  isEditingEmail() { return this.editingFields().has('email'); }
-  isEditingPassword() { return this.editingFields().has('password'); }
+  isEditingUsername() {
+    return this.editingFields().has('username');
+  }
+
+  isEditingFirstName() {
+    return this.editingFields().has('firstName');
+  }
+
+  isEditingSurname() {
+    return this.editingFields().has('surname');
+  }
+
+  isEditingLocation() {
+    return this.editingFields().has('location');
+  }
+
+  isEditingEmail() {
+    return this.editingFields().has('email');
+  }
+
+  isEditingPassword() {
+    return this.editingFields().has('password');
+  }
 
   toggleEdit(field: 'username' | 'firstName' | 'surname' | 'location' | 'email' | 'password') {
     if (!this.isOwnProfile()) {
@@ -208,7 +239,7 @@ export class UserProfile implements OnInit {
       return;
     }
 
-    const control =  this.updateForm.get(field);
+    const control = this.updateForm.get(field);
     const fields = this.editingFields();
 
     if (fields.has(field)) {
@@ -248,12 +279,12 @@ export class UserProfile implements OnInit {
       return;
     }
 
-    if(fieldName === 'username' && value === this.authService.currentUser()?.username) {
+    if (fieldName === 'username' && value === this.authService.currentUser()?.username) {
       console.warn(`${fieldName} coincides with logged in user's username`);
       return;
     }
 
-    if(fieldName === 'email' && value === this.authService.currentUser()?.email) {
+    if (fieldName === 'email' && value === this.authService.currentUser()?.email) {
       console.warn(`${fieldName} coincides with logged in user's email address`);
       return;
     }
@@ -311,15 +342,23 @@ export class UserProfile implements OnInit {
     });
   }
 
-  // Password handling
   onPasswordFocus() {
-    // Enable editing when user focuses on password field
+    const passwordControl = this.updateForm.get('password');
+    const confirmControl = this.updateForm.get('passwordConfirmation');
+
+    // Add validators when user focuses on password
+    passwordControl?.setValidators(this.passwordValidator.getPasswordValidators());
+    confirmControl?.setValidators([Validators.required]);
+
+    passwordControl?.updateValueAndValidity();
+    confirmControl?.updateValueAndValidity();
+
     if (!this.isEditingPassword()) {
       const fields = this.editingFields();
       fields.add('password');
       this.editingFields.set(new Set(fields));
     }
-    // Show password requirements
+
     this.showPasswordRequirements = true;
   }
 
@@ -329,8 +368,14 @@ export class UserProfile implements OnInit {
     // Keep editing enabled - don't disable until cancel/save
   }
 
-  toggleRequirements(): void {
-    this.showPasswordRequirements = !this.showPasswordRequirements;
+  getPasswordStrength(): string {
+    const password = this.updateForm.get('password')?.value;
+    return this.passwordValidator.getPasswordStrength(password);
+  }
+
+  getPasswordStrengthLabel(): string {
+    const strength = this.getPasswordStrength();
+    return this.passwordValidator.getPasswordStrengthLabel(strength);
   }
 
   updatePassword() {
@@ -339,8 +384,8 @@ export class UserProfile implements OnInit {
       return;
     }
 
-    const pwd = this.password();
-    const confirm = this.passwordConfirmation();
+    const pwd = this.updateForm.get('password')?.value;
+    const confirm = this.updateForm.get('passwordConfirmation')?.value;
 
     if (!pwd || pwd.length < environment.minPWLength) {
       console.error(`Password must be at least ${environment.minPWLength} characters`);
@@ -364,12 +409,37 @@ export class UserProfile implements OnInit {
   }
 
   cancelPasswordEdit() {
-    this.password.set('');
-    this.passwordConfirmation.set('');
+    const passwordControl = this.updateForm.get('password');
+    const confirmControl = this.updateForm.get('passwordConfirmation');
+
+    // Reset controls (clears value and validation state)
+    passwordControl?.reset();
+    confirmControl?.reset();
+
+    // Remove validators since password is optional
+    passwordControl?.clearValidators();
+    confirmControl?.clearValidators();
+
+    passwordControl?.updateValueAndValidity();
+    confirmControl?.updateValueAndValidity();
+
     this.showPasswordRequirements = false;
+
     const fields = this.editingFields();
     fields.delete('password');
     this.editingFields.set(new Set(fields));
+  }
+
+  showPasswordConfirmation() {
+    return this.updateForm.get('password')?.value && this.updateForm.get('password')?.valid && this.isEditingPassword();
+  }
+
+  disablePWUpdateButton() {
+    const pwFieldValue = this.updateForm.get('password')?.value;
+    return !pwFieldValue ||
+      this.getFormControls['password'].invalid ||
+      this.getFormControls['passwordConfirmation'].invalid ||
+      pwFieldValue !== this.updateForm.get('passwordConfirmation')?.value;
   }
 
   get getFormControls() {

@@ -150,7 +150,6 @@ export class RegistrationForm {
     this.showPasswordRequirements = !this.showPasswordRequirements;
   }
 
-  // Simplified methods using service
   getPasswordStrength(): string {
     const password = this.registerForm.get('password')?.value;
     return this.passwordValidator.getPasswordStrength(password);

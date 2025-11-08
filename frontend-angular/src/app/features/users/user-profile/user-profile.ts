@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { AuthService } from '../../auth/services/auth-service';
-import { UserProfileService } from './user-profile-service';
+import { UserProfileService } from '../services/user-profile-service';
 import { ProfilePictureUpload } from '../profile-picture-upload/profile-picture-upload';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -14,6 +14,8 @@ import { Password } from 'primeng/password';
 import {environment} from '../../../../environments/environment';
 import {FormUtilService} from '../../../shared/utils/form/form-util-service';
 import {PasswordRequirement, PasswordValidationService} from '../../auth/services/password-validation-service';
+import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
+import {UserValidationService} from '../services/user-validation-service';
 
 @Component({
   selector: 'app-user-profile',
@@ -35,6 +37,7 @@ import {PasswordRequirement, PasswordValidationService} from '../../auth/service
 export class UserProfile implements OnInit {
   private userProfileService = inject(UserProfileService);
   public authService = inject(AuthService);
+  private userValidationService = inject(UserValidationService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
@@ -44,6 +47,10 @@ export class UserProfile implements OnInit {
   passwordRequirements: PasswordRequirement[];
 
   updateForm: FormGroup;
+  salutations: string[];
+  showCustomSalutation = signal(false);
+  usernameExists = signal(false);
+  emailExists = signal(false);
 
   // Profile data from service
   userProfile = this.userProfileService.userProfile;
@@ -64,6 +71,8 @@ export class UserProfile implements OnInit {
   passwordConfirmation = signal('');
 
   constructor() {
+    this.salutations = environment.defaultSalutations;
+
     // Initialize password requirements from service
     this.passwordRequirements = this.passwordValidator.getPasswordRequirements();
 
@@ -80,6 +89,9 @@ export class UserProfile implements OnInit {
     }, {
       //validators: this.passwordValidator.passwordMatchValidator()
     });
+
+    this.checkUsernameAvailability();
+    this.checkEmailAvailability();
   }
 
   ngOnInit() {
@@ -99,6 +111,47 @@ export class UserProfile implements OnInit {
         }
       }
     });
+  }
+
+  checkUsernameAvailability(): void {
+    this.updateForm.get('username')?.valueChanges
+      .pipe(
+        filter(username => {
+          if (username === this.authService.currentUser()?.username) {
+            this.usernameExists.set(false);
+            return false; // Don't proceed with API call
+          }
+          return username.length >= environment.minIdentifierLength;
+        }),
+        debounceTime(environment.defaultDebounceTimeForFormFields),
+        distinctUntilChanged(),
+        switchMap(username => this.userValidationService.checkUsernameAvailability(username))
+      )
+      .subscribe(isAvailable => {
+        this.usernameExists.set(!isAvailable);
+      });
+  }
+
+  private checkEmailAvailability(): void {
+    const emailField = this.updateForm.get('email');
+
+    if (!this.isEditingSurname()) {
+      console.log(this.isEditingUsername());
+      return;
+    }
+
+
+
+    emailField?.valueChanges
+      .pipe(
+        filter(() => this.updateForm.get('email')?.valid === true),
+        debounceTime(environment.defaultDebounceTimeForFormFields),
+        distinctUntilChanged(),
+        switchMap(email => this.userValidationService.checkEmailAvailability(email))
+      )
+      .subscribe(isAvailable => {
+        this.emailExists.set(!isAvailable);
+      });
   }
 
   loadUserProfile(username: string) {
@@ -195,6 +248,11 @@ export class UserProfile implements OnInit {
     // Check if field is valid
     if (control?.invalid) {
       console.error(`${fieldName} is invalid`);
+      return;
+    }
+
+    if(value === this.authService.currentUser()?.username) {
+      console.warn(`${fieldName} coincides with current username`);
       return;
     }
 

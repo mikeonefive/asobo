@@ -52,6 +52,12 @@
               }
             </small>
           }
+
+          @if (this.usernameExists()) {
+            <div class="error-message">
+              <small>Username is already taken. Please choose another one.</small>
+            </div>
+          }
         </div>
 
         <!-- First Name -->
@@ -201,6 +207,12 @@
                 <span>Invalid email format.</span>
               }
             </small>
+          }
+
+          @if (this.emailExists()) {
+            <div class="error-message">
+              <small>A user with this email address already exists.</small>
+            </div>
           }
         </div>
 

@@ -4,7 +4,7 @@ import {Observable, of, tap} from 'rxjs';
 import { AuthService } from '../../auth/services/auth-service';
 import { UrlUtilService } from '../../../shared/utils/url/url-util-service';
 import { environment } from '../../../../environments/environment';
-import { UserProfile } from './models/user-profile-model';
+import { UserProfile } from '../user-profile/models/user-profile-model';
 import { User } from '../../auth/models/user';
 
 @Injectable({

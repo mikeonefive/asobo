@@ -16,9 +16,11 @@ export const environment = {
   frontendBaseUrl: FRONTEND_URL,
   JWT_TOKEN_STORAGE_KEY: JWT_TOKEN_STORAGE_KEY,
   USER_STORAGE_KEY: USER_STORAGE_KEY,
+  defaultSalutations: ['Mr.', 'Ms.', 'Other'],
   minIdentifierLength: 3,
   minPWLength: 6,
   specialCharactersForPW: /[!@#$%^&*(),.?":;{}|<>]/,
   userProfileBaseUrl: `/user/`,
   userDummyProfilePicRelativeUrl: '/uploads/profile-pictures/default.png',
+  defaultDebounceTimeForFormFields: 500,
 };

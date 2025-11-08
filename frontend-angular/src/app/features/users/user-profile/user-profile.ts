@@ -113,7 +113,7 @@ export class UserProfile implements OnInit {
     });
   }
 
-  checkUsernameAvailability(): void {
+  private checkUsernameAvailability(): void {
     this.updateForm.get('username')?.valueChanges
       .pipe(
         filter(username => {
@@ -133,18 +133,15 @@ export class UserProfile implements OnInit {
   }
 
   private checkEmailAvailability(): void {
-    const emailField = this.updateForm.get('email');
-
-    if (!this.isEditingSurname()) {
-      console.log(this.isEditingUsername());
-      return;
-    }
-
-
-
-    emailField?.valueChanges
+    this.updateForm.get('email')?.valueChanges
       .pipe(
-        filter(() => this.updateForm.get('email')?.valid === true),
+        filter(email => {
+          if (email === this.authService.currentUser()?.email) {
+            this.emailExists.set(false);
+            return false; // Don't proceed with API call
+          }
+          return this.updateForm.get('email')?.valid === true;
+        }),
         debounceTime(environment.defaultDebounceTimeForFormFields),
         distinctUntilChanged(),
         switchMap(email => this.userValidationService.checkEmailAvailability(email))
@@ -251,8 +248,13 @@ export class UserProfile implements OnInit {
       return;
     }
 
-    if(value === this.authService.currentUser()?.username) {
-      console.warn(`${fieldName} coincides with current username`);
+    if(fieldName === 'username' && value === this.authService.currentUser()?.username) {
+      console.warn(`${fieldName} coincides with logged in user's username`);
+      return;
+    }
+
+    if(fieldName === 'email' && value === this.authService.currentUser()?.email) {
+      console.warn(`${fieldName} coincides with logged in user's email address`);
       return;
     }
 

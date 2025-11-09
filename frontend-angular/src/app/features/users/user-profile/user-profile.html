@@ -15,6 +15,61 @@
     <div class="d-flex justify-content-center mt-5 profile-section">
 
       <form [formGroup]="updateForm" class="d-flex flex-column gap-2 profile-section-forms">
+        <!-- Salutation -->
+        <div class="update-field">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-tag"></i>
+            </p-inputgroup-addon>
+            <p-float-label variant="on">
+              <p-select
+                id="profile-salutation"
+                [options]="salutations"
+                formControlName="salutation"
+                placeholder="Select your Salutation"
+                panelStyleClass="solid-dropdown"
+                (onChange)="onSalutationChange($event)"
+              />
+              <label for="profile-salutation">Salutation</label>
+            </p-float-label>
+          </p-inputgroup>
+
+          @if (this.getFormControls['salutation'].touched && this.getFormControls['salutation'].invalid) {
+            <small class="error-message">
+              @if (this.getFormControls['salutation'].errors?.['required']) {
+                <span>Salutation is required.</span>
+              }
+            </small>
+          }
+        </div>
+
+          @if (showCustomSalutation()) {
+            <div class="update-field custom-salutation-field">
+              <p-inputgroup>
+                <p-inputgroup-addon />
+                <p-float-label variant="on">
+                  <input
+                    type="text"
+                    placeholder="Other Salutation"
+                    formControlName="customSalutation"
+                    pInputText
+                    id="custom-salutation"
+                  >
+                  <label for="custom-salutation">Custom Salutation</label>
+                </p-float-label>
+              </p-inputgroup>
+
+              @if (this.getFormControls['customSalutation'].touched && this.getFormControls['customSalutation'].invalid) {
+                <small class="error-message">
+                  @if (this.getFormControls['customSalutation'].errors?.['required']) {
+                    <span>Please specify your salutation.</span>
+                  }
+                </small>
+              }
+            </div>
+          }
+
+
         <!-- Username -->
         <div class="update-field">
           <p-iconfield>
@@ -233,7 +288,7 @@
                     (onFocus)="onPasswordFocus()"
                     (onBlur)="onPasswordBlur()"
                   />
-                  <label for="profile-password">New Password</label>
+                  <label for="profile-password" class="new-password-label">New Password</label>
                 </p-float-label>
               </p-inputgroup>
             </p-iconfield>
@@ -288,7 +343,7 @@
                       [toggleMask]="true"
                       [feedback]="false"
                     />
-                    <label for="profile-password-confirm">Confirm Password</label>
+                    <label for="profile-password-confirm" class="password-label">Confirm Password</label>
                   </p-float-label>
                 </p-inputgroup>
               </p-iconfield>

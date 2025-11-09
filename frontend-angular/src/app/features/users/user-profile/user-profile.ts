@@ -17,6 +17,7 @@ import {PasswordRequirement, PasswordValidationService} from '../../auth/service
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
 import {UserValidationService} from '../services/user-validation-service';
 import {NgClass} from '@angular/common';
+import {Select} from 'primeng/select';
 
 @Component({
   selector: 'app-user-profile',
@@ -32,6 +33,7 @@ import {NgClass} from '@angular/common';
     Password,
     ReactiveFormsModule,
     NgClass,
+    Select,
   ],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss',
@@ -88,6 +90,20 @@ export class UserProfile implements OnInit {
       validators: this.passwordValidator.passwordMatchValidator()
     });
 
+    this.updateForm.get('salutation')?.valueChanges.subscribe(value => {
+      this.showCustomSalutation.set(value === this.salutations[this.salutations.length - 1]);
+      const customSalutationControl = this.updateForm.get('customSalutation');
+
+      if (this.showCustomSalutation()) {
+        customSalutationControl?.setValidators([Validators.required]);
+      } else {
+        customSalutationControl?.clearValidators();
+        customSalutationControl?.setValue('');
+      }
+
+      customSalutationControl?.updateValueAndValidity();
+    });
+
     this.checkUsernameAvailability();
     this.checkEmailAvailability();
 
@@ -104,6 +120,8 @@ export class UserProfile implements OnInit {
     this.updateForm.disable();
     this.enableField('password');
     this.enableField('passwordConfirmation');
+    this.enableField('salutation');
+    this.enableField('customSalutation');
 
     // Get username from route params and load profile
     this.route.params.subscribe(params => {
@@ -177,7 +195,7 @@ export class UserProfile implements OnInit {
           location: user.location || '',
           email: user.email,
           salutation: user.salutation || '',
-          //customSalutation: user.customSalutation || ''
+          customSalutation: '',
         });
 
         // Disable all fields initially if viewing own profile
@@ -268,6 +286,8 @@ export class UserProfile implements OnInit {
     const control = this.updateForm.get(fieldName);
     const value = control?.value;
 
+    console.log("value: " + value);
+
     if (!value || value.trim() === '') {
       console.error(`${fieldName} cannot be empty`);
       return;
@@ -289,6 +309,11 @@ export class UserProfile implements OnInit {
       return;
     }
 
+    if (fieldName in ['salutation', 'customSalutation'] && value === this.authService.currentUser()?.salutation) {
+      console.warn(`${fieldName} coincides with logged in user's salutation`);
+      return;
+    }
+
     this.userProfileService.updateField(fieldName, value).subscribe({
       next: () => {
         console.log(`${fieldName} updated successfully`);
@@ -301,6 +326,16 @@ export class UserProfile implements OnInit {
         this.loadUserProfile(this.username());
       }
     });
+  }
+
+  onSalutationChange(event: any) {
+    const isOther = event.value === 'Other';
+    this.showCustomSalutation.set(isOther);
+
+    // Only save if not "Other"
+    if (!isOther) {
+      this.saveField('salutation');
+    }
   }
 
   handleFileSelected(file: File) {

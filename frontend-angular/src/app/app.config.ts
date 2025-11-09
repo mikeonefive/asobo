@@ -7,6 +7,7 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {AuthInterceptor} from './core/interceptors/auth-interceptor';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {MessageService} from 'primeng/api';
+import {provideNativeDateAdapter} from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
+    provideNativeDateAdapter(),
     provideAnimations(),
     AuthInterceptor,
     MessageService,

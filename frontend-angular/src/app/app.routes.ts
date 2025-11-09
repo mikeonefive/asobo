@@ -7,6 +7,7 @@ import {authGuard} from './features/auth/auth.guard';
 import {UserProfile} from './features/users/user-profile/user-profile';
 import {RegistrationPage} from './features/auth/registration/registration-page/registration-page';
 import {AboutPage} from './core/about/about-page/about-page';
+import {CreateEventForm} from './features/events/create-event-form/create-event-form';
 
 export const routes: Routes = [
   // public routes
@@ -23,6 +24,7 @@ export const routes: Routes = [
     children: [
       { path: 'user/:username', component: UserProfile },
       { path: 'events', component: EventsPage },
+      { path: 'create-event', component: CreateEventForm }
       //{ path: '', redirectTo: '/events', pathMatch: 'full' },
     ]
   },

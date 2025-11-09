@@ -1,9 +1,9 @@
 import {Component, computed, inject, signal, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../auth/services/auth-service';
-import {UserProfileService} from '../services/user-profile-service';
-import {ProfilePictureUpload} from '../profile-picture-upload/profile-picture-upload';
+import {AuthService} from '../../../auth/services/auth-service';
+import {UserProfileService} from '../../services/user-profile-service';
+import {ProfilePictureUpload} from '../../profile-picture-upload/profile-picture-upload';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
 import {InputText} from 'primeng/inputtext';
@@ -11,16 +11,16 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputGroup} from 'primeng/inputgroup';
 import {InputGroupAddon} from 'primeng/inputgroupaddon';
 import {Password} from 'primeng/password';
-import {environment} from '../../../../environments/environment';
-import {FormUtilService} from '../../../shared/utils/form/form-util-service';
-import {PasswordRequirement, PasswordValidationService} from '../../auth/services/password-validation-service';
+import {environment} from '../../../../../environments/environment';
+import {FormUtilService} from '../../../../shared/utils/form/form-util-service';
+import {PasswordRequirement, PasswordValidationService} from '../../../auth/services/password-validation-service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
-import {UserValidationService} from '../services/user-validation-service';
+import {UserValidationService} from '../../services/user-validation-service';
 import {NgClass} from '@angular/common';
 import {Select} from 'primeng/select';
 
 @Component({
-  selector: 'app-user-profile',
+  selector: 'app-user-profile-form',
   imports: [
     ProfilePictureUpload,
     IconField,
@@ -35,10 +35,10 @@ import {Select} from 'primeng/select';
     NgClass,
     Select,
   ],
-  templateUrl: './user-profile.html',
-  styleUrl: './user-profile.scss',
+  templateUrl: './user-profile-form.html',
+  styleUrl: './user-profile-form.scss',
 })
-export class UserProfile implements OnInit {
+export class UserProfileForm implements OnInit {
   private userProfileService = inject(UserProfileService);
   public authService = inject(AuthService);
   private userValidationService = inject(UserValidationService);

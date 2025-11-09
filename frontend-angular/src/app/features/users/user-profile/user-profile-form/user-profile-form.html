@@ -1,10 +1,4 @@
 @if (authService.isLoggedIn()) {
-  <p>Profile of {{ userProfile().username }}</p>
-
-  @if (!isOwnProfile()) {
-    <p class="text-muted">Viewing profile (read-only)</p>
-  }
-
   <div class="form-group position-relative">
     <app-profile-picture-upload
       [currentImage]="displayImage()"

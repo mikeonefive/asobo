@@ -25,8 +25,8 @@ export class CreateEventForm {
 
   constructor() {
     this.createEventForm = this.formBuilder.group({
-      title: ['', Validators.required, Validators.minLength(3), Validators.maxLength(100)],
-      description: ['', [Validators.required], Validators.minLength(10), Validators.maxLength(1000)],
+      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       location: ['', [Validators.required]],
       date: [new Date(), [Validators.required]],
     });

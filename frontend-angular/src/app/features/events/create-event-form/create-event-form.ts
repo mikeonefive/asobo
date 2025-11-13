@@ -6,6 +6,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {DatePickerModule} from 'primeng/datepicker';
 import { ProfilePictureUpload } from '../../users/profile-picture-upload/profile-picture-upload';
+import {EventService} from '../services/event-service';
+import {AuthService} from '../../auth/services/auth-service';
 
 @Component({
   selector: 'app-create-event-form',
@@ -24,6 +26,8 @@ import { ProfilePictureUpload } from '../../users/profile-picture-upload/profile
 export class CreateEventForm {
   createEventForm: FormGroup;
   private formBuilder = inject(FormBuilder);
+  private eventService = inject(EventService);
+  private authService = inject(AuthService);
   previewUrl = signal<string | ArrayBuffer | null>(null);
   selectedImage: File | null = null;
 
@@ -33,12 +37,43 @@ export class CreateEventForm {
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       location: ['', [Validators.required]],
       date: [new Date(), [Validators.required, this.validateDate]],
+      isPrivate: [false]
     });
   }
 
   onSubmit() {
     console.log(this.createEventForm.getRawValue());
     console.log(this.selectedImage);
+
+    const formData = new FormData();
+    formData.append('title', this.createEventForm.value.title!);
+    formData.append('description', this.createEventForm.value.description!);
+    formData.append('location', this.createEventForm.value.location!);
+
+    const date: Date = this.createEventForm.value.date;
+    const isoLocal = date.toISOString().slice(0, 19); // '2025-11-13T16:33:28'
+    formData.append('date', isoLocal);
+
+    const isPrivate = this.createEventForm.value.isPrivate;
+    formData.append('isPrivate', String(isPrivate));
+
+    const creator = this.authService.currentUser();
+    if (creator) {
+      formData.append('creator.id', creator.id);
+    }
+
+    if (this.selectedImage) {
+      formData.append('eventPicture', this.selectedImage);
+    }
+
+    this.eventService.createNewEvent(formData).subscribe({
+      next: (event) => {
+        console.log(event);
+      },
+      error: (err) => {
+        console.log('Error creating new event', err);
+      }
+    });
   }
 
   handleFileSelected(file: File) {

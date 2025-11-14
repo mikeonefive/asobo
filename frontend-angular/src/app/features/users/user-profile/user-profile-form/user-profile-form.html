@@ -66,10 +66,11 @@
           }
         </div>
 
-          @if (showCustomSalutation()) {
-            <div class="update-field custom-salutation-field">
+        @if (showCustomSalutation()) {
+          <div class="update-field custom-salutation-field">
+            <p-iconfield>
               <p-inputgroup>
-                <p-inputgroup-addon />
+                <p-inputgroup-addon/>
                 <p-float-label variant="on">
                   <input
                     type="text"
@@ -81,16 +82,24 @@
                   <label for="custom-salutation">Custom Salutation</label>
                 </p-float-label>
               </p-inputgroup>
-
-              @if (getFormControls['customSalutation'].touched && getFormControls['customSalutation'].invalid) {
-                <small class="error-message">
-                  @if (getFormControls['customSalutation'].errors?.['required']) {
-                    <span>Please specify your salutation.</span>
-                  }
-                </small>
+              @if (isOwnProfile()) {
+                <p-inputicon
+                  [class]="isEditingUsername() ? 'pi pi-check' : 'pi pi-pen-to-square'"
+                  (click)="toggleEdit('customSalutation')"
+                  style="cursor: pointer;"
+                />
               }
-            </div>
-          }
+            </p-iconfield>
+
+            @if (getFormControls['customSalutation'].touched && getFormControls['customSalutation'].invalid) {
+              <small class="error-message">
+                @if (getFormControls['customSalutation'].errors?.['required']) {
+                  <span>Please specify your salutation.</span>
+                }
+              </small>
+            }
+          </div>
+        }
 
 
         <!-- Username -->

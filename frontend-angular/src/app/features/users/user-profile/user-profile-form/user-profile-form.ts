@@ -130,7 +130,7 @@ export class UserProfileForm implements OnInit {
     this.enableField('password');
     this.enableField('passwordConfirmation');
     this.enableField('salutation');
-    this.enableField('customSalutation');
+    //this.enableField('customSalutation');
 
     // Get username from route params and load profile
     this.route.params.subscribe(params => {
@@ -334,7 +334,7 @@ export class UserProfileForm implements OnInit {
     return this.editingFields().has('password');
   }
 
-  toggleEdit(field: 'aboutMe' | 'username' | 'firstName' | 'surname' | 'location' | 'email' | 'password'): void {
+  toggleEdit(field: 'customSalutation' | 'aboutMe' | 'username' | 'firstName' | 'surname' | 'location' | 'email' | 'password'): void {
     if (!this.isOwnProfile()) {
       console.error('Cannot edit another user\'s profile');
       return;

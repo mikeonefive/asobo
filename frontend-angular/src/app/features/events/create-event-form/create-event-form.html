@@ -41,14 +41,15 @@
   </div>
 
   <div class="form-group position-relative">
-    <input
-      type="text"
+    <textarea
+      pTextarea
+      rows="6"
       placeholder="Description"
       formControlName="description"
       class="form-control"
       id="description"
       autofocus
-    >
+    ></textarea>
     @if (this.getFormControls['description'].touched && this.getFormControls['description'].hasError('required')) {
       <small class="error-message">
         Description is required.

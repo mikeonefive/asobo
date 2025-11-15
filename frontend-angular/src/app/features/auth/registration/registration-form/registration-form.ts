@@ -9,7 +9,7 @@ import {SelectModule} from 'primeng/select';
 import {FormUtilService} from '../../../../shared/utils/form/form-util-service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs';
 import {environment} from '../../../../../environments/environment';
-import {PictureUpload} from "../../../../core/picture-upload/profile-picture-upload";
+import {PictureUpload} from '../../../../core/picture-upload/picture-upload';
 import {PasswordRequirement, PasswordValidationService} from '../../services/password-validation-service';
 import {UserValidationService} from '../../../users/services/user-validation-service';
 

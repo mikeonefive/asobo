@@ -1,26 +1,18 @@
-import {Component, inject, signal} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from "@angular/forms";
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import {DatePickerModule} from 'primeng/datepicker';
+import { Component, inject, signal } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
+import { DatePickerModule } from 'primeng/datepicker';
 import { PictureUpload } from '../../../../core/picture-upload/picture-upload';
-import {EventService} from '../../services/event-service';
-import {AuthService} from '../../../auth/services/auth-service';
-import {Router} from '@angular/router';
-import {environment} from '../../../../../environments/environment';
-import {Textarea} from 'primeng/textarea';
-import {Checkbox} from 'primeng/checkbox';
+import { EventService } from '../../services/event-service';
+import { AuthService } from '../../../auth/services/auth-service';
+import { Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
+import { Textarea } from 'primeng/textarea';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-create-event-form',
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     DatePickerModule,
     PictureUpload,
     Textarea,

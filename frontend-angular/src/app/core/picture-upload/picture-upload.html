@@ -1,4 +1,9 @@
-<div #pictureBox [class]="setShapeCssClass()" (click)="fileInput.click()">
+<div
+  #pictureBox
+  [class]="setShapeCssClass()"
+  [class.disabled]="disabled()"
+  (click)="!disabled() && fileInput.click()"
+>
   <input
     #fileInput
     type="file"

@@ -6,7 +6,7 @@
       (fileSelected)="handleFileSelected($event)"
       [showPlusBeforeUpload] = "true"
       [shape] = "'rectangle'"
-      [caption] = "'Add event cover picture'"
+      [caption] = "'Add cover picture'"
       [dimensions] = "[40, 20]"
     />
   </div>
@@ -17,7 +17,7 @@
       placeholder="Title"
       formControlName="title"
       class="form-control"
-      id="title"
+      id="create-event-title"
       autofocus
     >
 
@@ -47,7 +47,7 @@
       placeholder="Description"
       formControlName="description"
       class="form-control"
-      id="description"
+      id="create-event-description"
       autofocus
     ></textarea>
     @if (this.getFormControls['description'].touched && this.getFormControls['description'].hasError('required')) {
@@ -75,7 +75,7 @@
       placeholder="Location"
       formControlName="location"
       class="form-control"
-      id="location"
+      id="create-event-location"
       autofocus
     >
     @if (this.getFormControls['location'].touched && this.getFormControls['location'].hasError('required')) {
@@ -88,13 +88,13 @@
   <div class="form-group position-relative">
     <p-datepicker
       formControlName="date"
-      id="date"
       name="date"
       [showIcon]="true"
       dateFormat="dd MM yy at"
       [showTime]="true"
       hourFormat="12"
-      [readonlyInput]="false">
+      [readonlyInput]="false"
+    >
     </p-datepicker>
     @if (this.getFormControls['date'].touched && this.getFormControls['date'].hasError('required')) {
       <small class="error-message">
@@ -112,7 +112,7 @@
   <div class="d-flex justify-content-center">
     <div class="checkbox-wrapper">
       <p-checkbox formControlName="isPrivate" [binary]="true" inputId="isPrivate"/>
-      <label for="isPrivate">Private Event</label>
+      <label for="isPrivate">Private Event?</label>
     </div>
   </div>
 

@@ -1,3 +1,4 @@
+@use 'variables' as *;
 
 @media (max-width: 768px), (max-height: 500px) {
   .event-card {
@@ -13,8 +14,8 @@
 
 .event-card {
   display: inline-block;
-  width: 15vw;
-  height: 50vh;
+  width: $event-card-width;
+  height: $event-card-height;
   border-radius: 15px;
   overflow: hidden;
   filter: drop-shadow(3px 3px 5px gray);

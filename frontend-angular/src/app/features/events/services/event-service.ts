@@ -15,6 +15,12 @@ export class EventService {
     return this.http.get<Event[]>(environment.eventsEndpoint);
   }
 
+  public getAllEventsByVisibility(isPrivate: boolean): Observable<Event[]> {
+    return this.http.get<Event[]>(environment.eventsEndpoint, {
+      params: { isPrivate }
+    });
+  }
+
   public createNewEvent(formData: FormData): Observable<Event> {
     return this.http.post<Event>(environment.eventsEndpoint, formData);
   }

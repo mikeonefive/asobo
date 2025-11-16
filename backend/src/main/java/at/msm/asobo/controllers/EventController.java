@@ -32,6 +32,11 @@ public class EventController {
         return this.eventService.getAllEvents();
     }
 
+    @GetMapping(params = "isPrivate")
+    public List<EventDTO> getAllEvents(@RequestParam(required = false) boolean isPrivate) {
+        return this.eventService.getAllEvents(isPrivate);
+    }
+
 //    @GetMapping
 //    public List<EventDTO> getEventsByTitle(String title) {
 //        return this.eventService.getEventsByTitle(title);

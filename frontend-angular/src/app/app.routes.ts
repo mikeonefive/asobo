@@ -15,6 +15,7 @@ export const routes: Routes = [
   { path: 'about', component: AboutPage },
   { path: 'login', component: LoginPage },
   { path: 'register', component: RegistrationPage },
+  { path: 'events', component: EventsPage },
   { path: 'events/:id', component: EventDetailPage },
   { path: '', component: LoginPage },
 
@@ -24,7 +25,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'user/:username', component: UserProfilePage },
-      { path: 'events', component: EventsPage },
       { path: 'create-event', component: CreateEventPage }
       //{ path: '', redirectTo: '/events', pathMatch: 'full' },
       //{ path: '', redirectTo: '/login', pathMatch: 'full' },

@@ -54,7 +54,7 @@ public class Event {
     private List<Medium> media;
 
     @Column(name = "is_private", columnDefinition = "boolean default false")
-    private boolean privateEvent;
+    private boolean isPrivateEvent;
 
     public Event() {
     }
@@ -156,10 +156,10 @@ public class Event {
     }
 
     public boolean isPrivateEvent() {
-        return privateEvent;
+        return this.isPrivateEvent;
     }
 
-    public void setPrivateEvent(boolean privateEvent) {
-        this.privateEvent = privateEvent;
+    public void setPrivateEvent(boolean isPrivateEvent) {
+        this.isPrivateEvent = isPrivateEvent;
     }
 }

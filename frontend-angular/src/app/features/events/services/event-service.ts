@@ -15,9 +15,15 @@ export class EventService {
     return this.http.get<Event[]>(environment.eventsEndpoint);
   }
 
-  public getAllEventsByVisibility(isPrivate: boolean): Observable<Event[]> {
+  public getAllPublicEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(environment.eventsEndpoint, {
-      params: { isPrivate }
+      params: { isPrivate: false }
+    });
+  }
+
+  public getAllPrivateEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(environment.eventsEndpoint, {
+      params: { isPrivate: true }
     });
   }
 

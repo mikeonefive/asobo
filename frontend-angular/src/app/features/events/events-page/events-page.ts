@@ -26,9 +26,9 @@ export class EventsPage implements OnInit {
       return;
     }
 
-    this.eventService.getAllEventsByVisibility(false).subscribe({
+    this.eventService.getAllPublicEvents().subscribe({
       next: (events) => this.events = events,
-      error: (err) => console.error('Error fetching events:', err)
+      error: (err) => console.error('Error fetching public events:', err)
     });
   }
 }

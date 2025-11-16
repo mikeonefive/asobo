@@ -59,8 +59,13 @@ public class EventService {
         return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 
-    public List<EventDTO> getAllEvents(boolean isPrivate) {
-        List<Event> events = this.eventRepository.findEventsByPrivateEvent(isPrivate);
+    public List<EventDTO> getAllPublicEvents() {
+        List<Event> events = this.eventRepository.findByIsPrivateEventFalse();
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
+    }
+
+    public List<EventDTO> getAllPrivateEvents() {
+        List<Event> events = this.eventRepository.findByIsPrivateEventTrue();
         return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 

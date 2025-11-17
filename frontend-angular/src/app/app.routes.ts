@@ -9,12 +9,14 @@ import {RegistrationPage} from './features/auth/registration/registration-page/r
 import {AboutPage} from './core/about/about-page/about-page';
 import {UserProfilePage} from './features/users/user-profile/user-profile-page/user-profile-page';
 import {CreateEventPage} from './features/events/create-event/create-event-page/create-event-page';
+import {AdminPage} from './features/admin/admin-page/admin-page';
 
 export const routes: Routes = [
   // public routes
   { path: 'about', component: AboutPage },
   { path: 'login', component: LoginPage },
   { path: 'register', component: RegistrationPage },
+  { path: 'events', component: EventsPage },
   { path: 'events/:id', component: EventDetailPage },
   { path: '', component: LoginPage },
 
@@ -25,7 +27,8 @@ export const routes: Routes = [
     children: [
       { path: 'user/:username', component: UserProfilePage },
       { path: 'events', component: EventsPage },
-      { path: 'create-event', component: CreateEventPage }
+      { path: 'create-event', component: CreateEventPage },
+      { path: 'admin', component: AdminPage },
       //{ path: '', redirectTo: '/events', pathMatch: 'full' },
       //{ path: '', redirectTo: '/login', pathMatch: 'full' },
     ]

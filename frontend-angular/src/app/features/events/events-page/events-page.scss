@@ -1,11 +1,29 @@
+@use 'variables' as *;
+@use '../event-card/event-card' as *;
+
+$event-card-gap: 1.2rem;
+$number-of-event-cards-per-row: 3;
+
 #event-list {
   display: flex;
-  flex-wrap: wrap;                    /* allows wrapping on smaller screens */
-  gap: 1.2rem;                          /* space between cards */
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   padding: 0;
+  row-gap: $event-card-gap; /* Vertical gap between rows */
+  column-gap: 0;
+  margin: 0 auto;
+  max-width: calc(
+    ($event-card-width * $number-of-event-cards-per-row) +
+    ($event-card-gap * ($number-of-event-cards-per-row - 1))
+  );
 }
 
 #event-list li {
   list-style: none;
+  margin-right: $event-card-gap; /* horizontal gap between columns */
+}
+
+/* remove horizontal gap from last item in the row */
+#event-list li:nth-child(3n) {
+  margin-right: 0;
 }

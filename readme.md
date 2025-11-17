@@ -60,7 +60,7 @@ asobo/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/asobo.git
+git clone https://github.com/asobo-Vienna/asobo.git
 cd asobo
 ```
 

@@ -1,4 +1,8 @@
 @use 'variables' as *;
+@use '../event-card/event-card' as *;
+
+$event-card-gap: 1.2rem;
+$number-of-event-cards-per-row: 3;
 
 #event-list {
   display: flex;

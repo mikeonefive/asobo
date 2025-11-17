@@ -1,5 +1,8 @@
 @use 'variables' as *;
 
+$event-card-width: 15vw;
+$event-card-height: 50vh;
+
 @media (max-width: 768px), (max-height: 500px) {
   .event-card {
     min-width: 200px;

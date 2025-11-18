@@ -21,4 +21,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     List<Event> findEventsByTitle(String title);
 
+    List<Event> findByParticipants_Id(UUID userId);
+
+    List<Event> findByParticipants_IdAndIsPrivateEventTrue(UUID userId);
+
+    // find public events attend by a certain user; underscore in method name is needed by JPA
+    List<Event> findByParticipants_IdAndIsPrivateEventFalse(UUID userId);
 }

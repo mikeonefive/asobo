@@ -69,6 +69,19 @@ public class EventService {
         return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }
 
+    public List<EventDTO> getEventsByParticipantId(UUID participantId, Boolean isPrivate) {
+        List<Event> events;
+
+        if (isPrivate == null) {
+            events = eventRepository.findByParticipants_Id(participantId);
+        } else if (isPrivate) {
+            events = eventRepository.findByParticipants_IdAndIsPrivateEventTrue(participantId);
+        } else {
+            events = eventRepository.findByParticipants_IdAndIsPrivateEventFalse(participantId);
+        }
+        return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
+    }
+
     public List<EventDTO> getEventsByDate(LocalDateTime date) {
         List<Event> events = this.eventRepository.findEventsByDate(date);
         return this.eventDTOEventMapper.mapEventsToEventDTOs(events);

@@ -27,8 +27,14 @@ public class EventController {
     }
 
     @GetMapping
-    public List<EventDTO> getAllEvents(@RequestParam(required = false) Boolean isPrivate) {
-        if (isPrivate == null) {
+    public List<EventDTO> getAllEvents(
+            @RequestParam(required = false) UUID userId,
+            @RequestParam(required = false) Boolean isPrivate
+    ) {
+        if (userId != null) {
+            // Fetch events where the user is a participant
+            return this.eventService.getEventsByParticipantId(userId, isPrivate);
+        } else if (isPrivate == null) {
             return this.eventService.getAllEvents();
         } else if (isPrivate) {
             return this.eventService.getAllPrivateEvents();
@@ -52,8 +58,7 @@ public class EventController {
 
         return this.eventService.getEventsByLocation(location);
     }
-
-
+    
     @GetMapping(params = "date")
     public List<EventDTO> getEventsByDate(@RequestParam(required = false) String date) {
         if (date == null || date.isBlank()) {

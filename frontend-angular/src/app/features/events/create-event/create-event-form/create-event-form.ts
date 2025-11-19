@@ -64,7 +64,7 @@ export class CreateEventForm {
 
     this.eventService.createNewEvent(formData).subscribe({
       next: (event) => {
-        console.log(event);
+        alert(`Event ${event.title} created!`);
         this.router.navigate(['/events', event.id]);
       },
       error: (err) => {

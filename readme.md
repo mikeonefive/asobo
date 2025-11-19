@@ -21,7 +21,7 @@ Before you begin, ensure you have the following installed:
 - **Java JDK 21** - [Download](https://www.oracle.com/java/technologies/downloads/#java21)
 - **Maven** (v3.6 or higher) - [Download](https://maven.apache.org/download.cgi)
 - **Git** - [Download](https://git-scm.com/downloads)
-- **NeonDB Account** - [Sign up](https://neon.tech/) (for PostgreSQL database)
+- **Docker & Docker Compose** – [Download](https://www.docker.com/get-started)
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ Before you begin, ensure you have the following installed:
 - **Spring Security** - Authentication & Authorization
 - **JWT (JSON Web Tokens)** - Token-based Authentication
 - **Spring Data JPA** - Database Access
-- **PostgreSQL** - Database (via NeonDB)
+- **PostgreSQL** - Database (via Docker)
 - **MapStruct** - Object Mapping
 - **SpringDoc OpenAPI** - API Documentation
 
@@ -59,61 +59,87 @@ asobo/
 ## Installation
 
 ### 1. Clone the Repository
-```bash
-git clone https://github.com/asobo-Vienna/asobo.git
-cd asobo
-```
+   ```bash
+   git clone https://github.com/asobo-Vienna/asobo.git
+   cd asobo
+   ```
 
 ### 2. Frontend Setup
-```bash
-cd frontend-angular
-npm install
-```
+   ```bash
+   cd frontend-angular
+   npm install
+   ```
 
 ### 3. Backend Setup
-```bash
-cd backend
-mvn clean install
-```
+   ```bash
+   cd backend
+   mvn clean install
+   ```
 
 ## Configuration
 
-### Database Configuration (NeonDB)
+### Database Configuration (Docker Compose)
 
-1. **Create a NeonDB Project:**
-   - Sign up at [neon.tech](https://neon.tech/)
-   - Create a new project
-   - Copy your PostgreSQL connection string
+1. **Start the Database:**
 
-2. **Configure Backend:**
-
-Create or update `backend/src/main/resources/application.properties`:
-```properties
-# Database Configuration
-spring.datasource.url=jdbc:postgresql://[your-neondb-host]/[database-name]?sslmode=require
-spring.datasource.username=[your-username]
-spring.datasource.password=[your-password]
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-# JPA Configuration
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.format_sql=true
-
-# JWT Configuration
-jwt.secret=your-secret-key-here-make-it-long-and-secure
-jwt.expiration=86400000
-
-# Server Configuration
-server.port=8080
-
-# File Upload Configuration
-spring.servlet.multipart.max-file-size=10MB
-spring.servlet.multipart.max-request-size=10MB
+From the root directory of the project, run:
+```bash
+docker-compose up -d
 ```
 
-**Important:** Replace the placeholders with your actual NeonDB credentials.
+   This will start a PostgreSQL database container with the following credentials:
+   - **Username:** `eww`
+   - **Password:** `eww`
+   - **Database:** `asoboapp`
+   - **Port:** `5432`
+
+2. **Populate Initial Data:**
+
+   Once the database is running, the Spring application will automatically populate it with initial data from `data.sql` during startup (if configured in your application properties).
+
+3. **Configure Backend:**
+
+   Create or update `backend/src/main/resources/application.properties`:
+   ```properties
+   # Database Configuration
+   spring.datasource.url=jdbc:postgresql://localhost:5432/asoboapp
+   spring.datasource.username=eww
+   spring.datasource.password=eww
+   spring.datasource.driver-class-name=org.postgresql.Driver
+
+   # JPA Configuration
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=true
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+   spring.jpa.properties.hibernate.format_sql=true
+
+   # JWT Configuration
+   jwt.secret=your-secret-key-here-make-it-long-and-secure
+   jwt.expiration=86400000
+
+   # Server Configuration
+   server.port=8080
+
+   # File Upload Configuration
+   spring.servlet.multipart.max-file-size=10MB
+   spring.servlet.multipart.max-request-size=10MB
+   
+   # Initialize database with data.sql
+   spring.sql.init.mode=always
+   spring.sql.init.data-locations=classpath:data.sql
+   ```
+
+4. **Stop the Database:**
+
+When you're done, stop the container with:
+```bash
+docker-compose down
+```
+
+To also remove the database volume and start fresh next time:
+```bash
+docker-compose down -v
+```
 
 ### Frontend Configuration
 
@@ -163,19 +189,13 @@ After first run, you may need to create an initial user through the registration
 
 ## Authors
 
-**Michael Schwarzinger**
-- GitHub: [@mikeonefive](https://github.com/mikeonefive)
+[@mikeonefive](https://github.com/mikeonefive)
 
-**Simon Wolfsteiner**
-- GitHub: [@seimes](https://github.com/seimes)
+[@seimes](https://github.com/seimes)
 
 ## Troubleshooting
 
 ### Common Issues
-
-**Database connection issues:**
-- Verify your NeonDB credentials in `application.properties`
-- Check if the database connection string includes `?sslmode=require`
 
 **Maven build failures:**
 - Ensure Java 21 is installed: `java -version`

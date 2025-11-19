@@ -10,7 +10,6 @@ A full-stack application for bringing people together built with Angular and Spr
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the Application](#running-the-application)
-- [API Documentation](#api-documentation)
 
 ## Prerequisites
 
@@ -40,7 +39,6 @@ Before you begin, ensure you have the following installed:
 - **Spring Data JPA** - Database Access
 - **PostgreSQL** - Database (via Docker)
 - **MapStruct** - Object Mapping
-- **SpringDoc OpenAPI** - API Documentation
 
 ## Project Structure
 ```
@@ -115,7 +113,8 @@ docker-compose up -d
 
    # JWT Configuration
    jwt.secret=your-secret-key-here-make-it-long-and-secure
-   jwt.expiration=86400000
+   jwt.expiration-ms=how-long-until-token-expires-if-remember-me-was-not-checked
+   jwt.remember-me-expiration-ms=how-long-the-remember-me-session-should-last
 
    # Server Configuration
    server.port=8080
@@ -179,7 +178,6 @@ The frontend will start on **http://localhost:4200**
 Open your browser and navigate to:
 - **Frontend:** http://localhost:4200
 - **Backend API:** http://localhost:8080
-- **API Documentation:** http://localhost:8080/swagger-ui.html
 
 
 ## Default Credentials

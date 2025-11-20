@@ -19,6 +19,7 @@ import {AuthService} from '../../auth/services/auth-service';
 import {User} from '../../auth/models/user';
 import {ParticipantService} from '../services/participant-service';
 import {LambdaFunctions} from '../../../shared/utils/lambda-functions';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-event-detail-page',
@@ -47,10 +48,10 @@ export class EventDetailPage {
   time!: string;
   location!: string;
   description?: string;
-  comments: List<Comment> = new List<Comment>([]);
+  comments = signal<List<Comment>>(new List<Comment>());
   // TODO? make participants list a signal and use computed so we don't have to manually check in a couple places???
-  participants: List<Participant> = new List<Participant>([]);
-  mediaItems: List<MediaItem> = new List<MediaItem>([]);
+  participants = signal<List<Participant>>(new List<Participant>());
+  mediaItems = signal<List<MediaItem>>(new List<MediaItem>());
   currentUser: User | null = this.authService.currentUser();
   isUserAlreadyPartOfEvent = signal(false);
   protected readonly UrlUtilService = UrlUtilService;
@@ -80,7 +81,7 @@ export class EventDetailPage {
     this.description = event.description;
 
     this.participantService.getAllByEventId(event.id).subscribe((participants: List<Participant>) => {
-      this.participants = participants;
+      this.participants.set(participants);
       if (this.currentUser) {
         const participant = this.participantService.mapUserToParticipant(this.currentUser);
         this.isUserAlreadyPartOfEvent.set(
@@ -90,10 +91,10 @@ export class EventDetailPage {
     });
 
     this.commentService.getAllByEventId(event.id).subscribe((comments: List<Comment>) => {
-      this.comments = comments;
+      this.comments.set(comments);
     });
     this.mediaService.getAllByEventId(event.id).subscribe((mediaItems: List<MediaItem>) => {
-      this.mediaItems = mediaItems;
+      this.mediaItems.set(mediaItems);
     });
   }
 
@@ -105,14 +106,14 @@ export class EventDetailPage {
     comment.authorId = this.currentUser.id;
     comment.username = this.currentUser.username;
     comment.pictureURI = this.currentUser.pictureURI;
-    this.comments.add(comment);
+    this.comments().add(comment);
   }
 
 
   deleteComment(comment: Comment) {
     this.commentService.delete(comment).subscribe({
       next: () => {
-        this.comments.remove(comment);
+        this.comments().remove(comment);
       },
       error: (err) => {
         console.error('Failed to delete comment!', err);
@@ -135,18 +136,18 @@ export class EventDetailPage {
 
   uploadMedia(file: File) {
     this.mediaService.upload(this.id, file).subscribe({
-      next: (mediaItem) => this.mediaItems.add(mediaItem),
+      next: (mediaItem) => this.mediaItems().add(mediaItem),
       error: (err) => console.error('Failed to upload media!', err)
     });
   }
 
 
   deleteMedia(item: MediaItem) {
-    this.mediaItems.remove(item);       // remove immediately
+    this.mediaItems().remove(item);       // remove immediately
     this.mediaService.delete(this.id, item).subscribe({
       error: (err) => {
         console.error('Failed to delete media!', err);
-        this.mediaItems.add(item);     // revert if backend fails
+        this.mediaItems().add(item);     // revert if backend fails
       }
     });
   }
@@ -164,11 +165,11 @@ export class EventDetailPage {
         }
 
         const participantToJoin = this.participantService.mapUserToParticipant(this.currentUser);
-        this.participants = participants;
+        this.participants.set(participants);
 
         // compare by ID function passed into List.contains() method
         this.isUserAlreadyPartOfEvent.set(
-          this.participants.contains(participantToJoin, LambdaFunctions.compareById)
+          this.participants().contains(participantToJoin, LambdaFunctions.compareById)
         );
       },
       error: (err) => {
@@ -176,4 +177,6 @@ export class EventDetailPage {
         console.error('Error joining event:', err); }
     });
   }
+
+  protected readonly environment = environment;
 }

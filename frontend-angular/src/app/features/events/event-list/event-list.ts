@@ -28,7 +28,7 @@ export class EventList implements OnInit {
 
   ngOnInit(): void {
     // Only fetch if no input was provided
-    if (!this.inputEvents() || this.inputEvents()!.size() === 0) {
+    if (!this.inputEvents()) {
       if (this.authService.isLoggedIn()) {
         this.eventService.getAllEvents().subscribe({
           next: (events) => this.fetchedEvents.set(new List<Event>(events)),

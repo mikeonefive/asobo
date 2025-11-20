@@ -2,7 +2,6 @@ package at.msm.asobo.dto.event;
 
 import at.msm.asobo.dto.medium.MediumDTO;
 import at.msm.asobo.dto.comment.UserCommentDTO;
-import at.msm.asobo.dto.user.EventCreatorDTO;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -120,11 +119,11 @@ public class EventDTO {
         return this.creator;
     }
 
-    public boolean isPrivate() {
+    public boolean getIsPrivate() {
         return this.isPrivate;
     }
 
-    public void setPrivate(boolean isPrivate) {
+    public void setIsPrivate(boolean isPrivate) {
         this.isPrivate = isPrivate;
     }
 

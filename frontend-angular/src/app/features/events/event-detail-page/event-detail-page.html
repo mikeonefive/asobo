@@ -2,7 +2,7 @@
 <div class="row text-start">
   <!-- Image column -->
   <div class="col-md-6 event-image-container">
-    <img class="card-img-top" [src]="UrlUtilService.getMediaUrl(pictureURI || '/uploads/event-cover-pictures/event-cover-default.svg')" alt="{{ title }}" />
+    <img class="card-img-top" [src]="UrlUtilService.getMediaUrl(pictureURI || environment.eventDummyCoverPicRelativeUrl)" alt="{{ title }}" />
   </div>
 
   <!-- Event Info Column -->
@@ -50,19 +50,19 @@
 
     <!-- Participants -->
     <div class="col-md-6 text-start">
-      <app-participants [participants]="participants"/>
+      <app-participants [participants]="participants()"/>
     </div>
   </div>
 
   <!-- Existing comments list -->
   <div class="row text-start mt-3 gx-5">
     <div class="col-md-6 text-start">
-      <app-comments-list [comments]="comments" (commentDeleted)="deleteComment($event)" (commentEdited)="editComment($event)"/>
+      <app-comments-list [comments]="comments()" (commentDeleted)="deleteComment($event)" (commentEdited)="editComment($event)"/>
     </div>
 
     <!-- Photos & Video -->
     <div class="col-md-6 mt-3 text-start">
-      <app-gallery [mediaItems]="mediaItems"
+      <app-gallery [mediaItems]="mediaItems()"
       (mediaAdded)="uploadMedia($event)" (mediaDeleted)="deleteMedia($event)"/>
     </div>
   </div>

@@ -28,5 +28,6 @@ export const environment = {
   userProfileBaseUrl: '/user/',
   adminSectionBaseUrl: '/admin',
   userDummyProfilePicRelativeUrl: '/uploads/profile-pictures/default.png',
+  eventDummyCoverPicRelativeUrl: '/uploads/event-cover-pictures/event-cover-default.svg',
   defaultDebounceTimeForFormFields: 500,
 };

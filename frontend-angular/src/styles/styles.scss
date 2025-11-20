@@ -2,10 +2,26 @@
 @use '@angular/material' as mat;
 @import "primeicons/primeicons.css";
 
-h1.component, h4.component {
+h1.component, h2.component {
   text-align: center;
   color: $asobo-purple !important;
   margin-bottom: 2.5rem;
+}
+
+h2.component {
+  text-align: left;
+  margin-left: 0.5rem;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.clickable:hover {
+  opacity: 0.8;
 }
 
 .btn-purple {

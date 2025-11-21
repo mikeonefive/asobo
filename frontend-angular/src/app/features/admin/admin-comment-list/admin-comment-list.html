@@ -3,7 +3,6 @@
 <p-table [value]="comments()">
   <ng-template pTemplate="header">
     <tr>
-      <th scope="col"></th>
       <th scope="col" aria-label="Username">Username</th>
       <th scope="col" aria-label="Text">Text</th>
       <th scope="col" aria-label="EventID">Event ID</th>
@@ -16,24 +15,19 @@
 
   <ng-template pTemplate="body" let-comment>
     <tr>
-      <td>
-        <a [routerLink]="">
-          <img
-            [src]="UrlUtilService.getMediaUrl(comment.pictureURI || environment.userDummyProfilePicRelativeUrl)"
-            [alt]="comment.username + '\'s avatar'"
-            class="user-avatar"
-          />
-        </a>
-      </td>
-
       <td>{{ comment.username }}</td>
       <td>"{{ comment.text }}"</td>
       <td>{{ comment.eventId }}</td>
       <td>{{ comment.creationDate | date:'yyyy-MM-dd hh:mm a'}}</td>
+
+      @if(comment.modificationDate) {
       <td>{{ comment.modificationDate | date:'yyyy-MM-dd hh:mm a'}}</td>
+      } @else {
+        <td>–</td>
+      }
 
       <td>
-        <i class="pi pi-user-edit clickable" title="Edit" (click)="onEdit(comment)" aria-label="Edit comment"></i>
+        <i class="pi pi-pencil clickable" title="Edit" (click)="onEdit(comment)" aria-label="Edit comment"></i>
       </td>
       <td>
         <i class="pi pi-trash clickable" title="Delete" (click)="onDelete(comment)" aria-label="Delete comment"></i>

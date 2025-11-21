@@ -35,6 +35,7 @@
 
 .p-textarea {
   resize: none;
+  width: 100%;
 }
 
 .p-floatlabel:has(input:focus) label, .p-floatlabel:has(textarea:focus) label {

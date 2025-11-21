@@ -3,7 +3,6 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { DatePipe } from '@angular/common';
 import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
-import {RouterLink} from '@angular/router';
 import {environment} from '../../../../environments/environment';
 import {AdminCommentService} from '../services/admin-comment-service';
 import {Comment} from '../../events/models/comment'
@@ -14,7 +13,6 @@ import {Comment} from '../../events/models/comment'
     TableModule,
     TagModule,
     DatePipe,
-    RouterLink
   ],
   templateUrl: './admin-comment-list.html',
   styleUrl: './admin-comment-list.scss',
@@ -33,8 +31,6 @@ export class AdminCommentList implements OnInit {
     return;
   }
 
-  protected readonly UrlUtilService = UrlUtilService;
-
   onEdit(comment: any) {
     console.log('Editing comment:', comment);
   }
@@ -43,10 +39,7 @@ export class AdminCommentList implements OnInit {
     console.log('Deleting comment:', comment);
   }
 
-  getUserRouterLink(username: string): string {
-    return `${environment.userProfileBaseUrl}${username}`;
-  }
-
+  protected readonly UrlUtilService = UrlUtilService;
   protected readonly environment = environment;
 }
 

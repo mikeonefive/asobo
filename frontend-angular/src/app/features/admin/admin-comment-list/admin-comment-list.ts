@@ -6,6 +6,7 @@ import {UrlUtilService} from '../../../shared/utils/url/url-util-service';
 import {environment} from '../../../../environments/environment';
 import {AdminService} from '../services/admin-service';
 import {CommentWithEventTitle} from '../../events/models/comment-with-event-title';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-comment-list',
@@ -13,6 +14,7 @@ import {CommentWithEventTitle} from '../../events/models/comment-with-event-titl
     TableModule,
     TagModule,
     DatePipe,
+    RouterLink
   ],
   templateUrl: './admin-comment-list.html',
   styleUrl: './admin-comment-list.scss',
@@ -37,6 +39,10 @@ export class AdminCommentList implements OnInit {
 
   onDelete(comment: any) {
     console.log('Deleting comment:', comment);
+  }
+
+  getEventRouterLink(eventId: string): string {
+    return `${environment.eventsSectionBaseUrl}/${eventId}`;
   }
 
   protected readonly UrlUtilService = UrlUtilService;

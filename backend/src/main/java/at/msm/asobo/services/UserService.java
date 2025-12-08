@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -122,7 +123,7 @@ public class UserService {
                         userLoginDTO.getIdentifier(),
                         userLoginDTO.getPassword()
                 );
-        
+
         Authentication authentication = authenticationManager.authenticate(authToken);
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -199,20 +200,27 @@ public class UserService {
     }
 
     public boolean isUsernameAlreadyTaken(String username) {
-        return this.userRepository.findByUsername(username).isPresent();
+        return this.userRepository.existsByUsername(username);
     }
 
     public boolean isEmailAlreadyTaken(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return this.userRepository.existsByEmail(email);
     }
 
     private void validateUserRegistration(UserRegisterDTO userRegisterDTO) {
-        if (this.isEmailAlreadyTaken(userRegisterDTO.getEmail())) {
-            throw new EmailAlreadyExistsException(userRegisterDTO.getEmail());
-        }
+        validateEmailNotTaken(userRegisterDTO.getEmail());
+        validateUsernameNotTaken(userRegisterDTO.getUsername());
+    }
 
-        if (this.isUsernameAlreadyTaken(userRegisterDTO.getUsername())) {
-            throw new UsernameAlreadyExistsException(userRegisterDTO.getUsername());
+    private void validateEmailNotTaken(String email) {
+        if (this.isEmailAlreadyTaken(email)) {
+            throw new EmailAlreadyExistsException(email);
+        }
+    }
+
+    private void validateUsernameNotTaken(String username) {
+        if (this.isUsernameAlreadyTaken(username)) {
+            throw new UsernameAlreadyExistsException(username);
         }
     }
 

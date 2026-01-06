@@ -102,6 +102,7 @@ public class UserService {
         PatchUtils.copyNonNullProperties(userUpdateDTO, existingUser, "profilePicture", "password");
 
         if(userUpdateDTO.getPassword() != null) {
+            this.passwordService.validatePasswordFormat(userUpdateDTO.getPassword());
             String hashedPassword = this.passwordService.hashPassword(userUpdateDTO.getPassword());
             existingUser.setPassword(hashedPassword);
         }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -99,6 +98,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(UserCommentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserCommentNotFound(UserCommentNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "USERCOMMENT_NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -120,6 +129,16 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value()
         );
 
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(InvalidFileUploadException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidFileUpload(InvalidFileUploadException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "INVALID_FILE_UPLOAD",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value()
+        );
         return ResponseEntity.badRequest().body(error);
     }
 }

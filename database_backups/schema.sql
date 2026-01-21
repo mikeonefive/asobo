@@ -1,23 +1,23 @@
--- public."role" definition
+-- "role" definition
 
 -- Drop table
 
--- DROP TABLE public."role";
+-- DROP TABLE "role";
 
-CREATE TABLE public."role" (
+CREATE TABLE IF NOT EXISTS "role" (
 	id int8 NOT NULL,
 	"name" varchar(255) NULL,
 	CONSTRAINT role_pkey PRIMARY KEY (id)
 );
 
 
--- public.users definition
+-- users definition
 
 -- Drop table
 
--- DROP TABLE public.users;
+-- DROP TABLE users;
 
-CREATE TABLE public.users (
+CREATE TABLE IF NOT EXISTS users (
 	is_active bool NOT NULL,
 	register_date timestamp(6) NULL,
 	id uuid NOT NULL,
@@ -36,13 +36,13 @@ CREATE TABLE public.users (
 );
 
 
--- public."event" definition
+-- "event" definition
 
 -- Drop table
 
--- DROP TABLE public."event";
+-- DROP TABLE "event";
 
-CREATE TABLE public."event" (
+CREATE TABLE IF NOT EXISTS "event" (
 	creation_date timestamp(6) NULL,
 	"date" timestamp(6) NOT NULL,
 	modification_date timestamp(6) NULL,
@@ -58,13 +58,13 @@ CREATE TABLE public."event" (
 );
 
 
--- public.event_event_admins definition
+-- event_event_admins definition
 
 -- Drop table
 
--- DROP TABLE public.event_event_admins;
+-- DROP TABLE event_event_admins;
 
-CREATE TABLE public.event_event_admins (
+CREATE TABLE IF NOT EXISTS event_event_admins (
 	administered_events_id uuid NOT NULL,
 	event_admins_id uuid NOT NULL,
 	CONSTRAINT fk536isow46vbmofdyrws7rqiiy FOREIGN KEY (event_admins_id) REFERENCES public.users(id),
@@ -72,13 +72,13 @@ CREATE TABLE public.event_event_admins (
 );
 
 
--- public.event_participants definition
+-- event_participants definition
 
 -- Drop table
 
--- DROP TABLE public.event_participants;
+-- DROP TABLE event_participants;
 
-CREATE TABLE public.event_participants (
+CREATE TABLE IF NOT EXISTS event_participants (
 	attended_events_id uuid NOT NULL,
 	participants_id uuid NOT NULL,
 	CONSTRAINT fk8gnffqcvvxcfijv2ycdpnsarq FOREIGN KEY (participants_id) REFERENCES public.users(id),
@@ -86,13 +86,13 @@ CREATE TABLE public.event_participants (
 );
 
 
--- public.medium definition
+-- medium definition
 
 -- Drop table
 
--- DROP TABLE public.medium;
+-- DROP TABLE medium;
 
-CREATE TABLE public.medium (
+CREATE TABLE IF NOT EXISTS medium (
 	event_id uuid NOT NULL,
 	id uuid NOT NULL,
 	mediumuri varchar(4096) NOT NULL,
@@ -103,13 +103,13 @@ CREATE TABLE public.medium (
 );
 
 
--- public.user_comment definition
+-- user_comment definition
 
 -- Drop table
 
--- DROP TABLE public.user_comment;
+-- DROP TABLE user_comment;
 
-CREATE TABLE public.user_comment (
+CREATE TABLE IF NOT EXISTS user_comment (
 	creation_date timestamp(6) NULL,
 	modification_date timestamp(6) NULL,
 	author_id uuid NOT NULL,
@@ -123,13 +123,13 @@ CREATE TABLE public.user_comment (
 );
 
 
--- public.user_roles definition
+-- user_roles definition
 
 -- Drop table
 
--- DROP TABLE public.user_roles;
+-- DROP TABLE user_roles;
 
-CREATE TABLE public.user_roles (
+CREATE TABLE IF NOT EXISTS user_roles (
 	user_id uuid NOT NULL,
 	role_id int8 NOT NULL,
 	CONSTRAINT user_roles_pkey PRIMARY KEY (user_id, role_id),

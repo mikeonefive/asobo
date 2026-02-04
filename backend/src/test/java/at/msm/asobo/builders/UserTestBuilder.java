@@ -4,7 +4,10 @@ import at.msm.asobo.dto.auth.LoginResponseDTO;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.dto.auth.UserRegisterDTO;
 import at.msm.asobo.dto.user.UserUpdateDTO;
+import at.msm.asobo.entities.User;
+import at.msm.asobo.security.UserPrincipal;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserTestBuilder {
@@ -74,6 +77,18 @@ public class UserTestBuilder {
         return this;
     }
 
+    public User buildUserEntity() {
+        User user = new User();
+        user.setId(id);
+        user.setUsername(this.username);
+        user.setEmail(this.email);
+        user.setFirstName(this.firstName);
+        user.setSurname(this.surname);
+        user.setSalutation(this.salutation);
+        user.setPassword(this.password);
+        return user;
+    }
+
     public UserPublicDTO buildUserPublicDTO() {
         UserPublicDTO user = new UserPublicDTO();
         user.setId(this.id);
@@ -116,5 +131,14 @@ public class UserTestBuilder {
         user.setSalutation(this.salutation);
 
         return new LoginResponseDTO("any-token", user);
+    }
+
+    public UserPrincipal buildUserPrincipal() {
+        return new UserPrincipal(
+                this.id,
+                this.username,
+                this.password,
+                List.of()
+        );
     }
 }

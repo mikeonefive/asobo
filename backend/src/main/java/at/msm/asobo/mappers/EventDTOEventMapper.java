@@ -215,7 +215,7 @@ public class EventDTOEventMapper {
                 .collect(Collectors.toList());
     }
 
-    public Page<EventSummaryDTO> mapEventsToEventSummaryDTOs(Page<Event> events) {
+    public Page<EventSummaryDTO> mapEventPageToEventSummaryDTOs(Page<Event> events) {
         if (events == null) {
             return Page.empty();
         }

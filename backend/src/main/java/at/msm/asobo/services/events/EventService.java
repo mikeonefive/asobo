@@ -112,10 +112,13 @@ public class EventService {
         } else {
             events = eventRepository.findByParticipants_IdAndIsPrivateEventFalse(participantId, pageable);
         }
-        return this.eventDTOEventMapper.mapEventsToEventSummaryDTOs(events);
+        return this.eventDTOEventMapper.mapEventPageToEventSummaryDTOs(events);
     }
 
     public List<EventSummaryDTO> getEventsByDate(LocalDateTime date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date must not be null");
+        }
         List<Event> events = this.eventRepository.findEventsByDate(date);
         return this.eventDTOEventMapper.mapEventsToEventSummaryDTOs(events);
     }

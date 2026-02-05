@@ -14,12 +14,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,57 +46,68 @@ class EventServiceTest {
     private EventSummaryDTO privateEventSummaryDTO2;
     private Pageable pageable02;
     private Pageable pageable12;
-    
+    private LocalDateTime searchDate;
+
     @BeforeEach
     void setup() {
         // Public events
         publicEvent1 = new EventTestBuilder()
                 .withId(UUID.randomUUID())
-                .withTitle("Public Event 1")
+                .withTitle("Public Event 1 (Today)")
                 .withIsPrivateEvent(false)
+                .withDate(LocalDateTime.now())
                 .buildEventEntity();
 
         publicEvent2 = new EventTestBuilder()
                 .withId(UUID.randomUUID())
-                .withTitle("Public Event 2")
+                .withTitle("Public Event 2 (Tomorrow)")
                 .withIsPrivateEvent(false)
+                .withDate(LocalDateTime.now().plusDays(1))
                 .buildEventEntity();
 
         // Private events
         privateEvent1 = new EventTestBuilder()
                 .withId(UUID.randomUUID())
-                .withTitle("Private Event 1")
+                .withTitle("Private Event 1 (Today)")
                 .withIsPrivateEvent(true)
+                .withDate(LocalDateTime.now())
                 .buildEventEntity();
 
         privateEvent2 = new EventTestBuilder()
                 .withId(UUID.randomUUID())
-                .withTitle("Private Event 2")
+                .withTitle("Private Event 2 (Tomorrow)")
                 .withIsPrivateEvent(true)
+                .withDate(LocalDateTime.now().plusDays(1))
                 .buildEventEntity();
 
         publicEventSummaryDTO1 = new EventTestBuilder()
                 .withId(publicEvent1.getId())
                 .withIsPrivateEvent(publicEvent1.isPrivateEvent())
+                .withDate(publicEvent1.getDate())
                 .buildEventSummaryDTO();
 
         publicEventSummaryDTO2 = new EventTestBuilder()
                 .withId(publicEvent2.getId())
                 .withIsPrivateEvent(publicEvent2.isPrivateEvent())
+                .withDate(publicEvent2.getDate())
                 .buildEventSummaryDTO();
 
         privateEventSummaryDTO1 = new EventTestBuilder()
                 .withId(privateEvent1.getId())
                 .withIsPrivateEvent(privateEvent1.isPrivateEvent())
+                .withDate(privateEvent1.getDate())
                 .buildEventSummaryDTO();
 
         privateEventSummaryDTO2 = new EventTestBuilder()
                 .withId(privateEvent2.getId())
                 .withIsPrivateEvent(privateEvent2.isPrivateEvent())
+                .withDate(privateEvent2.getDate())
                 .buildEventSummaryDTO();
 
         pageable02 = PageRequest.of(0, 2); // page 1
         pageable12 = PageRequest.of(1, 2); // page 2
+
+        searchDate = LocalDateTime.of(2026, 3, 14, 15, 0);
     }
 
     @Test
@@ -131,6 +144,7 @@ class EventServiceTest {
         assertThat(result).isEmpty();
         verify(eventRepository).findAll();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 
     @Test
@@ -245,6 +259,7 @@ class EventServiceTest {
         assertThat(result).isEmpty();
         verify(eventRepository).findByIsPrivateEventFalse();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 
     @Test
@@ -359,6 +374,7 @@ class EventServiceTest {
         assertThat(result).isEmpty();
         verify(eventRepository).findByIsPrivateEventTrue();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 
     @Test
@@ -511,6 +527,7 @@ class EventServiceTest {
         verify(eventRepository, never()).findByParticipants_Id(any());
         verify(eventRepository, never()).findByParticipants_IdAndIsPrivateEventTrue(any());
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(publicEvents);
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 
     @Test
@@ -529,5 +546,58 @@ class EventServiceTest {
 
         verify(eventRepository).findByParticipants_Id(participantId);
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(emptyEvents);
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
+    }
+
+    @Test
+    void getEventsByDate_validDate_returnsMappedEventSummaries() {
+        List<Event> events = List.of(publicEvent1, privateEvent1);
+        List<EventSummaryDTO> mappedDtos = List.of(publicEventSummaryDTO1, privateEventSummaryDTO1);
+
+        when(eventRepository.findEventsByDate(searchDate)).thenReturn(events);
+        when(eventDTOEventMapper.mapEventsToEventSummaryDTOs(events))
+                .thenReturn(mappedDtos);
+
+        List<EventSummaryDTO> result = eventService.getEventsByDate(searchDate);
+
+        assertNotNull(result);
+        assertThat(result)
+                .isEqualTo(mappedDtos)
+                .hasSize(2);
+
+        verify(eventRepository).findEventsByDate(searchDate);
+        verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
+    }
+
+    @Test
+    void getEventsByDate_noEventsFound_returnsEmptyList() {
+        when(eventRepository.findEventsByDate(searchDate))
+                .thenReturn(Collections.emptyList());
+        when(eventDTOEventMapper.mapEventsToEventSummaryDTOs(List.of()))
+                .thenReturn(Collections.emptyList());
+
+        List<EventSummaryDTO> result = eventService.getEventsByDate(searchDate);
+
+        assertNotNull(result);
+        assertThat(result).isEmpty();
+
+        verify(eventRepository).findEventsByDate(searchDate);
+        verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
+    }
+
+    @Test
+    void getEventsByDate_nullDate_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> eventService.getEventsByDate(null)
+        );
+
+        assertThat(exception.getMessage()).isEqualTo("Date must not be null");
+
+        verify(eventRepository, never()).findEventsByDate(any());
+        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 }

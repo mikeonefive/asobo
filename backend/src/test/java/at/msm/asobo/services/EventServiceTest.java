@@ -600,4 +600,75 @@ class EventServiceTest {
         verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
         verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
+
+    @Test
+    void getEventsByLocation_validLocation_returnsMappedEventSummaries() {
+        String location = "Vienna";
+        List<Event> events = List.of(publicEvent1, privateEvent1);
+        List<EventSummaryDTO> mappedDtos = List.of(publicEventSummaryDTO1, privateEventSummaryDTO1);
+
+        when(eventRepository.findEventsByLocation(location)).thenReturn(events);
+        when(eventDTOEventMapper.mapEventsToEventSummaryDTOs(events))
+                .thenReturn(mappedDtos);
+
+        List<EventSummaryDTO> result = eventService.getEventsByLocation(location);
+
+        assertNotNull(result);
+        assertThat(result).isEqualTo(mappedDtos).hasSize(2);
+
+        verify(eventRepository).findEventsByLocation(location);
+        verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
+    }
+
+    @Test
+    void getEventsByLocation_nullLocation_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> eventService.getEventsByLocation(null)
+        );
+
+        assertThat(exception.getMessage())
+                .isEqualTo("Location must not be null or empty");
+
+        verify(eventRepository, never()).findEventsByLocation(any());
+        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
+    }
+
+    @Test
+    void getEventsByLocation_emptyLocation_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> eventService.getEventsByLocation(""));
+
+        verify(eventRepository, never()).findEventsByLocation(any());
+        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
+    }
+
+    @Test
+    void getEventsByLocation_blankLocation_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> eventService.getEventsByLocation("   "));
+
+        verify(eventRepository, never()).findEventsByLocation(any());
+        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
+    }
+
+    @Test
+    void getEventsByLocation_noEventsFound_returnsEmptyList() {
+        String location = "Unknown City";
+
+        when(eventRepository.findEventsByLocation(location))
+                .thenReturn(List.of());
+        when(eventDTOEventMapper.mapEventsToEventSummaryDTOs(List.of()))
+                .thenReturn(List.of());
+
+        List<EventSummaryDTO> result = eventService.getEventsByLocation(location);
+
+        assertNotNull(result);
+        assertThat(result).isEmpty();
+
+        verify(eventRepository).findEventsByLocation(location);
+        verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
+        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
+    }
 }

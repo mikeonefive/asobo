@@ -124,6 +124,10 @@ public class EventService {
     }
 
     public List<EventSummaryDTO> getEventsByLocation(String location) {
+        if (location == null || location.trim().isEmpty()) {
+            throw new IllegalArgumentException("Location must not be null or empty");
+        }
+
         List<Event> events = this.eventRepository.findEventsByLocation(location);
         return this.eventDTOEventMapper.mapEventsToEventSummaryDTOs(events);
     }

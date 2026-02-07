@@ -179,4 +179,17 @@ public class Event implements PictureEntity {
     public void setEventAdmins(Set<User> eventAdmins) {
         this.eventAdmins = eventAdmins;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

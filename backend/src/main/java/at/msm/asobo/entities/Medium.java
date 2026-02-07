@@ -2,6 +2,8 @@ package at.msm.asobo.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -58,5 +60,18 @@ public class Medium {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Medium medium = (Medium) o;
+        return Objects.equals(id, medium.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

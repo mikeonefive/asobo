@@ -155,6 +155,10 @@ public class EventService {
     }
 
     public List<EventDTO> getEventsByTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title must not be null or empty");
+        }
+
         List<Event> events = this.eventRepository.findEventsByTitle(title);
         return this.eventDTOEventMapper.mapEventsToEventDTOs(events);
     }

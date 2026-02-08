@@ -1,13 +1,19 @@
 package at.msm.asobo.builders;
 
+import at.msm.asobo.dto.comment.UserCommentDTO;
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.dto.event.EventSummaryDTO;
+import at.msm.asobo.dto.medium.MediumDTO;
+import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.Medium;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.entities.UserComment;
 import at.msm.asobo.mappers.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -225,6 +231,24 @@ public class EventTestBuilder {
         return eventDTO;
     }
 
+    public EventCreationDTO buildEventCreationDTO() {
+        EventCreationDTO eventCreationDTO = new EventCreationDTO();
+        eventCreationDTO.setId(this.id);
+        eventCreationDTO.setTitle(this.title);
+        eventCreationDTO.setDescription(this.description);
+        eventCreationDTO.setLocation(this.location);
+        eventCreationDTO.setPrivate(this.isPrivateEvent);
+        eventCreationDTO.setDate(this.date);
+        eventCreationDTO.setCreationDate(this.creationDate);
+        eventCreationDTO.setModificationDate(this.modificationDate);
+        eventCreationDTO.setCreator(this.userDTOUserMapper.mapUserToUserPublicDTO(this.creator));
+        eventCreationDTO.setEventAdmins(this.userDTOUserMapper.mapUsersToUserPublicDTOs(this.eventAdmins));
+        eventCreationDTO.setParticipants(this.userDTOUserMapper.mapUsersToUserPublicDTOs(this.participants));
+        eventCreationDTO.setComments(this.userCommentDTOUserCommentMapper.mapUserCommentsToUserCommentDTOs(this.comments));
+        eventCreationDTO.setMedia(this.mediumDTOMediumMapper.mapMediaToMediaDTOList(this.media));
+
+        return eventCreationDTO;
+    }
 
     public EventSummaryDTO buildEventSummaryDTO() {
         EventSummaryDTO eventDTO = new EventSummaryDTO();

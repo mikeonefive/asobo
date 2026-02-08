@@ -9,9 +9,14 @@ import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.exceptions.events.EventNotFoundException;
+import at.msm.asobo.exceptions.users.UserNotAuthorizedException;
+import at.msm.asobo.exceptions.users.UserNotFoundException;
 import at.msm.asobo.mappers.EventDTOEventMapper;
 import at.msm.asobo.repositories.EventRepository;
+import at.msm.asobo.security.UserPrincipal;
+import at.msm.asobo.services.events.EventAdminService;
 import at.msm.asobo.services.events.EventService;
+import at.msm.asobo.services.files.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +44,15 @@ class EventServiceTest {
     @InjectMocks
     private EventService eventService;
 
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private EventAdminService eventAdminService;
+
+    @Mock
+    private FileStorageService fileStorageService;
+
     private Event publicEvent1;
     private Event publicEvent2;
     private Event privateEvent1;
@@ -51,7 +65,10 @@ class EventServiceTest {
     private EventDTO publicEventDTO2;
     private EventDTO privateEventDTO1;
     private User creator;
+    private UserPrincipal creatorPrincipal;
     private UserPublicDTO creatorDTO;
+    private User eventAdmin1;
+    private User eventAdmin2;
     private UserPublicDTO eventAdminDTO1;
     private UserPublicDTO eventAdminDTO2;
     private Pageable pageable02;
@@ -95,18 +112,30 @@ class EventServiceTest {
                 .withUsernameAndEmail("creator")
                 .buildUserEntity();
 
+        creatorPrincipal = new UserTestBuilder()
+                .fromUser(creator)
+                .buildUserPrincipal();
+
         creatorDTO = new UserTestBuilder()
                 .fromUser(creator)
                 .buildUserPublicDTO();
 
-        eventAdminDTO1 = new UserTestBuilder()
+        eventAdmin1 = new UserTestBuilder()
                 .withId(UUID.randomUUID())
                 .withUsernameAndEmail("Event Admin 1")
+                .buildUserEntity();
+
+        eventAdminDTO1 = new UserTestBuilder()
+                .fromUser(eventAdmin1)
                 .buildUserPublicDTO();
 
-        eventAdminDTO2 = new UserTestBuilder()
+        eventAdmin2 = new UserTestBuilder()
                 .withId(UUID.randomUUID())
                 .withUsernameAndEmail("Event Admin 2")
+                .buildUserEntity();
+
+        eventAdminDTO2 = new UserTestBuilder()
+                .fromUser(eventAdmin2)
                 .buildUserPublicDTO();
 
         publicEventSummaryDTO1 = new EventTestBuilder()
@@ -698,12 +727,13 @@ class EventServiceTest {
 
     @Test
     void addNewEvent_withEventAdmins_createsEventWithProvidedAdmins() {
-        // refactor using Builder
-        EventCreationDTO creationDTO = new EventCreationDTO();
-        creationDTO.setCreator(creatorDTO);
-        creationDTO.setEventAdmins(new HashSet<>(Set.of(eventAdminDTO1, eventAdminDTO2)));
-        creationDTO.setTitle("Test Event");
-        creationDTO.setDate(LocalDateTime.now().plusDays(5));
+        EventCreationDTO creationDTO = new EventTestBuilder()
+                .withId(UUID.randomUUID())
+                .withCreator(creator)
+                .withEventAdmins(new HashSet<>(Set.of(eventAdmin1, eventAdmin2)))
+                .withTitle("Test event")
+                .withDate(LocalDateTime.now().plusDays(5))
+                .buildEventCreationDTO();
 
         Event newEvent = new EventTestBuilder()
                 .withCreator(creator)
@@ -974,5 +1004,155 @@ class EventServiceTest {
         });
 
         verify(eventRepository, never()).findEventsByTitle(any());
+    }
+
+    @Test
+    void deleteEventById_userIsCreator_deletesEvent() {
+        publicEvent1.setCreator(creator);
+        String pathToPicture = "path/to/picture.jpg";
+        publicEvent1.setPictureURI(pathToPicture);
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventDTOEventMapper.mapEventToEventDTO(publicEvent1)).thenReturn(publicEventDTO1);
+
+        EventDTO result = eventService.deleteEventById(publicEvent1.getId(), creatorPrincipal);
+
+        assertEquals(publicEventDTO1, result);
+        assertEquals(publicEventDTO1.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(fileStorageService).delete(pathToPicture);
+        verify(eventRepository).delete(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(publicEvent1);
+    }
+
+    @Test
+    void deleteEventById_eventWithoutPicture_deletesEventWithoutDeletingFile() {
+        publicEvent1.setCreator(creator);
+        publicEvent1.setPictureURI(null);
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventDTOEventMapper.mapEventToEventDTO(publicEvent1)).thenReturn(publicEventDTO1);
+
+        EventDTO result = eventService.deleteEventById(publicEvent1.getId(), creatorPrincipal);
+
+        assertEquals(publicEventDTO1, result);
+        assertEquals(publicEventDTO1.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(fileStorageService, never()).delete(any());
+        verify(eventRepository).delete(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(publicEvent1);
+    }
+
+    @Test
+    void deleteEventById_userIsEventAdmin_deletesEvent() {
+        publicEvent1.setCreator(creator);
+        publicEvent1.setPictureURI(null);
+
+        UserPrincipal adminPrincipal = new UserTestBuilder()
+                .fromUser(eventAdmin1)
+                .buildUserPrincipal();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(eventAdmin1.getId())).thenReturn(eventAdmin1);
+        when(eventAdminService.canManageEvent(publicEvent1, eventAdmin1)).thenReturn(true);
+        when(eventDTOEventMapper.mapEventToEventDTO(publicEvent1)).thenReturn(publicEventDTO1);
+
+        EventDTO result = eventService.deleteEventById(publicEvent1.getId(), adminPrincipal);
+
+        assertEquals(publicEventDTO1, result);
+        assertEquals(publicEventDTO1.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(eventAdmin1.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, eventAdmin1);
+        verify(fileStorageService, never()).delete(any());
+        verify(eventRepository).delete(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(publicEvent1);
+    }
+
+    @Test
+    void deleteEventById_userNotAuthorized_throwsException() {
+        User unauthorizedUser = new UserTestBuilder()
+                .withId(UUID.randomUUID())
+                .withUsernameAndEmail("unauthorized")
+                .buildUserEntity();
+
+        publicEvent1.setCreator(creator);
+
+        UserPrincipal unauthorizedPrincipal = new UserTestBuilder()
+                .fromUser(unauthorizedUser)
+                .buildUserPrincipal();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(unauthorizedUser.getId())).thenReturn(unauthorizedUser);
+        when(eventAdminService.canManageEvent(publicEvent1, unauthorizedUser)).thenReturn(false);
+
+        UserNotAuthorizedException exception = assertThrows(
+                UserNotAuthorizedException.class,
+                () -> eventService.deleteEventById(publicEvent1.getId(), unauthorizedPrincipal)
+        );
+
+        assertThat(exception.getMessage())
+                .isEqualTo("You are not allowed to delete this event");
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(unauthorizedUser.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, unauthorizedUser);
+        verify(fileStorageService, never()).delete(any());
+        verify(eventRepository, never()).delete(any());
+        verify(eventDTOEventMapper, never()).mapEventToEventDTO(any());
+    }
+
+    @Test
+    void deleteEventById_eventNotFound_throwsException() {
+        UUID eventId = UUID.randomUUID();
+        UserPrincipal userPrincipal = new UserTestBuilder()
+                .fromUser(creator)
+                .buildUserPrincipal();
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        assertThrows(EventNotFoundException.class, () -> {
+            eventService.deleteEventById(eventId, userPrincipal);
+        });
+
+        verify(eventRepository).findById(eventId);
+        verify(userService, never()).getUserById(any());
+        verify(eventAdminService, never()).canManageEvent(any(), any());
+        verify(fileStorageService, never()).delete(any());
+        verify(eventRepository, never()).delete(any());
+    }
+
+    @Test
+    void deleteEventById_userNotFound_throwsException() {
+        UUID userId = UUID.randomUUID();
+
+        UserPrincipal userPrincipal = new UserTestBuilder()
+                .withId(userId)
+                .withUsernameAndEmail("Nonexistent user")
+                .buildUserPrincipal();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(userId)).thenThrow(new UserNotFoundException(userId));
+
+        assertThrows(UserNotFoundException.class, () -> {
+            eventService.deleteEventById(publicEvent1.getId(), userPrincipal);
+        });
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(userId);
+        verify(eventAdminService, never()).canManageEvent(any(), any());
+        verify(fileStorageService, never()).delete(any());
+        verify(eventRepository, never()).delete(any());
     }
 }

@@ -20,7 +20,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,9 +33,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserService userService;
     private final FileStorageService fileStorageService;
-    private final FileValidationService fileValidationService;
     private final EventAdminService eventAdminService;
-    private final FileStorageProperties fileStorageProperties;
     private final EventDTOEventMapper eventDTOEventMapper;
     private final UserDTOUserMapper userDTOUserMapper;
 
@@ -44,17 +41,13 @@ public class EventService {
             EventRepository eventRepository,
             UserService userService,
             FileStorageService fileStorageService,
-            FileValidationService fileValidationService,
             EventAdminService eventAdminService,
-            FileStorageProperties fileStorageProperties,
             EventDTOEventMapper eventDTOEventMapper,
             UserDTOUserMapper userDTOUserMapper) {
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.fileStorageService = fileStorageService;
-        this.fileValidationService = fileValidationService;
         this.eventAdminService = eventAdminService;
-        this.fileStorageProperties = fileStorageProperties;
         this.eventDTOEventMapper = eventDTOEventMapper;
         this.userDTOUserMapper = userDTOUserMapper;
     }

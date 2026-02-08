@@ -1,4 +1,4 @@
-package at.msm.asobo.services;
+package at.msm.asobo.services.events;
 
 import at.msm.asobo.builders.EventTestBuilder;
 import at.msm.asobo.builders.UserTestBuilder;
@@ -10,8 +10,7 @@ import at.msm.asobo.exceptions.users.UserNotFoundException;
 import at.msm.asobo.mappers.UserDTOUserMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.security.UserPrincipal;
-import at.msm.asobo.services.events.EventService;
-import at.msm.asobo.services.events.ParticipantService;
+import at.msm.asobo.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

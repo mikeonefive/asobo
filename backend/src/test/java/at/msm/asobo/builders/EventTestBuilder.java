@@ -4,6 +4,7 @@ import at.msm.asobo.dto.comment.UserCommentDTO;
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.dto.event.EventSummaryDTO;
+import at.msm.asobo.dto.event.EventUpdateDTO;
 import at.msm.asobo.dto.medium.MediumDTO;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
@@ -14,6 +15,7 @@ import at.msm.asobo.mappers.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -248,6 +250,19 @@ public class EventTestBuilder {
         eventCreationDTO.setMedia(this.mediumDTOMediumMapper.mapMediaToMediaDTOList(this.media));
 
         return eventCreationDTO;
+    }
+
+    public EventUpdateDTO buildEventUpdateDTO() {
+        EventUpdateDTO eventUpdateDTO = new EventUpdateDTO();
+        eventUpdateDTO.setTitle(this.title);
+        eventUpdateDTO.setDescription(this.description);
+        eventUpdateDTO.setLocation(this.location);
+        eventUpdateDTO.setPrivate(this.isPrivateEvent);
+        eventUpdateDTO.setDate(this.date);
+        eventUpdateDTO.setParticipants(this.userDTOUserMapper.mapUsersToUserPublicDTOs(this.participants));
+        eventUpdateDTO.setEventAdmins(this.userDTOUserMapper.mapUsersToUserPublicDTOs(this.eventAdmins));
+
+        return eventUpdateDTO;
     }
 
     public EventSummaryDTO buildEventSummaryDTO() {

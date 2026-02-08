@@ -1,10 +1,11 @@
-package at.msm.asobo.services;
+package at.msm.asobo.services.events;
 
 import at.msm.asobo.builders.EventTestBuilder;
 import at.msm.asobo.builders.UserTestBuilder;
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.dto.event.EventSummaryDTO;
+import at.msm.asobo.dto.event.EventUpdateDTO;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
@@ -12,10 +13,10 @@ import at.msm.asobo.exceptions.events.EventNotFoundException;
 import at.msm.asobo.exceptions.users.UserNotAuthorizedException;
 import at.msm.asobo.exceptions.users.UserNotFoundException;
 import at.msm.asobo.mappers.EventDTOEventMapper;
+import at.msm.asobo.mappers.UserDTOUserMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.security.UserPrincipal;
-import at.msm.asobo.services.events.EventAdminService;
-import at.msm.asobo.services.events.EventService;
+import at.msm.asobo.services.UserService;
 import at.msm.asobo.services.files.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -40,6 +42,9 @@ class EventServiceTest {
 
     @Mock
     private EventDTOEventMapper eventDTOEventMapper;
+
+    @Mock
+    private UserDTOUserMapper userDTOUserMapper;
 
     @InjectMocks
     private EventService eventService;
@@ -1122,9 +1127,11 @@ class EventServiceTest {
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
-        assertThrows(EventNotFoundException.class, () -> {
+        EventNotFoundException exception = assertThrows(EventNotFoundException.class, () -> {
             eventService.deleteEventById(eventId, userPrincipal);
         });
+
+        assertThat(exception.getMessage()).contains(eventId.toString());
 
         verify(eventRepository).findById(eventId);
         verify(userService, never()).getUserById(any());
@@ -1135,24 +1142,332 @@ class EventServiceTest {
 
     @Test
     void deleteEventById_userNotFound_throwsException() {
-        UUID userId = UUID.randomUUID();
-
         UserPrincipal userPrincipal = new UserTestBuilder()
-                .withId(userId)
+                .withId(UUID.randomUUID())
                 .withUsernameAndEmail("Nonexistent user")
                 .buildUserPrincipal();
 
         when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
-        when(userService.getUserById(userId)).thenThrow(new UserNotFoundException(userId));
+        when(userService.getUserById(userPrincipal.getUserId())).thenThrow(new UserNotFoundException(userPrincipal.getUserId()));
 
-        assertThrows(UserNotFoundException.class, () -> {
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
             eventService.deleteEventById(publicEvent1.getId(), userPrincipal);
         });
 
+        assertThat(exception.getMessage()).contains(userPrincipal.getUserId().toString());
+
         verify(eventRepository).findById(publicEvent1.getId());
-        verify(userService).getUserById(userId);
+        verify(userService).getUserById(userPrincipal.getUserId());
         verify(eventAdminService, never()).canManageEvent(any(), any());
         verify(fileStorageService, never()).delete(any());
         verify(eventRepository, never()).delete(any());
+    }
+
+    @Test
+    void updateEventById_userIsCreator_updatesEvent() {
+        publicEvent1.setCreator(creator);
+        publicEvent1.setTitle("Old Title");
+        publicEvent1.setDescription("Old Description");
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .withDescription("New Description")
+                .withParticipants(null)
+                .buildEventUpdateDTO();
+        updateDTO.setPicture(null);
+
+        Event savedEvent = new EventTestBuilder()
+                .fromEvent(publicEvent1)
+                .withTitle("New Title")
+                .withDescription("New Description")
+                .buildEventEntity();
+
+        EventDTO savedEventDTO = new EventTestBuilder()
+                .fromEvent(savedEvent)
+                .buildEventDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
+        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(savedEventDTO);
+
+        EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
+
+        assertEquals(savedEventDTO, result);
+        assertEquals(savedEventDTO.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(fileStorageService).handleEventPictureUpdate(null, publicEvent1);
+        verify(eventRepository).save(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
+    }
+
+    @Test
+    void updateEventById_withPicture_updatesEventAndPicture() {
+        publicEvent1.setCreator(creator);
+
+        MockMultipartFile picture = new MockMultipartFile(
+                "picture",
+                "event.jpg",
+                "image/jpeg",
+                "test image content".getBytes()
+        );
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("Updated Title")
+                .withParticipants(null)
+                .buildEventUpdateDTO();
+        updateDTO.setPicture(picture);
+
+        Event savedEvent = new EventTestBuilder()
+                .fromEvent(publicEvent1)
+                .buildEventEntity();
+
+        EventDTO saveEventDTO = new EventTestBuilder()
+                .fromEvent(savedEvent)
+                .buildEventDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
+        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(saveEventDTO);
+
+        EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
+
+        assertEquals(saveEventDTO, result);
+        assertEquals(saveEventDTO.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(fileStorageService).handleEventPictureUpdate(picture, publicEvent1);
+        verify(eventRepository).save(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
+    }
+
+    @Test
+    void updateEventById_withParticipants_updatesParticipants() {
+        publicEvent1.setCreator(creator);
+
+        User participant1 = new UserTestBuilder()
+                .withId(UUID.randomUUID())
+                .withUsernameAndEmail("participant1")
+                .buildUserEntity();
+
+        User participant2 = new UserTestBuilder()
+                .withId(UUID.randomUUID())
+                .withUsernameAndEmail("participant2")
+                .buildUserEntity();
+
+        UserPublicDTO participant1DTO = new UserTestBuilder()
+                .fromUser(participant1)
+                .buildUserPublicDTO();
+
+        UserPublicDTO participant2DTO = new UserTestBuilder()
+                .fromUser(participant2)
+                .buildUserPublicDTO();
+
+        Set<UserPublicDTO> participantDTOs = Set.of(participant1DTO, participant2DTO);
+        Set<User> participants = Set.of(participant1, participant2);
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withParticipants(participants)
+                .buildEventUpdateDTO();
+        updateDTO.setPicture(null);
+
+        Event savedEvent = new EventTestBuilder()
+                .fromEvent(publicEvent1)
+                .buildEventEntity();
+
+        EventDTO savedEventDTO = new EventTestBuilder()
+                .fromEvent(savedEvent)
+                .buildEventDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(userDTOUserMapper.mapUserPublicDTOsToUsers(participantDTOs)).thenReturn(participants);
+        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
+        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(savedEventDTO);
+
+        EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
+
+        assertEquals(savedEventDTO, result);
+        assertEquals(savedEventDTO.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(userDTOUserMapper).mapUserPublicDTOsToUsers(participantDTOs);
+        verify(eventRepository).save(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
+    }
+
+    @Test
+    void updateEventById_userNotAuthorized_throwsException() {
+        publicEvent1.setCreator(creator);
+
+        User unauthorizedUser = new UserTestBuilder()
+                .withId(UUID.randomUUID())
+                .withUsernameAndEmail("unauthorized")
+                .buildUserEntity();
+
+        UserPrincipal unauthorizedPrincipal = new UserTestBuilder()
+                .fromUser(unauthorizedUser)
+                .buildUserPrincipal();
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .buildEventUpdateDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(unauthorizedUser.getId())).thenReturn(unauthorizedUser);
+        when(eventAdminService.canManageEvent(publicEvent1, unauthorizedUser)).thenReturn(false);
+
+        UserNotAuthorizedException exception = assertThrows(
+                UserNotAuthorizedException.class,
+                () -> eventService.updateEventById(publicEvent1.getId(), unauthorizedPrincipal, updateDTO)
+        );
+
+        assertThat(exception.getMessage())
+                .isEqualTo("You are not allowed to update this event");
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(unauthorizedUser.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, unauthorizedUser);
+        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
+        verify(eventRepository, never()).save(any());
+        verify(eventDTOEventMapper, never()).mapEventToEventDTO(any());
+    }
+
+    @Test
+    void updateEventById_eventNotFound_throwsException() {
+        UUID eventId = UUID.randomUUID();
+        UserPrincipal userPrincipal = new UserTestBuilder()
+                .fromUser(creator)
+                .buildUserPrincipal();
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .buildEventUpdateDTO();
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        assertThrows(EventNotFoundException.class, () -> {
+            eventService.updateEventById(eventId, userPrincipal, updateDTO);
+        });
+
+        verify(eventRepository).findById(eventId);
+        verify(userService, never()).getUserById(any());
+        verify(eventAdminService, never()).canManageEvent(any(), any());
+        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
+        verify(eventRepository, never()).save(any());
+    }
+
+    @Test
+    void updateEventById_userNotFound_throwsException() {
+        UserPrincipal userPrincipal = new UserTestBuilder()
+                .withId(UUID.randomUUID())
+                .withUsernameAndEmail("user")
+                .buildUserPrincipal();
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .buildEventUpdateDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(userPrincipal.getUserId())).thenThrow(new UserNotFoundException(userPrincipal.getUserId()));
+
+        assertThrows(UserNotFoundException.class, () -> {
+            eventService.updateEventById(publicEvent1.getId(), userPrincipal, updateDTO);
+        });
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(userPrincipal.getUserId());
+        verify(eventAdminService, never()).canManageEvent(any(), any());
+        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
+        verify(eventRepository, never()).save(any());
+    }
+
+    @Test
+    void updateEventById_partialUpdate_onlyUpdatesProvidedFields() {
+        publicEvent1.setCreator(creator);
+        publicEvent1.setTitle("Old Title");
+        publicEvent1.setDescription("Old Description");
+        publicEvent1.setLocation("Old Location");
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .withDescription(null)
+                .withLocation(null)
+                .withParticipants(null)
+                .buildEventUpdateDTO();
+        updateDTO.setPicture(null);
+
+        Event savedEvent = new EventTestBuilder()
+                .fromEvent(publicEvent1)
+                .buildEventEntity();
+
+        EventDTO savedEventDTO = new EventTestBuilder()
+                .fromEvent(savedEvent)
+                .buildEventDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
+        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(savedEventDTO);
+
+        EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
+
+        assertEquals(savedEventDTO, result);
+        assertEquals(savedEventDTO.getId(), result.getId());
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(eventRepository).save(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
+    }
+
+    @Test
+    void updateEventById_setsModificationDate() {
+        publicEvent1.setCreator(creator);
+        LocalDateTime beforeUpdate = LocalDateTime.now();
+
+        EventUpdateDTO updateDTO = new EventTestBuilder()
+                .withTitle("New Title")
+                .withParticipants(null)
+                .buildEventUpdateDTO();
+        updateDTO.setPicture(null);
+
+        Event savedEvent = new EventTestBuilder()
+                .fromEvent(publicEvent1)
+                .buildEventEntity();
+
+        EventDTO savedEventDTO = new EventTestBuilder()
+                .fromEvent(savedEvent)
+                .buildEventDTO();
+
+        when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
+        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
+        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
+        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(savedEventDTO);
+
+        eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
+
+        assertNotNull(publicEvent1.getModificationDate());
+        assertThat(publicEvent1.getModificationDate()).isAfterOrEqualTo(beforeUpdate);
+
+        verify(eventRepository).findById(publicEvent1.getId());
+        verify(userService).getUserById(creator.getId());
+        verify(eventAdminService).canManageEvent(publicEvent1, creator);
+        verify(eventRepository).save(publicEvent1);
+        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
     }
 }

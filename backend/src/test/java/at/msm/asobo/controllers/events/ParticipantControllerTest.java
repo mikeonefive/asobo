@@ -1,7 +1,8 @@
-package at.msm.asobo.controllers;
+package at.msm.asobo.controllers.events;
 
 import at.msm.asobo.config.FileStorageProperties;
 import at.msm.asobo.config.SecurityConfig;
+import at.msm.asobo.controllers.ParticipantController;
 import at.msm.asobo.dto.user.UserPublicDTO;
 import at.msm.asobo.security.CustomUserDetailsService;
 import at.msm.asobo.security.JwtUtil;

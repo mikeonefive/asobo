@@ -1,5 +1,6 @@
-# Asobo
+<img width="auto" height="95" alt="logo" src="https://github.com/user-attachments/assets/d22dc4a7-2246-4bf0-ae82-d06c1c3a6e27" />
 
+# Asobo
 A full-stack application for bringing people together built with Angular and Spring Boot.
 
 ## Table of Contents

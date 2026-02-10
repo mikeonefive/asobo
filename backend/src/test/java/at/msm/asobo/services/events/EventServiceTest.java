@@ -24,7 +24,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.LocalDateTime;
@@ -144,45 +147,31 @@ class EventServiceTest {
                 .buildUserPublicDTO();
 
         publicEventSummaryDTO1 = new EventTestBuilder()
-                .withId(publicEvent1.getId())
-                .withIsPrivateEvent(publicEvent1.isPrivateEvent())
-                .withDate(publicEvent1.getDate())
+                .fromEvent(publicEvent1)
                 .buildEventSummaryDTO();
 
         publicEventSummaryDTO2 = new EventTestBuilder()
-                .withId(publicEvent2.getId())
-                .withIsPrivateEvent(publicEvent2.isPrivateEvent())
-                .withDate(publicEvent2.getDate())
+                .fromEvent(publicEvent2)
                 .buildEventSummaryDTO();
 
         privateEventSummaryDTO1 = new EventTestBuilder()
-                .withId(privateEvent1.getId())
-                .withIsPrivateEvent(privateEvent1.isPrivateEvent())
-                .withDate(privateEvent1.getDate())
+                .fromEvent(privateEvent1)
                 .buildEventSummaryDTO();
 
         privateEventSummaryDTO2 = new EventTestBuilder()
-                .withId(privateEvent2.getId())
-                .withIsPrivateEvent(privateEvent2.isPrivateEvent())
-                .withDate(privateEvent2.getDate())
+                .fromEvent(privateEvent2)
                 .buildEventSummaryDTO();
 
         publicEventDTO1 = new EventTestBuilder()
-                .withId(publicEvent1.getId())
-                .withIsPrivateEvent(publicEvent1.isPrivateEvent())
-                .withDate(publicEvent1.getDate())
+                .fromEvent(publicEvent1)
                 .buildEventDTO();
 
         publicEventDTO2 = new EventTestBuilder()
-                .withId(publicEvent2.getId())
-                .withIsPrivateEvent(publicEvent2.isPrivateEvent())
-                .withDate(publicEvent2.getDate())
+                .fromEvent(publicEvent2)
                 .buildEventDTO();
 
         privateEventDTO1 = new EventTestBuilder()
-                .withId(privateEvent1.getId())
-                .withIsPrivateEvent(privateEvent1.isPrivateEvent())
-                .withDate(privateEvent1.getDate())
+                .fromEvent(privateEvent1)
                 .buildEventDTO();
 
         pageable02 = PageRequest.of(0, 2); // page 1
@@ -194,7 +183,6 @@ class EventServiceTest {
     @Test
     void getAllEvents_returnsMappedEventSummaries() {
         List<Event> events = List.of(publicEvent1, publicEvent2);
-
         List<EventSummaryDTO> mappedDtos = List.of(publicEventSummaryDTO1, publicEventSummaryDTO2);
 
         when(eventRepository.findAll()).thenReturn(events);
@@ -203,7 +191,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllEvents();
 
-        assertNotNull(result);
         assertThat(result)
                 .isEqualTo(mappedDtos)
                 .hasSize(2);
@@ -220,7 +207,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllEvents();
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
         verify(eventRepository).findAll();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
@@ -237,7 +223,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).containsExactly(publicEventSummaryDTO1, publicEventSummaryDTO2);
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -274,7 +259,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).isEmpty();
         assertThat(result.getTotalElements()).isZero();
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -286,7 +270,7 @@ class EventServiceTest {
     /*@Test
     void getAllEventsPaginated_withSorting_appliesSorting() {
         Pageable pageable = PageRequest.of(0, 2, Sort.by("startDateTime").descending());
-        List<Event> events = List.of(event2, event1);  // Sortiert
+        List<Event> events = List.of(event2, event1);  // Sorted
         Page<Event> eventPage = new PageImpl<>(events, pageable, 2);
 
         when(eventRepository.findAllEvents(pageable)).thenReturn(eventPage);
@@ -304,7 +288,6 @@ class EventServiceTest {
     @Test
     void getAllPublicEvents_returnsMappedEventSummaries() {
         List<Event> events = List.of(publicEvent1, publicEvent2);
-
         List<EventSummaryDTO> mappedDtos = List.of(publicEventSummaryDTO1, publicEventSummaryDTO2);
 
         when(eventRepository.findByIsPrivateEventFalse()).thenReturn(events);
@@ -313,7 +296,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllPublicEvents();
 
-        assertNotNull(result);
         assertThat(result)
                 .isEqualTo(mappedDtos)
                 .hasSize(2);
@@ -330,7 +312,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllPublicEvents();
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
         verify(eventRepository).findByIsPrivateEventFalse();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
@@ -347,7 +328,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllPublicEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).containsExactly(publicEventSummaryDTO1, publicEventSummaryDTO2);
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -384,7 +364,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllPublicEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).isEmpty();
         assertThat(result.getTotalElements()).isZero();
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -396,7 +375,7 @@ class EventServiceTest {
     /*@Test
     void getAllPublicEventsPaginated_withSorting_appliesSorting() {
         Pageable pageable = PageRequest.of(0, 2, Sort.by("startDateTime").descending());
-        List<Event> events = List.of(event2, event1);  // Sortiert
+        List<Event> events = List.of(event2, event1);  // Sorted
         Page<Event> eventPage = new PageImpl<>(events, pageable, 2);
 
         when(eventRepository.findByIsPrivateEventFalse(pageable)).thenReturn(eventPage);
@@ -414,7 +393,6 @@ class EventServiceTest {
     @Test
     void getAllPrivateEvents_returnsMappedEventSummaries() {
         List<Event> events = List.of(privateEvent1, privateEvent2);
-
         List<EventSummaryDTO> mappedDtos = List.of(publicEventSummaryDTO1, publicEventSummaryDTO2);
 
         when(eventRepository.findByIsPrivateEventTrue()).thenReturn(events);
@@ -423,7 +401,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllPrivateEvents();
 
-        assertNotNull(result);
         assertThat(result)
                 .isEqualTo(mappedDtos)
                 .hasSize(2);
@@ -439,8 +416,7 @@ class EventServiceTest {
                 .thenReturn(List.of());
 
         List<EventSummaryDTO> result = eventService.getAllPrivateEvents();
-
-        assertNotNull(result);
+        
         assertThat(result).isEmpty();
         verify(eventRepository).findByIsPrivateEventTrue();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());

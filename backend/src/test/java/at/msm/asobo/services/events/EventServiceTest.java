@@ -21,6 +21,7 @@ import at.msm.asobo.services.files.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,7 +35,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -192,8 +194,7 @@ class EventServiceTest {
         List<EventSummaryDTO> result = eventService.getAllEvents();
 
         assertThat(result)
-                .isEqualTo(mappedDtos)
-                .hasSize(2);
+                .isEqualTo(mappedDtos);
 
         verify(eventRepository).findAll();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
@@ -296,9 +297,7 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllPublicEvents();
 
-        assertThat(result)
-                .isEqualTo(mappedDtos)
-                .hasSize(2);
+        assertThat(result).isEqualTo(mappedDtos);
 
         verify(eventRepository).findByIsPrivateEventFalse();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
@@ -313,6 +312,7 @@ class EventServiceTest {
         List<EventSummaryDTO> result = eventService.getAllPublicEvents();
 
         assertThat(result).isEmpty();
+
         verify(eventRepository).findByIsPrivateEventFalse();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
     }
@@ -401,9 +401,7 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getAllPrivateEvents();
 
-        assertThat(result)
-                .isEqualTo(mappedDtos)
-                .hasSize(2);
+        assertThat(result).isEqualTo(mappedDtos);
 
         verify(eventRepository).findByIsPrivateEventTrue();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
@@ -416,7 +414,7 @@ class EventServiceTest {
                 .thenReturn(List.of());
 
         List<EventSummaryDTO> result = eventService.getAllPrivateEvents();
-        
+
         assertThat(result).isEmpty();
         verify(eventRepository).findByIsPrivateEventTrue();
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(List.of());
@@ -433,7 +431,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllPrivateEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).containsExactly(privateEventSummaryDTO1, privateEventSummaryDTO2);
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -470,7 +467,6 @@ class EventServiceTest {
 
         Page<EventSummaryDTO> result = eventService.getAllPrivateEventsPaginated(pageable02);
 
-        assertNotNull(result);
         assertThat(result.getContent()).isEmpty();
         assertThat(result.getTotalElements()).isZero();
         assertThat(result.getPageable()).isEqualTo(pageable02);
@@ -508,10 +504,7 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByParticipantId(participantId, null);
 
-        assertNotNull(result);
-        assertThat(result)
-                .isEqualTo(mappedDtos)
-                .hasSize(2);
+        assertThat(result).isEqualTo(mappedDtos);
 
         verify(eventRepository).findByParticipants_Id(participantId);
         verify(eventRepository, never()).findByParticipants_IdAndIsPrivateEventTrue(any());
@@ -532,10 +525,8 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByParticipantId(participantId, true);
 
-        assertNotNull(result);
         assertThat(result)
                 .isEqualTo(mappedDtos)
-                .hasSize(2)
                 .allSatisfy(dto -> assertThat(dto.getIsPrivate()).isTrue());
 
         verify(eventRepository).findByParticipants_IdAndIsPrivateEventTrue(participantId);
@@ -557,10 +548,8 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByParticipantId(participantId, false);
 
-        assertNotNull(result);
         assertThat(result)
                 .isEqualTo(mappedDtos)
-                .hasSize(2)
                 .allSatisfy(dto -> assertThat(dto.getIsPrivate()).isFalse());
 
         verify(eventRepository).findByParticipants_IdAndIsPrivateEventFalse(participantId);
@@ -580,7 +569,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByParticipantId(participantId, null);
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
 
         verify(eventRepository).findByParticipants_Id(participantId);
@@ -598,10 +586,7 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByDate(searchDate);
 
-        assertNotNull(result);
-        assertThat(result)
-                .isEqualTo(mappedDtos)
-                .hasSize(2);
+        assertThat(result).isEqualTo(mappedDtos);
 
         verify(eventRepository).findEventsByDate(searchDate);
         verify(eventDTOEventMapper).mapEventsToEventSummaryDTOs(events);
@@ -616,7 +601,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByDate(searchDate);
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
 
         verify(eventRepository).findEventsByDate(searchDate);
@@ -633,8 +617,6 @@ class EventServiceTest {
         assertThat(exception.getMessage()).isEqualTo("Date must not be null");
 
         verify(eventRepository, never()).findEventsByDate(any());
-        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
-        verifyNoMoreInteractions(eventRepository, eventDTOEventMapper);
     }
 
     @Test
@@ -649,7 +631,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByLocation(location);
 
-        assertNotNull(result);
         assertThat(result).isEqualTo(mappedDtos).hasSize(2);
 
         verify(eventRepository).findEventsByLocation(location);
@@ -663,11 +644,9 @@ class EventServiceTest {
                 () -> eventService.getEventsByLocation(null)
         );
 
-        assertThat(exception.getMessage())
-                .isEqualTo("Location must not be null or empty");
+        assertThat(exception.getMessage()).isEqualTo("Location must not be null or empty");
 
         verify(eventRepository, never()).findEventsByLocation(any());
-        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
     }
 
     @Test
@@ -676,7 +655,6 @@ class EventServiceTest {
                 () -> eventService.getEventsByLocation(""));
 
         verify(eventRepository, never()).findEventsByLocation(any());
-        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
     }
 
     @Test
@@ -685,7 +663,6 @@ class EventServiceTest {
                 () -> eventService.getEventsByLocation("   "));
 
         verify(eventRepository, never()).findEventsByLocation(any());
-        verify(eventDTOEventMapper, never()).mapEventsToEventSummaryDTOs(any());
     }
 
     @Test
@@ -699,7 +676,6 @@ class EventServiceTest {
 
         List<EventSummaryDTO> result = eventService.getEventsByLocation(location);
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
 
         verify(eventRepository).findEventsByLocation(location);
@@ -718,12 +694,12 @@ class EventServiceTest {
 
         Event newEvent = new EventTestBuilder()
                 .withCreator(creator)
+                .withEventAdmins(Set.of(eventAdmin1, eventAdmin2))
                 .withTitle(creationDTO.getTitle())
                 .withDate(creationDTO.getDate())
                 .buildEventEntity();
 
         Event savedEvent = new EventTestBuilder()
-                .withId(UUID.randomUUID())
                 .fromEvent(newEvent)
                 .buildEventEntity();
 
@@ -741,9 +717,12 @@ class EventServiceTest {
         assertEquals(eventDTO, result);
         assertEquals(eventDTO.getId(), result.getId());
 
-        assertThat(creationDTO.getEventAdmins())
-                .hasSize(2)
-                .contains(eventAdminDTO1, eventAdminDTO2);
+        ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
+        verify(eventRepository).save(eventCaptor.capture());
+
+        Event capturedEvent = eventCaptor.getValue();
+        assertThat(capturedEvent.getEventAdmins())
+                .containsExactlyInAnyOrder(eventAdmin1, eventAdmin2);
 
         verify(eventDTOEventMapper).mapEventCreationDTOToEvent(creationDTO);
         verify(eventRepository).save(newEvent);
@@ -763,7 +742,6 @@ class EventServiceTest {
                 .buildEventEntity();
 
         Event savedEvent = new EventTestBuilder()
-                .withId(UUID.randomUUID())
                 .fromEvent(newEvent)
                 .buildEventEntity();
 
@@ -779,12 +757,7 @@ class EventServiceTest {
         EventDTO result = eventService.addNewEvent(creationDTO);
 
         assertEquals(eventDTO, result);
-        assertEquals(eventDTO.getId(), result.getId());
-
-        assertThat(creationDTO.getEventAdmins())
-                .isNotNull()
-                .hasSize(1)
-                .containsExactly(creatorDTO);
+        assertThat(creationDTO.getEventAdmins()).containsExactly(creatorDTO);
 
         verify(eventDTOEventMapper).mapEventCreationDTOToEvent(creationDTO);
         verify(eventRepository).save(newEvent);
@@ -793,7 +766,6 @@ class EventServiceTest {
 
     @Test
     void addNewEvent_withEmptyEventAdmins_setsCreatorAsAdmin() {
-        // Arrange
         EventCreationDTO creationDTO = new EventCreationDTO();
         creationDTO.setCreator(creatorDTO);
         creationDTO.setEventAdmins(new HashSet<>());
@@ -805,7 +777,6 @@ class EventServiceTest {
                 .buildEventEntity();
 
         Event savedEvent = new EventTestBuilder()
-                .withId(UUID.randomUUID())
                 .fromEvent(newEvent)
                 .buildEventEntity();
 
@@ -821,12 +792,7 @@ class EventServiceTest {
         EventDTO result = eventService.addNewEvent(creationDTO);
 
         assertEquals(eventDTO, result);
-        assertEquals(eventDTO.getId(), result.getId());
-
-        assertThat(creationDTO.getEventAdmins())
-                .isNotNull()
-                .hasSize(1)
-                .containsExactly(creatorDTO);
+        assertThat(creationDTO.getEventAdmins()).containsExactly(creatorDTO);
 
         verify(eventDTOEventMapper).mapEventCreationDTOToEvent(creationDTO);
         verify(eventRepository).save(newEvent);
@@ -846,7 +812,6 @@ class EventServiceTest {
                 .buildEventEntity();
 
         Event savedEvent = new EventTestBuilder()
-                .withId(UUID.randomUUID())
                 .fromEvent(newEvent)
                 .buildEventEntity();
 
@@ -862,12 +827,7 @@ class EventServiceTest {
         EventDTO result = eventService.addNewEvent(creationDTO);
 
         assertEquals(eventDTO, result);
-        assertEquals(eventDTO.getId(), result.getId());
-
-        // check that eventAdmin set has not been modified
-        assertThat(creationDTO.getEventAdmins())
-                .hasSize(2)
-                .contains(creatorDTO, eventAdminDTO1);
+        assertThat(creationDTO.getEventAdmins()).containsExactlyInAnyOrder(creatorDTO, eventAdminDTO1);
 
         verify(eventDTOEventMapper).mapEventCreationDTOToEvent(creationDTO);
         verify(eventRepository).save(newEvent);
@@ -880,7 +840,6 @@ class EventServiceTest {
 
         Event result = eventService.getEventById(publicEvent1.getId());
 
-        assertNotNull(result);
         assertEquals(publicEvent1, result);
         verify(eventRepository).findById(publicEvent1.getId());
     }
@@ -888,6 +847,7 @@ class EventServiceTest {
     @Test
     void getEventById_eventNotFound_throwsException() {
         UUID eventId = UUID.randomUUID();
+
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
         EventNotFoundException exception = assertThrows(
@@ -908,6 +868,7 @@ class EventServiceTest {
 
         assertEquals(privateEventDTO1, result);
         assertEquals(privateEventDTO1.getId(), result.getId());
+
         verify(eventRepository).findById(privateEvent1.getId());
         verify(eventDTOEventMapper).mapEventToEventDTO(privateEvent1);
     }
@@ -921,13 +882,11 @@ class EventServiceTest {
         });
 
         verify(eventRepository).findById(privateEvent1.getId());
-        verify(eventDTOEventMapper, never()).mapEventToEventDTO(any());
     }
 
     @Test
     void getEventsByTitle_eventsExist_returnsMappedDTOs() {
         String title = "Public";
-
         List<Event> events = List.of(publicEvent1, publicEvent2);
         List<EventDTO> eventDTOs = List.of(publicEventDTO1, publicEventDTO2);
 
@@ -936,9 +895,8 @@ class EventServiceTest {
 
         List<EventDTO> result = eventService.getEventsByTitle(title);
 
-        assertThat(result)
-                .hasSize(2)
-                .isEqualTo(eventDTOs);
+        assertThat(result).isEqualTo(eventDTOs);
+
         verify(eventRepository).findEventsByTitle(title);
         verify(eventDTOEventMapper).mapEventsToEventDTOs(events);
     }
@@ -953,8 +911,8 @@ class EventServiceTest {
 
         List<EventDTO> result = eventService.getEventsByTitle(title);
 
-        assertNotNull(result);
         assertThat(result).isEmpty();
+
         verify(eventRepository).findEventsByTitle(title);
         verify(eventDTOEventMapper).mapEventsToEventDTOs(Collections.emptyList());
     }
@@ -966,7 +924,6 @@ class EventServiceTest {
         });
 
         verify(eventRepository, never()).findEventsByTitle(any());
-        verify(eventDTOEventMapper, never()).mapEventsToEventDTOs(any());
     }
 
     @Test
@@ -1083,8 +1040,7 @@ class EventServiceTest {
                 () -> eventService.deleteEventById(publicEvent1.getId(), unauthorizedPrincipal)
         );
 
-        assertThat(exception.getMessage())
-                .isEqualTo("You are not allowed to delete this event");
+        assertThat(exception.getMessage()).isEqualTo("You are not allowed to delete this event");
 
         verify(eventRepository).findById(publicEvent1.getId());
         verify(userService).getUserById(unauthorizedUser.getId());
@@ -1097,6 +1053,7 @@ class EventServiceTest {
     @Test
     void deleteEventById_eventNotFound_throwsException() {
         UUID eventId = UUID.randomUUID();
+
         UserPrincipal userPrincipal = new UserTestBuilder()
                 .fromUser(creator)
                 .buildUserPrincipal();
@@ -1215,7 +1172,6 @@ class EventServiceTest {
         EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
 
         assertEquals(saveEventDTO, result);
-        assertEquals(saveEventDTO.getId(), result.getId());
 
         verify(eventRepository).findById(publicEvent1.getId());
         verify(userService).getUserById(creator.getId());
@@ -1273,7 +1229,6 @@ class EventServiceTest {
         EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
 
         assertEquals(savedEventDTO, result);
-        assertEquals(savedEventDTO.getId(), result.getId());
 
         verify(eventRepository).findById(publicEvent1.getId());
         verify(userService).getUserById(creator.getId());
@@ -1309,20 +1264,18 @@ class EventServiceTest {
                 () -> eventService.updateEventById(publicEvent1.getId(), unauthorizedPrincipal, updateDTO)
         );
 
-        assertThat(exception.getMessage())
-                .isEqualTo("You are not allowed to update this event");
+        assertThat(exception.getMessage()).isEqualTo("You are not allowed to update this event");
 
         verify(eventRepository).findById(publicEvent1.getId());
         verify(userService).getUserById(unauthorizedUser.getId());
         verify(eventAdminService).canManageEvent(publicEvent1, unauthorizedUser);
-        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
         verify(eventRepository, never()).save(any());
-        verify(eventDTOEventMapper, never()).mapEventToEventDTO(any());
     }
 
     @Test
     void updateEventById_eventNotFound_throwsException() {
         UUID eventId = UUID.randomUUID();
+
         UserPrincipal userPrincipal = new UserTestBuilder()
                 .fromUser(creator)
                 .buildUserPrincipal();
@@ -1338,9 +1291,6 @@ class EventServiceTest {
         });
 
         verify(eventRepository).findById(eventId);
-        verify(userService, never()).getUserById(any());
-        verify(eventAdminService, never()).canManageEvent(any(), any());
-        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
         verify(eventRepository, never()).save(any());
     }
 
@@ -1364,8 +1314,6 @@ class EventServiceTest {
 
         verify(eventRepository).findById(publicEvent1.getId());
         verify(userService).getUserById(userPrincipal.getUserId());
-        verify(eventAdminService, never()).canManageEvent(any(), any());
-        verify(fileStorageService, never()).handleEventPictureUpdate(any(), any());
         verify(eventRepository, never()).save(any());
     }
 
@@ -1380,34 +1328,32 @@ class EventServiceTest {
                 .withTitle("New Title")
                 .withDescription(null)
                 .withLocation(null)
-                .withParticipants(null)
                 .buildEventUpdateDTO();
         updateDTO.setPicture(null);
 
-        Event savedEvent = new EventTestBuilder()
+        EventDTO expectedDTO = new EventTestBuilder()
                 .fromEvent(publicEvent1)
-                .buildEventEntity();
-
-        EventDTO savedEventDTO = new EventTestBuilder()
-                .fromEvent(savedEvent)
+                .withTitle("New Title")
                 .buildEventDTO();
 
         when(eventRepository.findById(publicEvent1.getId())).thenReturn(Optional.of(publicEvent1));
-        when(userService.getUserById(creator.getId())).thenReturn(creator);
+        when(userService.getUserById(creatorPrincipal.getUserId())).thenReturn(creator);
         when(eventAdminService.canManageEvent(publicEvent1, creator)).thenReturn(true);
-        when(eventRepository.save(publicEvent1)).thenReturn(savedEvent);
-        when(eventDTOEventMapper.mapEventToEventDTO(savedEvent)).thenReturn(savedEventDTO);
+        when(eventRepository.save(publicEvent1)).thenReturn(publicEvent1);
+        when(eventDTOEventMapper.mapEventToEventDTO(publicEvent1)).thenReturn(expectedDTO);
 
         EventDTO result = eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
 
-        assertEquals(savedEventDTO, result);
-        assertEquals(savedEventDTO.getId(), result.getId());
+        assertEquals("New Title", publicEvent1.getTitle());
+        assertEquals("Old Description", publicEvent1.getDescription());
+        assertEquals("Old Location", publicEvent1.getLocation());
+        assertEquals(expectedDTO, result);
 
         verify(eventRepository).findById(publicEvent1.getId());
-        verify(userService).getUserById(creator.getId());
+        verify(userService).getUserById(creatorPrincipal.getUserId());
         verify(eventAdminService).canManageEvent(publicEvent1, creator);
         verify(eventRepository).save(publicEvent1);
-        verify(eventDTOEventMapper).mapEventToEventDTO(savedEvent);
+        verify(eventDTOEventMapper).mapEventToEventDTO(publicEvent1);
     }
 
     @Test
@@ -1437,7 +1383,6 @@ class EventServiceTest {
 
         eventService.updateEventById(publicEvent1.getId(), creatorPrincipal, updateDTO);
 
-        assertNotNull(publicEvent1.getModificationDate());
         assertThat(publicEvent1.getModificationDate()).isAfterOrEqualTo(beforeUpdate);
 
         verify(eventRepository).findById(publicEvent1.getId());

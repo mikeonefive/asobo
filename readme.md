@@ -174,6 +174,12 @@ export const environment = {
 
 ### Option 1: Using Run Scripts (Recommended)
 
+⚠️ **Attention:** Before running the project, download the latest `.jar` built from the `master` branch.  
+Go to **GitHub → Actions**, open the most recent workflow run with a green checkmark, and download the `asobo-build` artifact.  
+Place the `.jar` file in the project root directory.
+
+⚠️ **Attention:** Make sure Docker Desktop is running before running any of the scripts.
+
 The easiest way to run the application is using the provided scripts from the project root directory:
 
 **On Linux/Mac:**
@@ -185,9 +191,6 @@ The easiest way to run the application is using the provided scripts from the pr
 ```bash
 run.bat
 ```
-
-⚠️ **Attention:** Make sure Docker Desktop is running before running any of the scripts.
-
 
 These scripts will:
 1. Ensure the PostgreSQL database is running

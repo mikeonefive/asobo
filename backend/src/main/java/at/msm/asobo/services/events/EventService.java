@@ -1,6 +1,5 @@
 package at.msm.asobo.services.events;
 
-import at.msm.asobo.config.FileStorageProperties;
 import at.msm.asobo.dto.event.EventCreationDTO;
 import at.msm.asobo.dto.event.EventDTO;
 import at.msm.asobo.dto.event.EventSummaryDTO;
@@ -9,12 +8,12 @@ import at.msm.asobo.entities.Event;
 import at.msm.asobo.entities.User;
 import at.msm.asobo.exceptions.events.EventNotFoundException;
 import at.msm.asobo.exceptions.users.UserNotAuthorizedException;
-import at.msm.asobo.mappers.*;
+import at.msm.asobo.mappers.EventDTOEventMapper;
+import at.msm.asobo.mappers.UserDTOUserMapper;
 import at.msm.asobo.repositories.EventRepository;
 import at.msm.asobo.security.UserPrincipal;
 import at.msm.asobo.services.UserService;
 import at.msm.asobo.services.files.FileStorageService;
-import at.msm.asobo.services.files.FileValidationService;
 import at.msm.asobo.utils.PatchUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -86,11 +85,11 @@ public class EventService {
         List<Event> events;
 
         if (isPrivate == null) {
-            events = eventRepository.findByParticipants_Id(participantId);
+            events = eventRepository.findByParticipantsId(participantId);
         } else if (isPrivate) {
-            events = eventRepository.findByParticipants_IdAndIsPrivateEventTrue(participantId);
+            events = eventRepository.findByParticipantsIdAndIsPrivateEventTrue(participantId);
         } else {
-            events = eventRepository.findByParticipants_IdAndIsPrivateEventFalse(participantId);
+            events = eventRepository.findByParticipantsIdAndIsPrivateEventFalse(participantId);
         }
         return this.eventDTOEventMapper.mapEventsToEventSummaryDTOs(events);
     }
@@ -99,11 +98,11 @@ public class EventService {
         Page<Event> events;
 
         if (isPrivate == null) {
-            events = eventRepository.findByParticipants_Id(participantId, pageable);
+            events = eventRepository.findByParticipantsId(participantId, pageable);
         } else if (isPrivate) {
-            events = eventRepository.findByParticipants_IdAndIsPrivateEventTrue(participantId, pageable);
+            events = eventRepository.findByParticipantsIdAndIsPrivateEventTrue(participantId, pageable);
         } else {
-            events = eventRepository.findByParticipants_IdAndIsPrivateEventFalse(participantId, pageable);
+            events = eventRepository.findByParticipantsIdAndIsPrivateEventFalse(participantId, pageable);
         }
         return this.eventDTOEventMapper.mapEventPageToEventSummaryDTOs(events);
     }
@@ -137,9 +136,8 @@ public class EventService {
     }
 
     public Event getEventById(UUID id) {
-        Event event = this.eventRepository.findById(id)
+        return this.eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
-        return event;
     }
 
     public EventDTO getEventDTOById(UUID id) {

@@ -1,7 +1,6 @@
 import {List} from '../../../core/data_structures/lists/list';
 
 export interface EventFilters {
-  query?: string;
   location?: string;
   creatorId?: string;
   date?: Date;

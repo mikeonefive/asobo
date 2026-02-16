@@ -25,6 +25,13 @@ public class EventSpecification {
       if (filterDTO.getParticipantIds() != null && !filterDTO.getParticipantIds().isEmpty()) {
         predicates.add(root.get("participants").get("id").in(filterDTO.getParticipantIds()));
       }
+      if (filterDTO.getDate() != null) {
+        LocalDateTime startOfDay = filterDTO.getDate().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        predicates.add(cb.greaterThanOrEqualTo(root.get("date"), startOfDay));
+        predicates.add(cb.lessThan(root.get("date"), endOfDay));
+      }
       if (filterDTO.getDateFrom() != null) {
         predicates.add(cb.greaterThanOrEqualTo(root.get("date"), filterDTO.getDateFrom()));
       }

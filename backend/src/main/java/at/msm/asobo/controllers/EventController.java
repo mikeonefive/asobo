@@ -39,6 +39,7 @@ public class EventController {
       @RequestParam(required = false) UUID userId,
       @RequestParam(required = false) String location,
       @RequestParam(required = false) UUID creatorId,
+      @RequestParam(required = false) LocalDateTime date,
       @RequestParam(required = false) LocalDateTime dateFrom,
       @RequestParam(required = false) LocalDateTime dateTo,
       @RequestParam(required = false) Boolean isPrivateEvent,
@@ -47,7 +48,14 @@ public class EventController {
 
     EventFilterDTO filterDTO =
         new EventFilterDTO(
-            location, creatorId, dateFrom, dateTo, isPrivateEvent, eventAdminIds, participantIds);
+            location,
+            creatorId,
+            date,
+            dateFrom,
+            dateTo,
+            isPrivateEvent,
+            eventAdminIds,
+            participantIds);
 
     if (userId != null) {
       return this.eventService.getEventsByParticipantId(userId, isPrivateEvent);
@@ -61,6 +69,7 @@ public class EventController {
       @RequestParam(required = false) UUID userId,
       @RequestParam(required = false) String location,
       @RequestParam(required = false) UUID creatorId,
+      @RequestParam(required = false) LocalDateTime date,
       @RequestParam(required = false) LocalDateTime dateFrom,
       @RequestParam(required = false) LocalDateTime dateTo,
       @RequestParam(required = false) Boolean isPrivateEvent,
@@ -70,7 +79,14 @@ public class EventController {
 
     EventFilterDTO filterDTO =
         new EventFilterDTO(
-            location, creatorId, dateFrom, dateTo, isPrivateEvent, eventAdminIds, participantIds);
+            location,
+            creatorId,
+            date,
+            dateFrom,
+            dateTo,
+            isPrivateEvent,
+            eventAdminIds,
+            participantIds);
 
     if (userId != null) {
       return this.eventService.getEventsByParticipantIdPaginated(
